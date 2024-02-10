@@ -21,7 +21,6 @@ export default function App() {
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const [updatingProduct, setUpdatingProduct] = useState({});
-  //get id from useParams
   const { prodId } = useParams();
 
   const uploadProductImage = async (formData) => {
