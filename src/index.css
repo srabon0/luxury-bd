@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.marquee {
+    width: 100%;
+    position: relative;
+    white-space: nowrap;
+    animation: marquee 40s linear infinite;
+  }
+  
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .marquee:hover {
+    animation-play-state: paused;
+  }
+  
+  .h-40 {
+    height: 40px;
+  }

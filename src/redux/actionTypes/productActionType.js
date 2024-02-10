@@ -1,0 +1,6 @@
+export const LOAD_PRODUCT = "LOAD_PRODUCT";
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const CHANGE_PAGE = "CHANGE_PAGE";
+export const CHANGE_ITEMS_PER_PAGE = "CHANGE_ITEMS_PER_PAGE";

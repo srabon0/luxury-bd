@@ -1,0 +1,13 @@
+[
+
+    {
+      "index": 3,
+      "name": "strawberry",
+      "isActive": true,
+      "price": "$139.75",
+      "picture": "https://images.pexels.com/photos/887393/pexels-photo-887393.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "quantity": 477,
+      "company": "HOMETOWN",
+      "description":"A strawberry is a small, red fruit with a sweet flavor and a characteristic aroma. It is a member of the rose family and is a popular fruit worldwide. The strawberry fruit is actually not a true berry, but a receptacle for the plant's seeds.It is composed of small seeds embedded in a fleshy, red receptacle, which is the edible part of the fruit. It is a good source of vitamin C, manganese, and folate. They are also low in calories and high in water content. They are often eaten fresh, but also can be used in a variety of dishes and desserts, like jams, jellies, syrups, ice creams, and pastries. They are also used in many medicinal and cosmetic applications. Strawberries are typically grown in temperate regions, but can be produced in tropical and subtropical regions as well."
+    }
+  ]
