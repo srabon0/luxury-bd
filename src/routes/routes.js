@@ -25,7 +25,10 @@ const routes = createBrowserRouter([
     path: "/signup",
     element: <SignUp />,
   },
-
+  {
+    path : "/contact",
+    element : <h2>Hello contact </h2>
+  },
   {
     path: "/dashboard",
     element: (
