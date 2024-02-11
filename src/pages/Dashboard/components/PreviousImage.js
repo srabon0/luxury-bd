@@ -1,7 +1,7 @@
-import React from "react";
-import { getImageUrl } from "../../../utils/utils";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import React from "react";
 import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
+import { getImageUrl } from "../../../utils/utils";
 
 const PreviousImage = ({ updatingProduct }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
