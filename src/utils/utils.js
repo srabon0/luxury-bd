@@ -14,6 +14,6 @@ export const getTableRowSerial = (index) => {
 
 export const getImageUrl = (imgName) => {
   const url =
-    process.env.REACT_APP_LOCAL_BACKEND + "/backend/product/image/" + imgName;
+    process.env.REACT_APP_BACKEND + "/backend/product/image/" + imgName;
   return url;
 };
