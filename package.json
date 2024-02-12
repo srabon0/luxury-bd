@@ -12,7 +12,6 @@
     "axios": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-firebase-hooks": "^5.0.3",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.49.3",
     "react-redux": "^8.0.5",
@@ -34,11 +33,7 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ],
-    "rules": {
-      "react-hooks/exhaustive-deps": "off",
-      "jsx-a11y/img-redundant-alt": "off"
-    }
+    ]
   },
   "browserslist": {
     "production": [
