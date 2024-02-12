@@ -13,7 +13,7 @@ const Navbar = () => {
     <nav className="bg-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or site name */}
-        <Link to="/" className="text-gray-800 text-lg font-semibold">
+        <Link to="/" className="text-gray-800 font-bold text-4xl">
           Classic Group
         </Link>
 
