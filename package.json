@@ -36,7 +36,8 @@
       "react-app/jest"
     ],
     "rules": {
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "jsx-a11y/img-redundant-alt": "off"
     }
   },
   "browserslist": {
