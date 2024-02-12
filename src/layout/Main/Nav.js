@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const currentUser = useSelector((state) => state.userState.authUser.user);
+  console.log(currentUser);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -13,7 +16,10 @@ const Navbar = () => {
     <nav className="bg-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or site name */}
-        <Link to="/" className="text-gray-800 font-bold text-4xl">
+        <Link
+          to="/"
+          className="text-gray-800 font-bold text-3xl hover:text-violet-500 italic"
+        >
           Classic Group
         </Link>
 
@@ -43,15 +49,17 @@ const Navbar = () => {
           <NavLink to="/" currentPath={location.pathname}>
             Home
           </NavLink>
-          <NavLink to="/dashboard" currentPath={location.pathname}>
-            Dashboard
-          </NavLink>
           <NavLink to="/services" currentPath={location.pathname}>
             Services
           </NavLink>
           <NavLink to="/contact" currentPath={location.pathname}>
             Contact
           </NavLink>
+          {currentUser && currentUser.role === "admin" && (
+            <NavLink to="/dashboard" currentPath={location.pathname}>
+              Dashboard
+            </NavLink>
+          )}
         </div>
       </div>
 
@@ -114,7 +122,9 @@ const NavLink = ({ to, currentPath, children }) => {
   return (
     <Link
       to={to}
-      className={`block p-4 text-left ${isActive ? "text-emerald-400" : ""}`}
+      className={`block p-4 text-left font-semibold ${
+        isActive ? "text-violet-600" : "text-gray-800"
+      }`}
     >
       {children}
     </Link>

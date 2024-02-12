@@ -11,11 +11,23 @@ import Brands from "../pages/Dashboard/Brand";
 import Category from "../pages/Dashboard/Categories";
 import Products from "../pages/Dashboard/Products";
 import StatusCards from "../pages/Dashboard/StatusCards";
+import ContactForm from "../pages/Main/Contact";
+import Home from "../components/Home/Home";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/contact",
+        element: <ContactForm />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -26,8 +38,8 @@ const routes = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path : "/contact",
-    element : <h2>Hello contact </h2>
+    path: "/contact",
+    element: <ContactForm />,
   },
   {
     path: "/dashboard",

@@ -2,8 +2,8 @@ import React from "react";
 import Footer from "./Footer";
 import Marquee from "./Marquee";
 import Nav from "./Nav";
-import Home from "../../components/Home/Home";
 import { Helmet } from "react-helmet";
+import { Outlet } from "react-router-dom";
 
 const Main = () => {
   return (
@@ -13,7 +13,7 @@ const Main = () => {
       </Helmet>
       <Marquee />
       <Nav />
-      <Home />
+      <Outlet />
       <Footer />
     </div>
   );
