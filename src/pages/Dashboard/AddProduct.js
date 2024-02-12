@@ -1,17 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragNDrop from "../../components/Shared/DragNDrop/DragNdrop";
 import apiInstance from "../../plugins/axiosIns";
 import BrandThunks from "../../redux/thunk/brandThunk";
 import CategoryThunks from "../../redux/thunk/categoryThunk";
+import ProductThunks from "../../redux/thunk/productThunk";
 import { isNullOrObjectEmpty } from "../../utils/utils";
 import PreviousImage from "./components/PreviousImage";
-import ProductThunks from "../../redux/thunk/productThunk";
 
 export default function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);

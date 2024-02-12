@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Drawer from "../../../components/Shared/Drawer/Drawer";
 import { isNullOrObjectEmpty } from "../../../utils/utils";
 
@@ -13,7 +13,9 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
   }, [updatedData]);
   return (
     <Drawer
-      title={isNullOrObjectEmpty(updatedData) ? "Add Category" : "Edit Category"}
+      title={
+        isNullOrObjectEmpty(updatedData) ? "Add Category" : "Edit Category"
+      }
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -41,7 +43,7 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
         </div>
 
         <button type="submit" class="btn btn-neutral">
-          {isNullOrObjectEmpty(updatedData) ? "Add Brand" : "Edit Brand"}
+          {isNullOrObjectEmpty(updatedData) ? "Add Category" : "Edit Category"}
         </button>
       </form>
     </Drawer>

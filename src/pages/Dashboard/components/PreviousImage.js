@@ -7,13 +7,8 @@ const PreviousImage = ({ updatingProduct }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteImage, setDeleteImage] = React.useState({});
 
-  const setModalOpen = (img) => {
-    setIsModalOpen(true);
-    setDeleteImage(img);
-  };
-
   const closeModal = () => {
-    setIsModalOpen(false);
+    console.log(deleteImage);
     setDeleteImage({});
   };
 

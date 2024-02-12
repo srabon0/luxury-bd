@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
+const imgs =
+  "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const Products = () => {
   return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">
@@ -21,8 +22,7 @@ const Products = () => {
           <div>
             <div className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&q=75&fit=crop&crop=top&w=600&h=700"
-                loading="lazy"
+                src={imgs}
                 alt="Photo by Austin Wade"
                 className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
               />
@@ -56,9 +56,8 @@ const Products = () => {
           <div>
             <div className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1523359346063-d879354c0ea5?auto=format&q=75&fit=crop&crop=top&w=600&h=700"
-                loading="lazy"
-                alt="Photo by Nick Karvounis"
+                src={imgs}
+                alt="Ph"
                 className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
               />
             </div>
@@ -84,9 +83,8 @@ const Products = () => {
           <div>
             <div className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1548286978-f218023f8d18?auto=format&q=75&fit=crop&crop=top&w=600&h=700"
-                loading="lazy"
-                alt="Photo by Austin Wade"
+                src={imgs}
+                alt="Photoade"
                 className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
               />
             </div>
@@ -111,9 +109,8 @@ const Products = () => {
           <div>
             <div className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1548286978-f218023f8d18?auto=format&q=75&fit=crop&crop=top&w=600&h=700"
-                loading="lazy"
-                alt="Photo by Austin Wade"
+                src={imgs}
+                alt="oto bydsfsadf A"
                 className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
               />
             </div>

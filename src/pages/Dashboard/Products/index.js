@@ -2,7 +2,6 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../../../components/Shared/Pagination/Pagination";
 import fetchProducts from "../../../redux/thunk/fetchProducts";
 import ProductTable from "./Table";
 
@@ -10,7 +9,7 @@ const Product = () => {
   const navigate = useNavigate();
   const [searchKey, setSearchKey] = useState("");
   const itemsPerPage = useSelector((state) => state.productState.itemsPerPage);
-  const totalItems = useSelector((state) => state.productState.totalItems);
+  // const totalItems = useSelector((state) => state.productState.totalItems);
   const currentPage = useSelector((state) => state.productState.pageNo);
 
   const dispatch = useDispatch();

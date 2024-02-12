@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import apiInstance from "../../../plugins/axiosIns";
-import { toast } from "react-toastify";
+import React, { useEffect } from "react";
 import Drawer from "../../../components/Shared/Drawer/Drawer";
 import { isNullOrObjectEmpty } from "../../../utils/utils";
 
@@ -12,7 +10,7 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
       setValue("name", updatedData.name);
       setValue("description", updatedData.description);
     }
-  }, [updatedData]);
+  }, []);
   return (
     <Drawer
       title={isNullOrObjectEmpty(updatedData) ? "Add Brand" : "Edit Brand"}

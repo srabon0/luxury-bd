@@ -1,9 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 const Sidebar = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUserRole = useSelector(
     (state) => state?.userState?.authUser?.user?.role

@@ -1,7 +1,7 @@
 // Modal.js
 
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import React, { useState } from 'react';
+import React from 'react';
 
 const ConfirmModal = ({ isOpen, onClose, children }) => {
     const modalClasses = isOpen
