@@ -11,7 +11,7 @@ const Navbar = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
   return (
-    <nav className="bg-white p-4">
+    <nav className="bg-white p-4 fixed top-10 w-full z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or site name */}
         <Link

@@ -13,7 +13,9 @@ const Main = () => {
       </Helmet>
       <Marquee />
       <Nav />
-      <Outlet />
+      <div className="mt-32">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

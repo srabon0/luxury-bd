@@ -1,7 +1,7 @@
 import React from "react";
 const Hero = () => {
   return (
-    <div className="relative">
+    <div className="relative mt-11">
       <video
         className="w-full h-[600px] object-cover sm:h-[400px] md:h-[500px] lg:h-[600px]"
         src="/vid/hero.mp4"
