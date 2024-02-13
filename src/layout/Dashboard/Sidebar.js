@@ -1,13 +1,18 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const currentUserRole = useSelector(
     (state) => state?.userState?.authUser?.user?.role
   );
-  console.log(currentUserRole);
+
+  const navigate = useNavigate();
+  if (!currentUserRole) {
+    navigate("/login");
+  }
+
   return (
     <div class="w-64 min-h-screen bg-gray-800 mt-8 sm:mt-0 ">
       <div class="flex items-center justify-center mt-10 mx-2">

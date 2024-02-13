@@ -3,15 +3,13 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
-  const currentUser = useSelector((state) => state.userState.authUser.user);
-  console.log(currentUser);
+  const currentUser = useSelector((state) => state?.userState?.authUser?.user);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
-
   return (
     <nav className="bg-white p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -56,9 +54,11 @@ const Navbar = () => {
             Contact
           </NavLink>
           {currentUser && currentUser.role === "admin" && (
-            <NavLink to="/dashboard" currentPath={location.pathname}>
-              Dashboard
-            </NavLink>
+            <>
+              <NavLink to="/dashboard" currentPath={location.pathname}>
+                Dashboard
+              </NavLink>
+            </>
           )}
         </div>
       </div>
