@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Card from "./components/Card";
+import Loader from "../../Shared/Loader/Loader";
 const Products = () => {
   const allProduct = useSelector((state) => state.productState.products);
 
@@ -19,6 +20,13 @@ const Products = () => {
             <span className="text-violet-600 font-bold">Luxurry</span>.
           </p>
         </div>
+
+        {(!allProduct || allProduct.length === 0) && (
+          <Loader
+            className={"w-full flex items-center justify-center mt-30 fw-bold"}
+            text="Loading Products..."
+          />
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {allProduct?.map((product) => {
