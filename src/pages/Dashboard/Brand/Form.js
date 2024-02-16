@@ -1,16 +1,38 @@
 import React, { useEffect } from "react";
 import Drawer from "../../../components/Shared/Drawer/Drawer";
 import { isNullOrObjectEmpty } from "../../../utils/utils";
+import apiInstance from "../../../plugins/axiosIns";
+import { updateBrand } from "../../../redux/actions/brandAction";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, setValue } = formProps;
 
+  const onUpdateData = async (brandData) => {
+    console.log("brandData", brandData)
+    console.log("data", brandData);
+    const payload = {
+      ...brandData,
+      _id: updatedData._id,
+    };
+    const url = "/backend/brand/" + updatedData._id;
+    const { data } = await apiInstance.put(url, payload);
+    if (data?.data?._id) {
+      toast.success(data?.message);
+      dispatch(updateBrand(payload));
+      onClose();
+    } else {
+      toast.error("Something went wrong");
+    }
+  };
   useEffect(() => {
     if (!isNullOrObjectEmpty(updatedData)) {
       setValue("name", updatedData.name);
       setValue("description", updatedData.description);
     }
-  }, []);
+  }, [updatedData]);
   return (
     <Drawer
       title={isNullOrObjectEmpty(updatedData) ? "Add Brand" : "Edit Brand"}
@@ -40,9 +62,17 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
           ></textarea>
         </div>
 
-        <button type="submit" class="btn btn-neutral">
-          {isNullOrObjectEmpty(updatedData) ? "Add Brand" : "Edit Brand"}
-        </button>
+        {isNullOrObjectEmpty(updatedData) && (
+          <button type="submit" class="btn btn-neutral">
+            Add Brand
+          </button>
+        )}
+
+        {!isNullOrObjectEmpty(updatedData) && (
+          <button onClick={handleSubmit(onUpdateData)} class="btn btn-neutral">
+            Update Brand
+          </button>
+        )}
       </form>
     </Drawer>
   );

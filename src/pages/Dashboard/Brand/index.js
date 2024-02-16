@@ -42,11 +42,10 @@ const Brands = () => {
       toast.error("Something went wrong");
     }
   };
-  
+
   useEffect(() => {
     dispatch(fetchBrands());
   }, [dispatch]);
-  
 
   return (
     <div>
@@ -63,6 +62,7 @@ const Brands = () => {
         updatedData={updatedData}
         onSubmit={onSubmit}
         formProps={formProps}
+        enableEdit={enableEdit}
       />
     </div>
   );

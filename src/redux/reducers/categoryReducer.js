@@ -12,6 +12,7 @@ const initalState = {
 };
 
 const categoryReducer = (state = initalState, action) => {
+  console.log("action", action);
   switch (action.type) {
     case LOAD_CATEGORY:
       return {
@@ -24,15 +25,22 @@ const categoryReducer = (state = initalState, action) => {
         categories: [...state.categories, action.payload],
       };
     case UPDATE_CATEGORY:
-      const updatedCategory = state.categories.map((category) => {
-        if (category._id === action.payload._id) {
-          return action.payload;
-        }
-        return category;
-      });
+      console.log("action.payload", action.payload._id);
+      const updateIndex = state.categories.findIndex(
+        (category) => category._id === action.payload._id
+      );
+
+      if (updateIndex === -1) {
+        console.error("No category found with the given _id");
+        return state;
+      }
+
+      const updatedCategories = [...state.categories];
+      updatedCategories[updateIndex] = action.payload;
+
       return {
         ...state,
-        categories: updatedCategory,
+        categories: updatedCategories,
       };
     case DELETE_CATEGORY:
       const filteredCategory = state.categories.filter(

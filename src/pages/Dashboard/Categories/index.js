@@ -20,7 +20,6 @@ const Category = () => {
   };
 
   const enableEdit = (data) => {
-    console.log("data", data);
     setUpdatedData(data);
     setDrawerOpen(true);
   };

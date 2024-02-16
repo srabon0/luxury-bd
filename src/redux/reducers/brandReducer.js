@@ -25,6 +25,7 @@ const brandReducer = (state = initalState, action) => {
         brands: [...state.brands, action.payload],
       };
     case UPDATE_BRAND:
+      console.log("action.payload", action.payload);
       const updatedBrand = state.brands.map((brand) => {
         if (brand._id === action.payload._id) {
           return action.payload;
