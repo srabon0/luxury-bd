@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { resetCurrentUser } from "../../redux/actions/userAction";
 
 const Navbar = () => {
   const currentUser = useSelector((state) => state?.userState?.authUser?.user);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    dispatch(resetCurrentUser());
+    window.location.href = "/";
+  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -43,7 +52,7 @@ const Navbar = () => {
         </button>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex space-x-4">
+        <div className="hidden lg:flex space-x-4 lg: items-center">
           <NavLink to="/" currentPath={location.pathname}>
             Home
           </NavLink>
@@ -58,6 +67,26 @@ const Navbar = () => {
               <NavLink to="/dashboard" currentPath={location.pathname}>
                 Dashboard
               </NavLink>
+              <button onClick={() => logout()} className="btn btn-primary">
+                Logout
+              </button>
+            </>
+          )}
+
+          {!currentUser && (
+            <>
+              <button
+                onClick={() => (window.location.href = "/login")}
+                className="btn btn-ghost btn-sm"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => (window.location.href = "/signup")}
+                className="btn btn-ghost btn-sm"
+              >
+                Sign Up
+              </button>
             </>
           )}
         </div>

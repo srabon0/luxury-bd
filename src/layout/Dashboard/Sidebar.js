@@ -4,14 +4,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const currentUserRole = useSelector(
-    (state) => state?.userState?.authUser?.user?.role
-  );
 
-  const navigate = useNavigate();
-  if (!currentUserRole) {
-    navigate("/login");
-  }
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    dispatch(resetCurrentUser());
+    window.location.href = "/";
+  };
 
   return (
     <div class="w-64 min-h-screen bg-gray-800 mt-8 sm:mt-0 ">
@@ -171,7 +170,7 @@ const Sidebar = () => {
       </nav>
       <button
         onClick={() => {
-          dispatch(resetCurrentUser());
+          logout();
         }}
         className="flex items-center w-full px-4 py-2 text-gray-300 rounded-lg hover:bg-blue-500 hover:text-gray-300"
       >

@@ -13,6 +13,7 @@ import Products from "../pages/Dashboard/Products";
 import StatusCards from "../pages/Dashboard/StatusCards";
 import ContactForm from "../pages/Main/Contact";
 import Home from "../components/Home/Home";
+import Service from "../pages/Main/Service";
 
 const routes = createBrowserRouter([
   {
@@ -31,20 +32,21 @@ const routes = createBrowserRouter([
         path: "/contact",
         element: <ContactForm />,
       },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/services",
+        element: <Service />,
+      },
     ],
   },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/contact",
-    element: <ContactForm />,
-  },
+
   {
     path: "/dashboard",
     element: (

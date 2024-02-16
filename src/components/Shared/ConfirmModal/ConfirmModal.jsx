@@ -5,7 +5,7 @@ import React from 'react';
 
 const ConfirmModal = ({ isOpen, onClose, children }) => {
     const modalClasses = isOpen
-        ? 'fixed top-0 left-0 w-full h-full flex items-center justify-center z-30'
+        ? 'fixed p-50 top-10 left-0 w-full h-full flex items-center justify-center z-30'
         : 'hidden';
 
     return (

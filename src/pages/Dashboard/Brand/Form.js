@@ -11,8 +11,6 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
   const { register, handleSubmit, setValue } = formProps;
 
   const onUpdateData = async (brandData) => {
-    console.log("brandData", brandData)
-    console.log("data", brandData);
     const payload = {
       ...brandData,
       _id: updatedData._id,
