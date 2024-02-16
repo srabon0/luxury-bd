@@ -4,12 +4,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 const Sidebar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("currentUser");
     dispatch(resetCurrentUser());
-    window.location.href = "/";
+    navigate("/login");
   };
 
   return (
