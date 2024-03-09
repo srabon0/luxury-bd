@@ -32,3 +32,4 @@ export const deleteBrand = (payload) => {
     payload: payload,
   };
 };
+

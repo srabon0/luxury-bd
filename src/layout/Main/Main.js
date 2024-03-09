@@ -13,7 +13,7 @@ const Main = () => {
       </Helmet>
       <Marquee />
       <Nav />
-      <div className="mt-32">
+      <div>
         <Outlet />
       </div>
       <Footer />

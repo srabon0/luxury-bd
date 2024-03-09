@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
-
+import mainLogo from "./../../assests/svg/classic.svg";
 const Navbar = () => {
   const currentUser = useSelector((state) => state?.userState?.authUser?.user);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,14 +21,22 @@ const Navbar = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
   return (
-    <nav className="bg-white p-4 fixed top-10 w-full z-50">
+    <nav className="bg-white w-full z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo or site name */}
         <Link
           to="/"
           className="text-gray-800 font-bold text-3xl hover:text-violet-500 italic"
         >
-          Classic Group
+          <div
+            style={{
+              width: "100px",
+            }}
+          >
+            <img
+            className="object-cover"
+            src={mainLogo} alt="logo" />
+          </div>
         </Link>
 
         {/* Mobile Menu Button */}

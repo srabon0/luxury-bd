@@ -25,7 +25,6 @@ const categoryReducer = (state = initalState, action) => {
         categories: [...state.categories, action.payload],
       };
     case UPDATE_CATEGORY:
-      console.log("action.payload", action.payload._id);
       const updateIndex = state.categories.findIndex(
         (category) => category._id === action.payload._id
       );
