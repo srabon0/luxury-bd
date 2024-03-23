@@ -13,7 +13,8 @@ const Main = () => {
       </Helmet>
       <Marquee />
       <Nav />
-      <div>
+      <div 
+      >
         <Outlet />
       </div>
       <Footer />
