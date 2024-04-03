@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ProductSerdcvices } from "../../services/product.services";
 import { getImageUrl } from "../../utils/utils";
-import { ArchiveBoxArrowDownIcon, TruckIcon } from "@heroicons/react/24/solid";
+import {
+  ArchiveBoxArrowDownIcon,
+  TagIcon,
+  TruckIcon,
+  ViewfinderCircleIcon,
+} from "@heroicons/react/24/solid";
 import "./ImageZoom.css"; // Import the CSS file
 import ImageZoom from "./ImageZoom";
 
@@ -79,7 +84,6 @@ const ProductDetails = () => {
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-4">
             <div className="relative overflow-hidden rounded-lg bg-gray-100">
-              
               <ImageZoom
                 src={image?.[activeImage]}
                 alt="selected product photo"
@@ -124,6 +128,14 @@ const ProductDetails = () => {
 
               <span className="text-sm">{cartoncapacity} per cartoon</span>
             </div>
+            <div className="mb-6 flex items-center gap-2 text-gray-500">
+              <TagIcon className="h-6 w-6" />
+              <span className="text-sm">{category}</span>
+            </div>
+            <div className="mb-6 flex items-center gap-2 text-gray-500">
+              <ViewfinderCircleIcon className="h-6 w-6" />
+              <span className="text-sm">{model}</span>
+            </div>
 
             {/* <div className="flex gap-2.5">
               <a className="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">
@@ -152,7 +164,6 @@ const ProductDetails = () => {
               <div className="mb-3 text-lg font-semibold text-gray-800">
                 Description
               </div>
-
               <p className="text-gray-500">{description}</p>
             </div>
           </div>
