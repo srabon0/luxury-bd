@@ -1,5 +1,6 @@
 import React from "react";
 import { getImageUrl } from "../../../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 // {
 //     "tags": [],
@@ -45,10 +46,18 @@ import { getImageUrl } from "../../../../utils/utils";
 const Card = ({ product }) => {
   const { _id, title, price, image, category, brand, cartoncapacity } = product;
   const thumbnail = getImageUrl(image[0]?.filename);
+  const navigate = useNavigate();
+
+  const navigateToDetails = () => {
+    navigate(`/product/${_id}`);
+  };
 
   return (
     <div>
-      <div className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100 cursor-pointer">
+      <div
+        onClick={navigateToDetails}
+        className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100 cursor-pointer"
+      >
         <img
           src={thumbnail}
           alt={title + _id}

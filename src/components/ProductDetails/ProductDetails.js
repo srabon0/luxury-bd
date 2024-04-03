@@ -1,135 +1,164 @@
-import axios from "axios";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ProductSerdcvices } from "../../services/product.services";
+import { getImageUrl } from "../../utils/utils";
+import { ArchiveBoxArrowDownIcon, TruckIcon } from "@heroicons/react/24/solid";
+import "./ImageZoom.css"; // Import the CSS file
+import ImageZoom from "./ImageZoom";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [fruit, setFruit] = useState([]);
-  const { name, price, picture, isActive,description } = fruit;
+  const [product, setProduct] = useState([]);
+  const [activeImage, setActiveImage] = useState(0);
+
+  const {
+    title,
+    description,
+    image,
+    price,
+    category,
+    model,
+    brand,
+    cartoncapacity,
+  } = product;
+
+  const getProduct = async () => {
+    try {
+      ProductSerdcvices.fetchProductById(id).then((data) => {
+        const imgs = createImageUrls(data?.image);
+        data.image = imgs;
+        setProduct(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const getItem = async () => {
-      const headers = {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      };
-      const url = `https://fruit-mart-server.onrender.com/api/v1/fruits/${id}`;
-      const { data } = await axios.get(url, { headers: headers });
-      console.log(data);
-      setFruit(data.fruit);
-    };
-    getItem();
+    getProduct();
   }, [id]);
-  return (
-    <section className="text-gray-600 body-font overflow-hidden bg-base-200">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+
+  const createImageUrls = (images) => {
+    return images?.map((img) => {
+      return getImageUrl(img?.filename);
+    });
+  };
+
+  const swapWithActiveImage = (index) => {
+    setProduct((prev) => {
+      return {
+        ...prev,
+        image: image,
+      };
+    });
+    setActiveImage(index);
+  };
+
+  const renderImages = () => {
+    return image?.map((img, index) => {
+      return (
+        <div
+          key={index}
+          className="overflow-hidden rounded-lg bg-gray-100"
+          onClick={() => swapWithActiveImage(index)}
+        >
           <img
-            alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src={picture}
+            src={img}
+            loading="lazy"
+            alt="product photo"
+            className="h-full w-full object-cover object-center"
           />
-          <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-            <h2 className="text-sm title-font text-gray-500 tracking-widest">
-              FRUITMART + {id}
-            </h2>
-            <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-              {name}
-            </h1>
-            <div className="flex mb-4">
-              <span className="flex items-center">
-                <svg
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-orange-600"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-orange-600"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-orange-600"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-orange-600"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <svg
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-4 h-4 text-orange-600"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                </svg>
-                <span className="text-gray-600 ml-3">4 Reviews</span>
+        </div>
+      );
+    });
+  };
+
+  return (
+    <div className="bg-white py-6 sm:py-8 lg:py-12">
+      <div className="mx-auto max-w-screen-lg px-4 md:px-8">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="space-y-4">
+            <div className="relative overflow-hidden rounded-lg bg-gray-100">
+              
+              <ImageZoom
+                src={image?.[activeImage]}
+                alt="selected product photo"
+              />
+
+              {/* <span className="absolute left-0 top-0 rounded-br-lg bg-red-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">
+                sale
+              </span> */}
+            </div>
+            <div class="grid grid-cols-2 gap-4">{renderImages()}</div>
+          </div>
+
+          <div className="md:py-8">
+            <div className="mb-2 md:mb-3">
+              <span className="mb-0.5 inline-block text-gray-500">
+                {brand?.name}
               </span>
-              <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s">
-                <p className="text-gray-500">
-                  {isActive ? <span>Instok </span> : ""}
-                </p>
+              <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
+                {title}
+              </h2>
+            </div>
+
+            <div className="mb-4">
+              <div className="flex items-end gap-2">
+                <span className="text-xl font-bold text-gray-800 md:text-2xl">
+                  ৳&nbsp; {price}
+                </span>
+                {/* <span className="mb-0.5 text-red-500 line-through">$30.00</span> */}
+              </div>
+
+              <span className="text-sm text-gray-500">
+                incl. VAT plus shipping
               </span>
             </div>
-            <p className="leading-relaxed">
-              {description}
-            </p>
-            <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5"></div>
-            <div className="flex">
-              <span className="title-font font-medium text-2xl text-gray-900">
-                Unit Price:$ {price}{" "}
-              </span>
-              <button className="flex ml-auto text-white bg-orange-600 border-0 py-2 px-6 focus:outline-none rounded">
-                Add to Cart
-              </button>
-              <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+
+            <div className="mb-6 flex items-center gap-2 text-gray-500">
+              <TruckIcon className="h-6 w-6" />
+              <span className="text-sm">2-4 day shipping</span>
+            </div>
+            <div className="mb-6 flex items-center gap-2 text-gray-500">
+              <ArchiveBoxArrowDownIcon className="h-6 w-6" />
+
+              <span className="text-sm">{cartoncapacity} per cartoon</span>
+            </div>
+
+            {/* <div className="flex gap-2.5">
+              <a className="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">
+                Add to cart
+              </a>
+
+              <a className="inline-block rounded-lg bg-gray-200 px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
                 <svg
-                  fill="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
                   viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
                 </svg>
-              </button>
+              </a>
+            </div> */}
+
+            <div className="mt-10 md:mt-16 lg:mt-20">
+              <div className="mb-3 text-lg font-semibold text-gray-800">
+                Description
+              </div>
+
+              <p className="text-gray-500">{description}</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -13,7 +13,10 @@ export const getTableRowSerial = (index) => {
 };
 
 export const getImageUrl = (imgName) => {
-  const url =
-    process.env.REACT_APP_BACKEND + "/backend/product/image/" + imgName;
+  const base =process.env.REACT_APP_BACKEND
+    // process.env.REACT_APP_ENV === "local"
+    //   ? process.env.REACT_APP_LOCAL_BACKEND
+    //   : process.env.REACT_APP_BACKEND;
+  const url = base + "/backend/product/image/" + imgName;
   return url;
 };
