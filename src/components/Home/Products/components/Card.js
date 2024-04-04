@@ -2,46 +2,6 @@ import React from "react";
 import { getImageUrl } from "../../../../utils/utils";
 import { useNavigate } from "react-router-dom";
 
-// {
-//     "tags": [],
-//     "status": "active",
-//     "_id": "65c7b68fcc46cd3a28cfe9fd",
-//     "title": "steel water tap",
-//     "description": "water tap made of steel metal",
-//     "image": [
-//         {
-//             "_id": "65c7b68fcc46cd3a28cfe9fe",
-//             "encoding": "7bit",
-//             "imageUrl": "images/1707587214438_830299363.jpg",
-//             "destination": "images/",
-//             "filename": "1707587214438_830299363.jpg",
-//             "path": "images/1707587214438_830299363.jpg",
-//             "size": 26212
-//         }
-//     ],
-//     "price": 7584,
-//     "category": {
-//         "_id": "65c7b4c7cc46cd3a28cfe9ba",
-//         "name": "Metal",
-//         "description": "this is metal product",
-//         "createdAt": "2024-02-10T17:39:19.687Z",
-//         "updatedAt": "2024-02-10T17:39:19.687Z",
-//         "__v": 0
-//     },
-//     "model": "LUX-877",
-//     "brand": {
-//         "_id": "65c7b6e0cc46cd3a28cfea12",
-//         "name": "Elegant",
-//         "description": "this is elegant brand a branch of classic group",
-//         "createdAt": "2024-02-10T17:48:16.658Z",
-//         "updatedAt": "2024-02-10T17:48:16.658Z",
-//         "__v": 0
-//     },
-//     "cartoncapacity": 123,
-//     "createdAt": "2024-02-10T17:46:55.252Z",
-//     "updatedAt": "2024-02-10T17:49:25.543Z",
-//     "__v": 1
-// },
 
 const Card = ({ product }) => {
   const { _id, title, price, image, category, brand, cartoncapacity } = product;

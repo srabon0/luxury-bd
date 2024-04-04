@@ -1,31 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { ProductSerdcvices } from "../../services/product.services";
-import { getImageUrl } from "../../utils/utils";
 import {
   ArchiveBoxArrowDownIcon,
   TagIcon,
   TruckIcon,
   ViewfinderCircleIcon,
 } from "@heroicons/react/24/solid";
-import "./ImageZoom.css"; // Import the CSS file
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ProductSerdcvices } from "../../services/product.services";
+import { getImageUrl } from "../../utils/utils";
 import ImageZoom from "./ImageZoom";
+import "./ImageZoom.css"; // Import the CSS file
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState({});
   const [activeImage, setActiveImage] = useState(0);
-
-  const {
-    title,
-    description,
-    image,
-    price,
-    category,
-    model,
-    brand,
-    cartoncapacity,
-  } = product;
 
   const getProduct = async () => {
     try {
@@ -41,7 +30,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     getProduct();
-  }, [id]);
+  }, []);
 
   const createImageUrls = (images) => {
     return images?.map((img) => {
@@ -53,14 +42,14 @@ const ProductDetails = () => {
     setProduct((prev) => {
       return {
         ...prev,
-        image: image,
+        image: product?.image,
       };
     });
     setActiveImage(index);
   };
 
   const renderImages = () => {
-    return image?.map((img, index) => {
+    return product?.image?.map((img, index) => {
       return (
         <div
           key={index}
@@ -85,7 +74,7 @@ const ProductDetails = () => {
           <div className="space-y-4">
             <div className="relative overflow-hidden rounded-lg bg-gray-100">
               <ImageZoom
-                src={image?.[activeImage]}
+                src={product?.image?.[activeImage]}
                 alt="selected product photo"
               />
 
@@ -99,17 +88,17 @@ const ProductDetails = () => {
           <div className="md:py-8">
             <div className="mb-2 md:mb-3">
               <span className="mb-0.5 inline-block text-gray-500">
-                {brand?.name}
+                {product?.brand?.name}
               </span>
               <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
-                {title}
+                {product?.title}
               </h2>
             </div>
 
             <div className="mb-4">
               <div className="flex items-end gap-2">
                 <span className="text-xl font-bold text-gray-800 md:text-2xl">
-                  ৳&nbsp; {price}
+                  ৳&nbsp; {product?.price}
                 </span>
                 {/* <span className="mb-0.5 text-red-500 line-through">$30.00</span> */}
               </div>
@@ -126,23 +115,25 @@ const ProductDetails = () => {
             <div className="mb-6 flex items-center gap-2 text-gray-500">
               <ArchiveBoxArrowDownIcon className="h-6 w-6" />
 
-              <span className="text-sm">{cartoncapacity} per cartoon</span>
+              <span className="text-sm">
+                {product?.cartoncapacity} per cartoon
+              </span>
             </div>
             <div className="mb-6 flex items-center gap-2 text-gray-500">
               <TagIcon className="h-6 w-6" />
-              <span className="text-sm">{category}</span>
+              <span className="text-sm">{product?.category?.name}</span>
             </div>
             <div className="mb-6 flex items-center gap-2 text-gray-500">
               <ViewfinderCircleIcon className="h-6 w-6" />
-              <span className="text-sm">{model}</span>
+              <span className="text-sm">{product?.model}</span>
             </div>
 
-            {/* <div className="flex gap-2.5">
-              <a className="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">
+            <div className="flex gap-2.5">
+              <button className="inline-block flex-1 rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 sm:flex-none md:text-base">
                 Add to cart
-              </a>
+              </button>
 
-              <a className="inline-block rounded-lg bg-gray-200 px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
+              <button className="inline-block rounded-lg bg-gray-200 px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-300 focus-visible:ring active:text-gray-700 md:text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -157,14 +148,14 @@ const ProductDetails = () => {
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                   />
                 </svg>
-              </a>
-            </div> */}
+              </button>
+            </div>
 
             <div className="mt-10 md:mt-16 lg:mt-20">
               <div className="mb-3 text-lg font-semibold text-gray-800">
                 Description
               </div>
-              <p className="text-gray-500">{description}</p>
+              <p className="text-gray-500">{product?.description}</p>
             </div>
           </div>
         </div>
