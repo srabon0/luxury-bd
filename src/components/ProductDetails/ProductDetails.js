@@ -97,9 +97,11 @@ const ProductDetails = () => {
 
             <div className="mb-4">
               <div className="flex items-end gap-2">
-                <span className="text-xl font-bold text-gray-800 md:text-2xl">
-                  ৳&nbsp; {product?.price}
-                </span>
+                {product?.price && (
+                  <span className="text-xl font-bold text-gray-800 md:text-2xl">
+                    ৳&nbsp; {product?.price}
+                  </span>
+                )}
                 {/* <span className="mb-0.5 text-red-500 line-through">$30.00</span> */}
               </div>
 
