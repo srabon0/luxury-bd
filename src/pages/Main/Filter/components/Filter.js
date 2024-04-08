@@ -64,9 +64,7 @@ const Filter = ({ setFilterProps }) => {
           <div className="flex flex-col gap-6">
             <div className="flex cursor-pointer items-center justify-between py-4 [border-top:1px_solid_rgba(0,_0,_0,_0)] md:py-0">
               <p className="font-semibold">Categories</p>
-              <a href="#" className="inline-block text-sm text-black">
-                <p>Clear</p>
-              </a>
+              {/* clear button  */}
             </div>
             <div className="flex flex-col gap-3">
               {categoryState?.categories?.length &&
