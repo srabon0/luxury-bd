@@ -1,9 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "../../../../utils/utils";
-
 const SingleGrid = ({ item }) => {
+  const navigate = useNavigate();
+
+  const navigateToDetails = () => {
+    navigate(`/product/${item?._id}`);
+  };
   return (
-    <div>
+    <div onClick={navigateToDetails}>
       <div className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
         <img
           src={getImageUrl(item?.image?.[0]?.filename)}
