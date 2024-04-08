@@ -65,9 +65,9 @@ const Navbar = () => {
           <NavLink to="/" currentPath={location.pathname}>
             Home
           </NavLink>
-          {/* <NavLink to="/services" currentPath={location.pathname}>
-            Services
-          </NavLink> */}
+          <NavLink to="/products" currentPath={location.pathname}>
+            Products
+          </NavLink>
           <NavLink to="/contact" currentPath={location.pathname}>
             Contact
           </NavLink>

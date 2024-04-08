@@ -11,20 +11,27 @@ import { getImageUrl } from "../../utils/utils";
 import ImageZoom from "./ImageZoom";
 import "./ImageZoom.css"; // Import the CSS file
 
+import { toast } from "react-toastify";
+import ProductDetailsSkeleton from "./ProductDetailsSkeleton";
+
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [activeImage, setActiveImage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getProduct = async () => {
     try {
+      setIsLoading(true);
       ProductSerdcvices.fetchProductById(id).then((data) => {
         const imgs = createImageUrls(data?.image);
         data.image = imgs;
         setProduct(data);
+        setIsLoading(false);
       });
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to fetch product details");
+      setIsLoading(false);
     }
   };
 
@@ -66,6 +73,8 @@ const ProductDetails = () => {
       );
     });
   };
+
+  if (isLoading && !product?.length) return <ProductDetailsSkeleton />;
 
   return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">

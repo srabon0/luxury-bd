@@ -15,6 +15,8 @@ import ContactForm from "../pages/Main/Contact";
 import Home from "../components/Home/Home";
 import Service from "../pages/Main/Service";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
+import CategoryFilter1 from "../pages/Main/Filter/components/Filter";
+import AllProductsWIthFilter from "../pages/Main/Filter/AllProductsWIthFilter";
 
 const routes = createBrowserRouter([
   {
@@ -44,6 +46,10 @@ const routes = createBrowserRouter([
       {
         path: "/services",
         element: <Service />,
+      },
+      {
+        path: "/products",
+        element: <AllProductsWIthFilter />,
       },
       {
         path: "/product/:id",

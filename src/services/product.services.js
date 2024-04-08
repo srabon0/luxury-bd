@@ -26,4 +26,11 @@ export const ProductSerdcvices = {
     const { data } = await apiInstance.delete(`backend/product/${productId}`);
     return data;
   },
+
+  async searchProducts(searchKey) {
+    const { data } = await apiInstance.post("/frontend/product/search", {
+      searchKey,
+    });
+    return data?.data;
+  },
 };
