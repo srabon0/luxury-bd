@@ -96,9 +96,9 @@ const Filter = ({ setFilterProps }) => {
           <div className="flex flex-col gap-6">
             <div className="flex cursor-pointer items-center justify-between py-4 [border-top:1px_solid_rgba(0,_0,_0,_0)] md:py-0">
               <p className="font-semibold">Brands</p>
-              <a href="#" className="inline-block text-sm text-black">
+              <div className="inline-block text-sm text-black">
                 <p>Clear</p>
-              </a>
+              </div>
             </div>
             <div className="flex flex-col gap-3">
               <label className="flex items-center font-medium">
