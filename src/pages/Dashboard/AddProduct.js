@@ -24,8 +24,11 @@ export default function App() {
   const { prodId } = useParams();
 
   const uploadProductImage = async (formData) => {
-    const uploadUrl =
-      process.env.REACT_APP_LOCAL_BACKEND + "/backend/product/upload";
+    const base =
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_BACKEND
+        : process.env.REACT_APP_LOCAL_BACKEND;
+    const uploadUrl = base + "/backend/product/upload";
     const response = await fetch(uploadUrl, {
       method: "POST",
       body: formData,
