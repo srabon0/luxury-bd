@@ -1,19 +1,13 @@
 // Import the necessary modules
 import axios from "axios";
-
-// Create a new Axios instance with custom configuration
-console.log(process.env.REACT_APP_BACKEND);
-console.log(localStorage.getItem("token"));
-
 const apiInstance = axios.create({
-  baseURL: process.env.REACT_APP_LOCAL_BACKEND,
+  baseURL: process.env.NODE_ENV === 'production' ? process.env.REACT_APP_BACKEND : process.env.REACT_APP_LOCAL_BACKEND,
   timeout: 100000,
   headers: {
     "Content-Type": "application/json",
     authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
-
 // Optionally, you can add interceptors for request and response
 apiInstance.interceptors.request.use(
   (config) => {
