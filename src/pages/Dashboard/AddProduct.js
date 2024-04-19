@@ -42,7 +42,6 @@ export default function App() {
   //   return response?.data?.imageInfo;
   // };
 
-
   const addProduct = async (productData) => {
     const url = "/backend/product/create";
     const response = await apiInstance.post(url, productData);
@@ -67,6 +66,7 @@ export default function App() {
       const product = { ...productData, image: newMergedImages };
 
       await updateProduct(id, product);
+
       toast.success("Product updated successfully");
     } catch (error) {
       toast.error(error.message);
@@ -77,7 +77,7 @@ export default function App() {
     dispatch(ProductThunks.updateProduct(id, productData));
     setSelectedFiles([]);
     setFormDataFile([]);
-    setUpdatingProduct({});
+    await fetchProduct();
   };
 
   const onSubmit = async (data) => {

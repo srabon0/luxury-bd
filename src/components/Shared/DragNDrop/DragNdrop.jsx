@@ -61,7 +61,7 @@ function DragNDrop({ selectedImages, setSelectedImages, setFormDataFile }) {
 
 
     return (
-        <div className="mb-4 flex flex-col-reverse ">
+        <div className="mb-4 flex flex-col-reverse z-0">
             <div>
                 <div
                     id="FileUpload"

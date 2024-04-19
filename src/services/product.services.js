@@ -33,4 +33,13 @@ export const ProductSerdcvices = {
     });
     return data?.data;
   },
+
+  async deleteSingleImage(imageFileObj) {
+    console.log(imageFileObj);
+    const { data } = await apiInstance.post(
+      "backend/product/delete/image/" + imageFileObj?.productId,
+      imageFileObj
+    );
+    return data;
+  },
 };

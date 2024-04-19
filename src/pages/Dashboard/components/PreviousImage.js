@@ -1,20 +1,45 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
+import { toast } from "react-toastify";
 import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
+import { ProductSerdcvices } from "../../../services/product.services";
 import { getImageUrl } from "../../../utils/utils";
 
-const PreviousImage = ({ updatingProduct }) => {
+const PreviousImage = ({ updatingProduct, setUpdatingProduct }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteImage, setDeleteImage] = React.useState({});
 
   const closeModal = () => {
-    console.log(deleteImage);
     setDeleteImage({});
+    setIsModalOpen(false);
+  };
+
+  const openDeleteModal = (img) => {
+    setDeleteImage(img);
+    setIsModalOpen(true);
+  };
+
+  const onConfirmDelete = async () => {
+    console.log("Deleting image, deleteImage: ", deleteImage);
+    ProductSerdcvices.deleteSingleImage({
+      productId: updatingProduct?._id,
+      ...deleteImage,
+    })
+      .then((res) => {
+        console.log("Image deleted: ", res);
+        setUpdatingProduct(res?.data);
+        toast.success("Image deleted successfully");
+        closeModal();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    closeModal();
   };
 
   return (
     <>
-      <div className="mb-6 grid grid-cols-2 gap-2">
+    <div className="mb-6 grid grid-cols-2 gap-2">
         <label className="mb-2.5 block text-black col-span-full">
           Previous Image
         </label>
@@ -27,7 +52,7 @@ const PreviousImage = ({ updatingProduct }) => {
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
               <button
-                onClick={() => setIsModalOpen(img)}
+                onClick={() => openDeleteModal(img)}
                 className="rounded btn btn-error btn-sm"
               >
                 <XMarkIcon className="h-6 w-6 text-white" />
@@ -50,7 +75,12 @@ const PreviousImage = ({ updatingProduct }) => {
             >
               Cancel
             </button>
-            <button className="btn btn-error btn-sm">Delete</button>
+            <button
+              onClick={() => onConfirmDelete()}
+              className="btn btn-error btn-sm"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </ConfirmModal>
