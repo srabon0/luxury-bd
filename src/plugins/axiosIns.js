@@ -2,9 +2,11 @@
 import axios from "axios";
 
 // Create a new Axios instance with custom configuration
+console.log(process.env.REACT_APP_BACKEND);
+console.log(localStorage.getItem("token"));
 
 const apiInstance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND,
+  baseURL: process.env.REACT_APP_LOCAL_BACKEND,
   timeout: 100000,
   headers: {
     "Content-Type": "application/json",

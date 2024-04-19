@@ -8,8 +8,11 @@ const SingleGrid = ({ item }) => {
     navigate(`/product/${item?._id}`);
   };
   return (
-    <div onClick={navigateToDetails}>
-      <div className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
+    <div
+      onClick={navigateToDetails}
+      className="border border-1 border-gray-300 rounded-md"
+    >
+      <div className="group relative block h-80 overflow-hidden bg-gray-100">
         <img
           src={getImageUrl(item?.image?.[0]?.filename)}
           loading="lazy"
@@ -22,14 +25,28 @@ const SingleGrid = ({ item }) => {
         </span> */}
       </div>
 
-      <div>
-        <div className="hover:gray-800 mb-1 text-gray-500 transition duration-100 lg:text-lg">
-          {item?.title}
+      <div className="flex items-start justify-between rounded-b-lg bg-gray-100 p-4">
+        <div className="flex flex-col">
+          <div className="font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-lg">
+            {item?.title}
+          </div>
+          <span className="text-sm text-gray-500 lg:text-base">
+            by {item?.brand?.name}
+          </span>
+          <span>
+            {item?.category?.name} - {item?.cartoncapacity} pcs
+          </span>
         </div>
 
-        <div className="flex items-end gap-2">
-          {/* <span className="font-bold text-gray-800 lg:text-lg">$15.00</span>
-          <span className="mb-0.5 text-red-500 line-through">$30.00</span> */}
+        <div className="flex flex-col items-end">
+          <span className="font-bold text-gray-600 lg:text-lg">
+            &#2547;{item?.price}
+          </span>
+          {item?.product?.offer && (
+            <span className="text-sm text-red-500 line-through">
+              &#2547;{item?.product?.offer?.priceAfterOffer}
+            </span>
+          )}
         </div>
       </div>
     </div>

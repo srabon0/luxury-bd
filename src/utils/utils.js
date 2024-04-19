@@ -16,7 +16,10 @@ export const getImageUrl = (imgName) => {
   if (!imgName) {
     return "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg";
   }
-  const base = process.env.REACT_APP_BACKEND;
+  const base =
+    process.env.REACT_APP_ENV === "local"
+      ? process.env.REACT_APP_LOCAL_BACKEND
+      : process.env.REACT_APP_BACKEND;
   const url = base + "/backend/product/image/" + imgName;
   return url;
 };

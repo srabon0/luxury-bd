@@ -13,7 +13,7 @@ const Card = ({ product }) => {
   };
 
   return (
-    <div>
+    <div className="border border-1 border-gray-300 rounded-lg">
       <div
         onClick={navigateToDetails}
         className="group relative block h-96 overflow-hidden rounded-t-lg bg-gray-100 cursor-pointer"
