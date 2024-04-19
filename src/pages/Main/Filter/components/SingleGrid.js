@@ -14,7 +14,7 @@ const SingleGrid = ({ item }) => {
     >
       <div className="group relative block h-80 overflow-hidden bg-gray-100">
         <img
-          src={getImageUrl(item?.image?.[0]?.filename)}
+          src={getImageUrl(item?.image?.[0]?.imageUrl)}
           loading="lazy"
           alt="Photo by Rachit Tank"
           className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"

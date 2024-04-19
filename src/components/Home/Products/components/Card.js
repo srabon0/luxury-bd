@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Card = ({ product }) => {
   const { _id, title, price, image, category, brand, cartoncapacity } = product;
-  const thumbnail = getImageUrl(image[0]?.filename);
+  const thumbnail = getImageUrl(image[0]?.imageUrl);
   const navigate = useNavigate();
 
   const navigateToDetails = () => {

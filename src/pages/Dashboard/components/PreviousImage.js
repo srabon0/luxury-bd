@@ -21,7 +21,7 @@ const PreviousImage = ({ updatingProduct }) => {
         {updatingProduct?.image?.map((img, i) => (
           <div key={i} className="relative group">
             <img
-              src={getImageUrl(img?.filename)}
+              src={getImageUrl(img?.imageUrl)}
               alt="product"
               className="w-full h-full object-cover rounded transition duration-500 ease-in-out transform hover:scale-105"
             />

@@ -53,7 +53,7 @@ const ProductTable = ({ enableEdit, children }) => {
               <TableCell>{getTableRowSerial(idx)}</TableCell>
               <TableCell
                 hasImg
-                imgSrc={getImageUrl(prods?.image?.[0]?.filename)}
+                imgSrc={getImageUrl(prods?.image?.[0]?.imageUrl)}
                 content={prods?.title}
               />
 

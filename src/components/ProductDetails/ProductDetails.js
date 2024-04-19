@@ -41,7 +41,7 @@ const ProductDetails = () => {
 
   const createImageUrls = (images) => {
     return images?.map((img) => {
-      return getImageUrl(img?.filename);
+      return getImageUrl(img?.imageUrl);
     });
   };
 
