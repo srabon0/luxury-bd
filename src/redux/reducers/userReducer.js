@@ -5,12 +5,13 @@ import {
 
 const initalState = {
   authUser: JSON.parse(localStorage.getItem("currentUser")) || {},
+  token:localStorage.getItem('token') || ''
 };
-
 const userReducer = (state = initalState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       localStorage.setItem("currentUser", JSON.stringify(action.payload));
+      localStorage.setItem("token", action.payload.accessToken)
       return {
         ...state,
         authUser: action.payload,
