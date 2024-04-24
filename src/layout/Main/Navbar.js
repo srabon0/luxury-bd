@@ -1,240 +1,159 @@
-import React, { useEffect, useState } from "react";
-import { signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
-import auth from "../../firebase.init";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { themeChange } from "theme-change";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import loadUserInfo from "../../redux/thunk/fetchUser";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { resetCurrentUser } from "../../redux/actions/userAction";
-const Navbar = () => {
-  const [darkMode, setDarkMode] = useState("winter");
-  const dispatch = useDispatch();
-  const [check, setCheck] = useState(false);
-  const setDar = () => {
-    if (darkMode == "winter") {
-      setDarkMode("dracula");
-      setCheck(true);
-      localStorage.setItem("theme", "dracula");
-    } else {
-      setDarkMode("winter");
-      setCheck(false);
-      localStorage.setItem("theme", "winter");
-    }
-  };
-  const navigate = useNavigate();
-  const [user, loading, error] = useAuthState(auth);
-  const state = useSelector((state) => state.fruitState);
-  const cart = state.cart;
-  const initialValue = 0;
-  const cartTotal = cart.reduce(
-    (accumulator, current) => accumulator + current.price * current.quantity,
-    initialValue
-  );
-  useEffect(() => {
-    themeChange(false);
-    const currentTheme = localStorage.getItem("theme");
-    setDarkMode(currentTheme);
-    if (currentTheme == "winter") {
-      setCheck(false);
-    } else {
-      setCheck(true);
-    }
+import mainLogo from "./../../assests/svg/classic.svg";
+const mainMenuList = [
+  {
+    id: 1000,
+    name: "Home",
+    link: "/",
+  },
+  {
+    id: 1001,
+    name: "Products",
+    link: "/products",
+  },
+  // {
+  //   id: 1002,
+  //   name: "About",
+  //   link: "/about",
+  // },
 
-    // 👆 false parameter is required for react project
-  }, [darkMode]);
-  const handleSignout = () => {
-    signOut(auth);
-  };
-  if (loading) {
-    return (
-      <div>
-        <p>Initialising User...</p>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-  if (user) {
-    dispatch(loadUserInfo(user?.email));
-  }
+  {
+    id: 1003,
+    name: "Contact",
+    link: "/contact",
+  },
+];
+
+const adminMenuList = [
+  {
+    id: 3000,
+    name: "Dashboard",
+    link: "/dashboard",
+  },
+  {
+    id: 3001,
+    name: "Profile",
+    link: "/dashboard/profile",
+  },
+];
+const NavMenu = ({ menu }) => {
+  const location = useLocation();
   return (
-    <div className="navbar bg-orange-500">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex="0" className="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />
-            </svg>
-          </label>
-          <ul
-            tabIndex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/signup">SignUp</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="navbar-center">
-        <Link to="/" className="btn btn-ghost text-white normal-case text-xl">
-          FruitMart
-        </Link>
-      </div>
-      <div className="navbar-end">
-        <div className="dropdown dropdown-end">
-          <label
-            htmlFor="my-drawer-2"
-            className="btn btn-square btn-ghost text-white lg:hidden"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-6 h-6 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
-          </label>
-          <label tabIndex="0" className="btn btn-ghost btn-circle text-white">
-            <div className="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <span className="badge badge-sm indicator-item">
-                {cart.length}
-              </span>
-            </div>
-          </label>
-          <div
-            tabIndex="0"
-            className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow"
-          >
-            <div className="card-body">
-              <span className="font-bold text-lg">{cart.length} items</span>
-              <span className="text-black font-medium text-sm">
-                Subtotal: $ {cartTotal.toFixed(2)}
-              </span>
-              <div className="card-actions">
-                <Link
-                  to="/cart"
-                  className="btn bg-orange-600 btn-sm border-0 text-white btn-block"
-                >
-                  View cart
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+    <NavLink
+      currentPath={location.pathname}
+      to={menu?.link}
+      className="lg:mr-12"
+    >
+      <span
+        className={`rounded text-md font-semibold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 ${
+          location.pathname === menu?.link ? "text-blue-400" : "text-black"
+        }`}
+      >
+        {menu?.name}
+      </span>
+    </NavLink>
+  );
+};
 
-        <div className="dropdown dropdown-end">
-          <label tabIndex="0" className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <img src="https://placeimg.com/80/80/people" />
-            </div>
-          </label>
-          <ul
-            tabIndex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <p className="bg-emerald-200 justify-between mb-1">
-                {user ? user?.email : ""}
-              </p>
-            </li>
-            <li>
-              <p className="justify-between mb-1 flex flex-row items-center">
-                {" "}
-                <span>☀️</span>
-                <input
-                  onChange={setDar}
-                  type="checkbox"
-                  className="toggle"
-                  checked={check}
-                />
-                <span>🌙</span>{" "}
-              </p>
-            </li>
-            <li>
-              <button
-                onClick={() => {
-                  navigate("/dashboard");
-                }}
-                className="justify-between mb-1"
-              >
-                Dashboard
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => {
-                  handleSignout();
-                  dispatch(resetCurrentUser());
-                }}
-                className="justify-between bg-error text-white mb-1"
-              >
-                Signout
-              </button>
-            </li>
-          </ul>
-        </div>
+const Navbar = () => {
+  const navigate = useNavigate();
+  const redirectToDetails = (link) => {
+    navigate(link);
+  };
 
-        <button
-          className="btn btn-sm btn-secondary"
-          onClick={() => {
-            navigate("/login");
-          }}
+  const currentUser = useSelector((state) => state?.userState?.authUser?.user);
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
+    dispatch(resetCurrentUser());
+    navigate("/login");
+  };
+  return (
+    <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center">
+      <span className="flex items-center whitespace-nowrap text-2xl font-black">
+        <span className="mr-2 w-16">
+          <img src={mainLogo} alt="" />
+        </span>
+        <span className="text-blue-800 font-bold text-2xl italic">Classic</span>
+        <span className="text-purple-800 font-bold text-2xl italic">Group</span>
+      </span>
+      <input type="checkbox" className="peer hidden" id="navbar-open" />
+      <label
+        className="absolute top-5 right-5 cursor-pointer lg:hidden"
+        for="navbar-open"
+      >
+        <svg
+          className="h-7 w-7"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          {" "}
-          Login{" "}
-        </button>
-      </div>
-    </div>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </label>
+
+      <nav
+        aria-label="Header Navigation"
+        className="peer-checked:pt-8 peer-checked:max-h-60 flex max-h-0 w-full flex-col items-center overflow-hidden transition-all lg:ml-24 lg:max-h-full lg:flex-row"
+      >
+        <ul className="flex w-full flex-col items-center space-y-2 lg:flex-row lg:justify-center lg:space-y-0">
+          {mainMenuList?.map((menu) => (
+            <NavMenu key={menu?.id} menu={menu} />
+          ))}
+
+          {currentUser && currentUser?.role === "admin" && (
+            <>
+              {adminMenuList?.map((menu) => (
+                <NavMenu key={menu?.id} menu={menu} />
+              ))}
+            </>
+          )}
+        </ul>
+        {!currentUser && (
+          <>
+            <hr className="mt-4 w-full lg:hidden" />
+            <div className="my-4 flex items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
+              <button
+                onClick={() => redirectToDetails("/login")}
+                className="whitespace-nowrap rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 hover:text-opacity-50"
+              >
+                Log in
+              </button>
+              <button
+                onClick={() => redirectToDetails("/signup")}
+                className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
+              >
+                Sign up
+              </button>
+            </div>
+          </>
+        )}
+        {currentUser && (
+          <>
+            <hr className="mt-4 w-full lg:hidden" />
+            <div className="my-4 flex items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
+              <button
+                onClick={logout}
+                className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
+              >
+                Log Out
+              </button>
+            </div>
+          </>
+        )}
+      </nav>
+    </header>
   );
 };
 

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { useDispatch } from "react-redux";
+import { Outlet } from "react-router-dom";
+import BrandThunks from "../../redux/thunk/brandThunk";
+import CategoryThunks from "../../redux/thunk/categoryThunk";
 import Footer from "./Footer";
 import Marquee from "./Marquee";
-import Nav from "./Nav";
-import { Helmet } from "react-helmet";
-import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import CategoryThunks from "../../redux/thunk/categoryThunk";
-import BrandThunks from "../../redux/thunk/brandThunk";
+import Navbar from "./Navbar";
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Main = () => {
         <title>Luxurry | Classic Group</title>
       </Helmet>
       <Marquee />
-      <Nav />
+      <Navbar />
       <div>
         <Outlet />
       </div>
