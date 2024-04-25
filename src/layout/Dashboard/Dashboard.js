@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { dashboardMenuList } from "./menuList";
 const Dashboard = () => {
@@ -33,7 +33,16 @@ const Dashboard = () => {
         </div>
         {/* Page content here */}
         <div className="flex">
-          <Sidebar />
+          <div className="bg-base-200">
+            <div className="mt-5">
+              <Link to="/dashboard">
+                <h3 className="text-center md:text-2xl text-xl font-bold hover:text-blue-500 cursor-pointer">
+                  Dashboard
+                </h3>
+              </Link>
+            </div>
+            <Sidebar />
+          </div>
           <div className="mx-auto p-5 w-4/5">
             <Outlet />
           </div>

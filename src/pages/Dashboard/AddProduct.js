@@ -29,21 +29,25 @@ export default function App() {
         ? process.env.REACT_APP_BACKEND
         : process.env.REACT_APP_LOCAL_BACKEND;
     const uploadUrl = base + "/backend/product/upload";
-    const response = await fetch(uploadUrl, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-    console.log("iamge upload success", data?.imageInfo);
-    return await data?.imageInfo;
+    try {
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      });
+      console.log(response?.status);
+      if (response?.status === 200) {
+        toast.success("Image uploaded successfully");
+        const data = await response.json();
+        return await data?.imageInfo;
+      } else {
+        toast.error("Image upload failed");
+        return;
+      }
+    } catch (error) {
+      console.log("image upload error", error);
+      toast.error("Image upload failed");
+    }
   };
-
-  // const uploadProductImage = async (formData) => {
-  //   const uploadUrl = "/backend/product/upload";
-  //   const response = await apiInstance.post(uploadUrl, formData);
-  //   return response?.data?.imageInfo;
-  // };
 
   const addProduct = async (productData) => {
     const url = "/backend/product/create";
@@ -64,12 +68,10 @@ export default function App() {
       });
 
       const imageInfo = await uploadProductImage(formData);
-      console.log("previous image", updatingProduct?.image);
       const newMergedImages = [...updatingProduct?.image, ...imageInfo];
       const product = { ...productData, image: newMergedImages };
 
       await updateProduct(id, product);
-
       toast.success("Product updated successfully");
     } catch (error) {
       toast.error(error.message);
@@ -91,6 +93,9 @@ export default function App() {
       });
 
       const imageInfo = await uploadProductImage(formData);
+      if (!imageInfo) {
+        return;
+      }
       console.log("imageInfo", imageInfo);
       const product = await { ...data, image: imageInfo };
       await addProduct(product);
