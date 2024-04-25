@@ -1,13 +1,24 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Card from "./components/Card";
 import Loader from "../../Shared/Loader/Loader";
-import "./style/style.css";
+import Card from "./components/Card";
+import blurr from "../../../assests/blurry.png";
+
+
 const Products = () => {
   const allProduct = useSelector((state) => state.productState.products);
-
   return (
-    <section className="bg-center bg-no-repeat bg-prime bg-gray-300 bg-blend-multiply">
+    <section
+    style={
+      {
+        backgroundImage: `url(${blurr})`,
+        backgroundSize: "object-fit",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }
+    }
+    >
       <div className="py-6 sm:py-8 lg:py-12">
         <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
           <div className="mb-10 md:mb-16">
