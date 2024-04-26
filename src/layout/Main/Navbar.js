@@ -74,7 +74,7 @@ const Navbar = () => {
     navigate("/login");
   };
   return (
-    <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center">
+    <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center ">
       <span className="flex items-center whitespace-nowrap text-2xl font-black">
         <span className="mr-2 w-16">
           <img src={mainLogo} alt="" />
@@ -84,7 +84,7 @@ const Navbar = () => {
       </span>
       <input type="checkbox" className="peer hidden" id="navbar-open" />
       <label
-        className="absolute top-5 right-5 cursor-pointer lg:hidden"
+        className="absolute right-5 top-9 cursor-pointer lg:hidden"
         for="navbar-open"
       >
         <svg
