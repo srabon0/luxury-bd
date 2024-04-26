@@ -20,7 +20,7 @@ const Products = () => {
     }
     >
       <div className="py-6 sm:py-8 lg:py-12">
-        <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+        <div className="container mx-auto p-10 md:py-12 px-0 md:p-8 md:px-0">
           <div className="mb-10 md:mb-16">
             <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">
               SANITARY <span className="text-violet-600">WARE</span>
@@ -43,7 +43,7 @@ const Products = () => {
             />
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="p-5 md:p-0 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 items-start">
             {allProduct?.map((product) => {
               return <Card key={product._id} product={product} />;
             })}
