@@ -4,6 +4,7 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { ProductSerdcvices } from "../../../services/product.services";
 import Filter from "./components/Filter";
 import ProductsGrid from "./components/ProductsGrid";
+import Pagination from "../../../components/Shared/Pagination/Pagination";
 
 const removeNullValuesFromRequest = (obj) => {
   for (const key in obj) {
@@ -46,6 +47,7 @@ const AllProductsWIthFilter = () => {
 
   const fetchSearchedProducts = async () => {
     removeNullValuesFromRequest(filterProps);
+
     ProductSerdcvices.searchProducts(filterProps)
       .then((data) => {
         console.log(data);
@@ -80,6 +82,13 @@ const AllProductsWIthFilter = () => {
             {/* Decor */}{" "}
             <div className="w-full">
               <ProductsGrid products={products} />
+
+              <Pagination
+                currentPage={15}
+                itemsPerPage={10}
+                onPageChange={(page) => console.log(page)}
+                totalItems={100}
+              />
             </div>
           </div>
         </div>

@@ -1,32 +1,58 @@
 import React from "react";
 
-const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
-  console.log("currentPage", currentPage);
-  console.log("itemsPerPage", itemsPerPage);
-  console.log("totalItems", totalItems);
+const Pagination = ({ paginate, meta }) => {
   const pageNumbers = [];
+  const totalCounts = meta?.totalCounts || 0;
+  const count = meta?.count || 10;
+  const page = meta?.page || 1;
 
-  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
-    //show default 1 page if totalItems is 0
-    if (i === 1 && totalItems === 0) {
-      pageNumbers.push(i);
-    } else if (i > 1) {
-      pageNumbers.push(i);
-    }
+  console.log(totalCounts);
+
+  for (let i = 1; i <= Math.ceil(totalCounts / count); i++) {
+    pageNumbers.push(i);
   }
+
+  // If totalCounts is 0, show default 1 page
+  if (totalCounts === 0 && !pageNumbers.includes(1)) {
+    pageNumbers.push(1);
+  }
+
   return (
-    <div className="join">
-      {pageNumbers?.map((number) => (
-        <button
-          key={number}
-          onClick={() => paginate(number)}
-          className={`join-item btn btn-xs ${
-            currentPage === number ? "btn-active" : ""
-          }`}
+    <div className="flex items-center justify-between">
+      <div>
+        <select
+          onChange={(e) => paginate("item", e.target.value)}
+          className="select select-bordered select-sm w-full max-w-xs"
         >
-          {number}
-        </button>
-      ))}
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div>
+        <p className="text-sm text-gray-400">
+          Showing {page * count} to{" "}
+          {page * count > totalCounts ? totalCounts : page * count} of{" "}
+          {totalCounts} entries
+        </p>
+      </div>
+      <div></div>
+      <div className="join">
+        {pageNumbers?.map((number) => (
+          <button
+            key={number}
+            onClick={() => paginate("page", number)}
+            className={`join-item btn btn-md ${
+              page === number ? "btn-active" : ""
+            }`}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

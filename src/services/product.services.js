@@ -2,13 +2,16 @@ import apiInstance from "../plugins/axiosIns";
 
 export const ProductSerdcvices = {
   async fetchProducts(page, count, searchKey) {
+    console.log(page, count, searchKey)
+    
     let url = `backend/product/all?page=${page}&count=${count}`;
     if (searchKey) {
       url += `&searchKey=${searchKey}`;
     }
 
     const { data } = await apiInstance.get(url);
-    return data;
+    console.log(data?.data?.products);
+    return data?.data;
   },
   async fetchProductById(productId) {
     const { data } = await apiInstance.get(`frontend/product/id/${productId}`);

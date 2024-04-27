@@ -1,30 +1,46 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import fetchProducts from "../../../redux/thunk/fetchProducts";
+import Pagination from "../../../components/Shared/Pagination/Pagination";
+import { ProductSerdcvices } from "../../../services/product.services";
 import ProductTable from "./Table";
+
+const initPageMeta = {
+  page: 1,
+  count: 5,
+};
 
 const Product = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [respMeta, setRespMeta] = useState(initPageMeta);
   const [searchKey, setSearchKey] = useState("");
-  const itemsPerPage = useSelector((state) => state.productState.itemsPerPage);
-  // const totalItems = useSelector((state) => state.productState.totalItems);
-  const currentPage = useSelector((state) => state.productState.pageNo);
-
-  const dispatch = useDispatch();
 
   const enableEdit = (data) => {
     navigate("/dashboard/edit-product/" + data._id);
   };
+  const fethProducts = () => {
+    ProductSerdcvices.fetchProducts(respMeta?.page, respMeta?.count, searchKey)
+      .then((data) => {
+        setProducts(data?.products);
+        setRespMeta(data?.meta);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    if (searchKey) {
-      dispatch(fetchProducts(currentPage, itemsPerPage, searchKey));
-    } else {
-      dispatch(fetchProducts(currentPage, itemsPerPage));
+    fethProducts();
+  }, [respMeta?.page, respMeta?.count, searchKey]);
+
+  const handlePaginationChange = (type, value) => {
+    if (type === "page") {
+      setRespMeta((prev) => ({ ...prev, page: value }));
+    } else if (type === "item") {
+      setRespMeta((prev) => ({ ...prev, count: value }));
     }
-  }, [dispatch, currentPage, itemsPerPage, searchKey]);
+  };
 
   return (
     <div>
@@ -45,12 +61,8 @@ const Product = () => {
           className="w-1/2 rounded border-[1.5px] my-4 border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         />
       </div>
-      <ProductTable enableEdit={enableEdit}>
-        {/* <Pagination
-          itemsPerPage={itemsPerPage}
-          totalItems={totalItems}
-          currentPage={currentPage}
-        /> */}
+      <ProductTable products={products} enableEdit={enableEdit}>
+        <Pagination paginate={handlePaginationChange} meta={respMeta} />
       </ProductTable>
     </div>
   );

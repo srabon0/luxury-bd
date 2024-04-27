@@ -34,7 +34,7 @@ const Dashboard = () => {
         {/* Page content here */}
         <div className="flex">
           <div className="bg-base-200">
-            <div className="mt-5">
+            <div className="mt-5 hidden lg:block">
               <Link to="/dashboard">
                 <h3 className="text-center md:text-2xl text-xl font-bold hover:text-blue-500 cursor-pointer">
                   Dashboard

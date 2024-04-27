@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 const Filter = ({ setFilterProps }) => {
   const { categoryState, brandState } = useSelector((state) => state);
   const [searchParams, setSearchParams] = useSearchParams();
+  
 
   const handleInputChange = (key, e) => {
     const value = e.target.value;

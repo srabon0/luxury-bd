@@ -1,6 +1,6 @@
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
 import Table from "../../../components/Shared/Table/Table";
 import TableCell from "../../../components/Shared/Table/TableCell";
@@ -19,7 +19,7 @@ const tableColmun = [
   "Action",
 ];
 
-const ProductTable = ({ enableEdit, children }) => {
+const ProductTable = ({ enableEdit, children, products }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteProd, setDeleteProd] = React.useState("");
   const dispatch = useDispatch();
@@ -43,11 +43,10 @@ const ProductTable = ({ enableEdit, children }) => {
     setDeleteProd(id);
   };
 
-  const allProds = useSelector((state) => state.productState.products);
   return (
     <>
       <Table columns={tableColmun}>
-        {allProds?.map((prods, idx) => {
+        {products?.map((prods, idx) => {
           return (
             <TableRow key={prods._id}>
               <TableCell>{getTableRowSerial(idx)}</TableCell>
