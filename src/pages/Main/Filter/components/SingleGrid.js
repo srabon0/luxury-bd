@@ -13,7 +13,7 @@ const SingleGrid = ({ item }) => {
   return (
     <div
       onClick={navigateToDetails}
-      className="w-[352px] bg-white shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-xl"
+      className=" bg-white shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-xl"
     >
       <div>
         <img
@@ -21,7 +21,7 @@ const SingleGrid = ({ item }) => {
           alt="Product"
           className="h-80 w-[352px] object-cover rounded-t-xl"
         />
-        <div className="px-4 py-3 w-[352px]">
+        <div className="px-4 py-3">
           <div className="flex justify-between items-center">
             <span className="text-gray-400 mr-3 uppercase text-xs flex gap-1 mb-1">
               <TagIcon className="w-4 h-4" /> {item?.category?.name}

@@ -7,7 +7,6 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { getImageUrl } from "../../../../utils/utils";
-
 const Card = ({ product }) => {
   const {
     _id,
@@ -19,7 +18,7 @@ const Card = ({ product }) => {
     cartoncapacity,
     description,
   } = product;
-  const thumbnail = getImageUrl(image[0]?.imageUrl);
+  const thumbnail = getImageUrl(image[0]?.imageUrl) ;
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
@@ -31,7 +30,7 @@ const Card = ({ product }) => {
       onClick={navigateToDetails}
       className="p-5 py-10 bg-purple-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer rounded-md"
     >
-      <img src={thumbnail} alt={title + _id} />
+      <img className="w-full" src={thumbnail} alt={title + _id} />
       <div className="space-x-1 flex justify-center mt-10">
         <StarIcon className="h-5 text-orange-500" />
         <StarIcon className="h-5 text-orange-500" />
@@ -39,7 +38,7 @@ const Card = ({ product }) => {
         <StarIcon className="h-5 text-orange-500" />
         <StarIcon className="h-5 text-orange-500" />
       </div>
-      <h1 className="text-3xl my-5">{title}</h1>
+      <h1 className="text-xl my-5">{title}</h1>
       <h4 className="flex gap-2 justify-center items-center">
         <span className="flex items-center gap-1">
           <TagIcon className="h-5 text-purple-500" /> <span>{category?.name}</span>

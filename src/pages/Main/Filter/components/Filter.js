@@ -1,11 +1,11 @@
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-const Filter = ({ setFilterProps }) => {
+const Filter = ({ setFilterProps, filterProps }) => {
   const { categoryState, brandState } = useSelector((state) => state);
   const [searchParams, setSearchParams] = useSearchParams();
-  
 
   const handleInputChange = (key, e) => {
     const value = e.target.value;
@@ -32,7 +32,11 @@ const Filter = ({ setFilterProps }) => {
 
   const clearAllFilters = () => {
     setSearchParams("");
-    setFilterProps({});
+    setFilterProps({
+      categoryId: null,
+      brandId: null,
+      search: null,
+    });
   };
 
   return (
@@ -44,9 +48,13 @@ const Filter = ({ setFilterProps }) => {
           <div className="mb-6 flex items-center justify-between py-4 [border-bottom:1px_solid_rgb(217,_217,_217)]">
             <h5 className="text-xl font-bold">Filters</h5>
 
-            <p>
-              <span onClick={clearAllFilters}>Clear All</span>
-            </p>
+            <button
+              onClick={clearAllFilters}
+              className="btn btn-sm btn-outline"
+            >
+              <XMarkIcon className="w-4 h-4" />
+              <span>Clear</span>
+            </button>
           </div>{" "}
           {/* Search input */}
           <input
@@ -54,6 +62,7 @@ const Filter = ({ setFilterProps }) => {
             className="mb-10 block h-9 min-h-[44px] w-full rounded-md border border-solid border-[#cccccc] bg-[#f2f2f7] bg-[16px_center] bg-no-repeat py-3 pl-11 pr-4 text-sm font-bold text-[#333333] [background-size:18px] [border-bottom:1px_solid_rgb(215,_215,_221)]"
             placeholder="Search"
             onChange={(e) => handleInputChange("search", e)}
+            value={searchParams?.get("search") || ""}
             style={{
               backgroundImage:
                 'url("https://assets.website-files.com/6458c625291a94a195e6cf3a/64b7a3a33cd5dc368f46daaa_MagnifyingGlass.svg")',
