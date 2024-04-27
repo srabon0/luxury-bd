@@ -15,17 +15,23 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [respMeta, setRespMeta] = useState(initPageMeta);
   const [searchKey, setSearchKey] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const enableEdit = (data) => {
     navigate("/dashboard/edit-product/" + data._id);
   };
   const fethProducts = () => {
+    setIsLoading(true);
     ProductSerdcvices.fetchProducts(respMeta?.page, respMeta?.count, searchKey)
       .then((data) => {
         setProducts(data?.products);
         setRespMeta(data?.meta);
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
+        setProducts([]);
+        setRespMeta(initPageMeta);
         console.log(err);
       });
   };
@@ -41,6 +47,14 @@ const Product = () => {
       setRespMeta((prev) => ({ ...prev, count: value }));
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin absolute"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -61,7 +75,11 @@ const Product = () => {
           className="w-1/2 rounded border-[1.5px] my-4 border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         />
       </div>
-      <ProductTable products={products} enableEdit={enableEdit}>
+      <ProductTable
+        setProducts={setProducts}
+        products={products}
+        enableEdit={enableEdit}
+      >
         <Pagination paginate={handlePaginationChange} meta={respMeta} />
       </ProductTable>
     </div>

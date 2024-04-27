@@ -6,8 +6,6 @@ const Pagination = ({ paginate, meta }) => {
   const count = meta?.count || 10;
   const page = meta?.page || 1;
 
-  console.log(totalCounts);
-
   for (let i = 1; i <= Math.ceil(totalCounts / count); i++) {
     pageNumbers.push(i);
   }
@@ -28,18 +26,8 @@ const Pagination = ({ paginate, meta }) => {
           <option value="10">10</option>
           <option value="20">20</option>
           <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
         </select>
       </div>
-      <div>
-        <p className="text-sm text-gray-400">
-          Showing {page * count} to{" "}
-          {page * count > totalCounts ? totalCounts : page * count} of{" "}
-          {totalCounts} entries
-        </p>
-      </div>
-      <div></div>
       <div className="join">
         {pageNumbers?.map((number) => (
           <button

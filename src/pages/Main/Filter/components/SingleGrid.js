@@ -13,17 +13,17 @@ const SingleGrid = ({ item }) => {
   return (
     <div
       onClick={navigateToDetails}
-      class="w-[352px] bg-white shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-xl"
+      className="w-[352px] bg-white shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-xl"
     >
       <div>
         <img
           src={getImageUrl(item?.image?.[0]?.imageUrl)}
           alt="Product"
-          class="h-80 w-[352px] object-cover rounded-t-xl"
+          className="h-80 w-[352px] object-cover rounded-t-xl"
         />
-        <div class="px-4 py-3 w-[352px]">
+        <div className="px-4 py-3 w-[352px]">
           <div className="flex justify-between items-center">
-            <span class="text-gray-400 mr-3 uppercase text-xs flex gap-1 mb-1">
+            <span className="text-gray-400 mr-3 uppercase text-xs flex gap-1 mb-1">
               <TagIcon className="w-4 h-4" /> {item?.category?.name}
             </span>
             <span className="flex items-center">
@@ -34,25 +34,25 @@ const SingleGrid = ({ item }) => {
               <StarIcon className="w-4 h-4 text-yellow-400" />
             </span>
           </div>
-          <p class="text-lg font-bold text-black truncate block capitalize">
+          <p className="text-lg font-bold text-black truncate block capitalize">
             {item?.title}
           </p>
-          <div class="flex items-center">
-            <p class="text-lg font-semibold text-black cursor-auto my-3">
+          <div className="flex items-center">
+            <p className="text-lg font-semibold text-black cursor-auto my-3">
               &#2547;{item?.price}
             </p>
             {item?.product?.offer && (
               <del>
-                <p class="text-sm text-gray-600 cursor-auto ml-2">
+                <p className="text-sm text-gray-600 cursor-auto ml-2">
                   {item?.product?.offer?.priceAfterOffer}
                 </p>
               </del>
             )}
-            <div class="ml-auto">
+            <div className="ml-auto">
               <ShoppingBagIcon
                 onClick={() => console.log("Add to cart")}
                 title="Add to cart"
-                class="h-6 w-6 text-gray-500 cursor-pointer"
+                className="h-6 w-6 text-gray-500 cursor-pointer"
               />
             </div>
           </div>

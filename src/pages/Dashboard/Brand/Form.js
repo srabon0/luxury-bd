@@ -61,13 +61,13 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
         </div>
 
         {isNullOrObjectEmpty(updatedData) && (
-          <button type="submit" class="btn btn-neutral">
+          <button type="submit" className="btn btn-neutral">
             Add Brand
           </button>
         )}
 
         {!isNullOrObjectEmpty(updatedData) && (
-          <button onClick={handleSubmit(onUpdateData)} class="btn btn-neutral">
+          <button onClick={handleSubmit(onUpdateData)} className="btn btn-neutral">
             Update Brand
           </button>
         )}

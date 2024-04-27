@@ -91,7 +91,7 @@ const ProductDetails = () => {
                 sale
               </span> */}
             </div>
-            <div class="grid grid-cols-2 gap-4">{renderImages()}</div>
+            <div className="grid grid-cols-2 gap-4">{renderImages()}</div>
           </div>
 
           <div className="md:py-8">

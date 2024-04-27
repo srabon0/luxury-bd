@@ -22,6 +22,7 @@ export default function App() {
   const dispatch = useDispatch();
   const [updatingProduct, setUpdatingProduct] = useState({});
   const { prodId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadProductImage = async (formData) => {
     const base =
@@ -34,10 +35,10 @@ export default function App() {
         method: "POST",
         body: formData,
       });
-      console.log(response?.status);
       if (response?.status === 200) {
-        toast.success("Image uploaded successfully");
         const data = await response.json();
+        if (data?.imageInfo?.length)
+          toast.success("Image uploaded successfully");
         return await data?.imageInfo;
       } else {
         toast.error("Image upload failed");
@@ -61,6 +62,7 @@ export default function App() {
   };
 
   const onUpdateProduct = async (id, productData) => {
+    setIsLoading(true);
     try {
       const formData = new FormData();
       formDataFile.forEach((image, i) => {
@@ -73,6 +75,7 @@ export default function App() {
 
       await updateProduct(id, product);
       toast.success("Product updated successfully");
+      await setIsLoading(false);
     } catch (error) {
       toast.error(error.message);
     }
@@ -86,6 +89,7 @@ export default function App() {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const formData = new FormData();
       formDataFile.forEach((image, i) => {
@@ -99,6 +103,7 @@ export default function App() {
       console.log("imageInfo", imageInfo);
       const product = await { ...data, image: imageInfo };
       await addProduct(product);
+      await setIsLoading(false);
     } catch (error) {
       toast.error(error.message);
     }
@@ -263,11 +268,23 @@ export default function App() {
                 setSelectedImages={setSelectedFiles}
               />
 
-              <input
-                type="submit"
-                value={updatingProduct?._id ? "Update Product" : "Add Product"}
-                className="btn btn-primary btn-sm btn-block"
-              />
+              {!isLoading ? (
+                <input
+                  disabled={isLoading}
+                  type="submit"
+                  value={
+                    updatingProduct?._id ? "Update Product" : "Add Product"
+                  }
+                  className="btn btn-secondary btn-md"
+                />
+              ) : (
+                <button className="btn">
+                  <span className="loading loading-spinner"></span>
+                  {updatingProduct?._id
+                    ? "Updating Product..."
+                    : "Adding Product..."}
+                </button>
+              )}
             </div>
           </form>
         </div>

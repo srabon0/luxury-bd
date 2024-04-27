@@ -9,6 +9,7 @@ import { getImageUrl, getTableRowSerial } from "../../../utils/utils";
 
 import apiInstance from "../../../plugins/axiosIns";
 import { deleteProduct } from "../../../redux/actions/productAction";
+import { toast } from "react-toastify";
 
 const tableColmun = [
   "SL",
@@ -19,7 +20,7 @@ const tableColmun = [
   "Action",
 ];
 
-const ProductTable = ({ enableEdit, children, products }) => {
+const ProductTable = ({ enableEdit, children, products, setProducts }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteProd, setDeleteProd] = React.useState("");
   const dispatch = useDispatch();
@@ -33,7 +34,9 @@ const ProductTable = ({ enableEdit, children, products }) => {
     apiInstance.delete(url).then((res) => {
       if (res.data) {
         dispatch(deleteProduct(id));
+        setProducts((prev) => prev.filter((prod) => prod._id !== id));
         setDeleteProd("");
+        toast.success("Product deleted successfully");
       }
     });
   };
