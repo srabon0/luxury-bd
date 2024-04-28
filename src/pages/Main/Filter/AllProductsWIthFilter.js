@@ -15,7 +15,13 @@ const removeNullValuesFromRequest = (obj) => {
   }
 };
 
+const initPageMeta = {
+  page: 1,
+  count: 10,
+};
+
 const AllProductsWIthFilter = () => {
+  const [respMeta, setRespMeta] = useState(initPageMeta);
   const [products, setProducts] = useState([{}]);
   const [isLoading, setIsLoading] = useState(false);
   const { search } = useLocation();
@@ -25,6 +31,8 @@ const AllProductsWIthFilter = () => {
     categoryId: query.get("categoryId"),
     brandId: query.get("brandId"),
     search: query.get("search"),
+    page: respMeta?.page,
+    count: respMeta?.count,
   });
 
   const initialRender = useRef(true);
@@ -36,6 +44,15 @@ const AllProductsWIthFilter = () => {
       search: query.get("search"),
     });
   }, [search]);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      updateURLParameters();
+      fetchSearchedProducts();
+    }
+  }, [filterProps]);
 
   const updateURLParameters = () => {
     for (const key in filterProps) {
@@ -49,10 +66,12 @@ const AllProductsWIthFilter = () => {
   const fetchSearchedProducts = async () => {
     setIsLoading(true);
     removeNullValuesFromRequest(filterProps);
-
+    console.log(filterProps);
     ProductSerdcvices.searchProducts(filterProps)
       .then((data) => {
         setProducts(data?.products);
+        setRespMeta(data?.meta);
+        console.log(data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -60,15 +79,6 @@ const AllProductsWIthFilter = () => {
         console.log(error);
       });
   };
-
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      updateURLParameters();
-      fetchSearchedProducts();
-    }
-  }, [filterProps]);
 
   const onchangeInput = (e) => {
     const params = new URLSearchParams(search);
@@ -79,6 +89,17 @@ const AllProductsWIthFilter = () => {
     }
     setFilterProps({ ...filterProps, search: e.target.value });
     setSearchParams(params);
+  };
+
+  const handlePaginationChange = (type, value) => {
+    setFilterProps((prev) => {
+      if (type === "page") {
+        return { ...prev, page: Number(value) };
+      } else if (type === "item") {
+        return { ...prev, count: Number(value) };
+      }
+      return prev;
+    });
   };
 
   return (
@@ -126,12 +147,7 @@ const AllProductsWIthFilter = () => {
             <div className="px-2 mx-auto">
               <ProductsGrid products={products} />
 
-              <Pagination
-                currentPage={15}
-                itemsPerPage={10}
-                onPageChange={(page) => console.log(page)}
-                totalItems={100}
-              />
+              <Pagination paginate={handlePaginationChange} meta={respMeta} />
             </div>
           )
         }

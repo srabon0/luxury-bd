@@ -1,5 +1,5 @@
 import React from "react";
-
+const optionValues = [5, 10, 20, 30];
 const Pagination = ({ paginate, meta }) => {
   const pageNumbers = [];
   const totalCounts = meta?.totalCounts || 0;
@@ -22,10 +22,11 @@ const Pagination = ({ paginate, meta }) => {
           onChange={(e) => paginate("item", e.target.value)}
           className="select select-bordered select-sm w-full max-w-xs"
         >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
+          {optionValues.map((value) => (
+            <option key={value} value={value} selected={value === count}>
+              {value}
+            </option>
+          ))}
         </select>
       </div>
       <div className="join">

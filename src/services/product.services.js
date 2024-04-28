@@ -2,8 +2,8 @@ import apiInstance from "../plugins/axiosIns";
 
 export const ProductSerdcvices = {
   async fetchProducts(page, count, searchKey) {
-    console.log(page, count, searchKey)
-    
+    console.log(page, count, searchKey);
+
     let url = `backend/product/all?page=${page}&count=${count}`;
     if (searchKey) {
       url += `&searchKey=${searchKey}`;
@@ -31,7 +31,10 @@ export const ProductSerdcvices = {
   },
 
   async searchProducts(searchKey) {
-    const { data } = await apiInstance.post("/frontend/product/search", {
+    const url = `frontend/product/search?${
+      searchKey?.page ? `page=${searchKey?.page}&` : ""
+    }${searchKey?.count ? `count=${searchKey?.count}` : ""}`;
+    const { data } = await apiInstance.post(url, {
       searchKey,
     });
     return data?.data;

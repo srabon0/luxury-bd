@@ -19,7 +19,7 @@ const SingleGrid = ({ item }) => {
         <img
           src={getImageUrl(item?.image?.[0]?.imageUrl)}
           alt="Product"
-          className="h-80 w-[352px] object-cover rounded-t-xl"
+          className="h-80 object-cover rounded-t-xl"
         />
         <div className="px-4 py-3">
           <div className="flex justify-between items-center">

@@ -13,6 +13,7 @@ import "./ImageZoom.css"; // Import the CSS file
 
 import { toast } from "react-toastify";
 import ProductDetailsSkeleton from "./ProductDetailsSkeleton";
+import noImg from "../../assests/noImg.png";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -82,10 +83,18 @@ const ProductDetails = () => {
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-4">
             <div className="relative overflow-hidden rounded-lg bg-gray-100">
-              <ImageZoom
-                src={product?.image?.[activeImage]}
-                alt="selected product photo"
-              />
+              {product?.image?.[activeImage] ? (
+                <ImageZoom
+                  src={product?.image?.[activeImage]}
+                  alt="selected product photo"
+                />
+              ) : (
+                <img
+                  src={noImg}
+                  alt="no image"
+                  className="h-full w-full object-cover object-center"
+                />
+              )}
 
               {/* <span className="absolute left-0 top-0 rounded-br-lg bg-red-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">
                 sale
