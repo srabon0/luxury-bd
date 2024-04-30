@@ -48,8 +48,8 @@ const NavMenu = ({ menu }) => {
       className="lg:mr-12"
     >
       <span
-        className={`rounded text-md font-semibold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 ${
-          location.pathname === menu?.link ? "text-blue-400" : "text-black"
+        className={`rounded text-lg lg:text-xl font-bold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 ${
+          location.pathname === menu?.link ? "text-primary" : "text-black"
         }`}
       >
         {menu?.name}
@@ -75,12 +75,16 @@ const Navbar = () => {
   };
   return (
     <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center ">
-      <span className="flex items-center whitespace-nowrap text-2xl font-black">
+      <span
+      onClick={() => navigate("/")}
+      className="flex items-center whitespace-nowrap text-2xl font-black">
         <span className="mr-2 w-16">
           <img src={mainLogo} alt="" />
         </span>
-        <span className="text-blue-800 font-bold text-2xl italic">Classic</span>
-        <span className="text-purple-800 font-bold text-2xl italic">Group</span>
+        <span className="text-secondary font-bold text-2xl italic">
+          Classic
+        </span>
+        <span className="text-violet-700 font-bold text-2xl italic">Group</span>
       </span>
       <input type="checkbox" className="peer hidden" id="navbar-open" />
       <label
@@ -132,7 +136,7 @@ const Navbar = () => {
               </button>
               <button
                 onClick={() => redirectToDetails("/signup")}
-                className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
+                className="whitespace-nowrap rounded-xl bg-primary px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-base-200 focus:ring-offset-2 hover:bg-base-200"
               >
                 Sign up
               </button>
@@ -145,7 +149,7 @@ const Navbar = () => {
             <div className="my-4 flex items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
               <button
                 onClick={logout}
-                className="whitespace-nowrap rounded-xl bg-blue-700 px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
+                className="whitespace-nowrap rounded-xl bg-primary px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
               >
                 Log Out
               </button>

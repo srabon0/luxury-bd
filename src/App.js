@@ -7,7 +7,7 @@ import store from "./redux/store";
 import routes from "./routes/routes";
 function App() {
   return (
-    <div>
+    <div className="bg-base-300">
       <Provider store={store}>
         <RouterProvider router={routes} />
       </Provider>
