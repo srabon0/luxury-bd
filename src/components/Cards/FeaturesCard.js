@@ -10,9 +10,12 @@ const FeaturesCard = ({ data }) => {
     >
       <img
         src={image}
-        trigger="hover"
-        target="div"
-        style={{ width: "100px", height: "100px" }}
+        style={{
+          width: "100px",
+          height: "100px",
+          objectFit: "contain",
+          maxWidth: "33%",
+        }}
         alt="image"
       />
       <h2 className="lg:text-xl md:text-2xl text-lg font-bold">{name}</h2>

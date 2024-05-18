@@ -29,10 +29,10 @@ const SearchModal = ({ setModalOpen }) => {
   };
 
   return (
-    <div className="z-50 min-h-screen w-full bg-opacity-90 bg-black fixed top-0 left-0 overflow-y-scroll">
+    <div className="z-50 h-full w-screen bg-opacity-90 bg-black fixed top-0 left-0 overflow-y-scroll">
       <section className="max-w-6xl mx-auto px-3">
         <button
-          className="fixed lg:right-10 md:right-7 right-3 lg:top-10 md:top-7 top-3 font-bold bg-white rounded-full h-8 w-8 z-20"
+          className="fixed lg:right-10 md:right-7 lg:top-10 md:top-7 top-3 font-bold bg-white rounded-full h-8 w-8 z-20"
           onClick={() => setModalOpen(false)}
         >
           ✕
@@ -57,7 +57,7 @@ const SearchModal = ({ setModalOpen }) => {
           <div className="search-products max-h-96 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 mt-10 text-white">
             {products.map((item) => (
               <ProductCard
-                key={item.id}
+                key={item._id}
                 data={item}
                 setModalOpen={setModalOpen}
               />

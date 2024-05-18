@@ -6,6 +6,7 @@ import PrimaryButton from "../Buttons/PrimaryButton";
 import CartProductCard from "./CartProductCard";
 
 import { useSelector } from "react-redux";
+import Drawer from "../Shared/Drawer/Drawer";
 
 const Cart = ({ setCartOpen, cartOpen }) => {
   const cartState = useSelector((state) => state.cartState);
@@ -29,80 +30,66 @@ const Cart = ({ setCartOpen, cartOpen }) => {
     setCartOpen(false);
   };
   return (
-    <section
-      className={`cart top-0 z-50 h-[100vh] bg-blue-200 lg:w-[30%] md:w-[40%] w-[80%] py-6 lg:px-8 px-4 ${
-        cartOpen && "open"
-      }`}
+    <Drawer
+      title=""
+      isOpen={cartOpen}
+      onClose={() => setCartOpen(false)}
+      bg="bg-blue-200"
     >
-      <label
-        htmlFor="my-modal-3"
-        className="btn btn-sm btn-circle btn-error text-white fixed right-5 top-2"
-        onClick={() => setCartOpen(false)}
-      >
-        ✕
-      </label>
-      <div className="text-center mt-4 mb-8">
-        <h2 className="font-bold text-xl">Your Shopping Cart</h2>
-        <h3 className="text-md">
-          Selected Items: <strong>{cart.length}</strong>
-        </h3>
+      <div>
+        <div className="text-center mt-4 mb-8">
+          <h2 className="font-bold text-xl">Your Shopping Cart</h2>
+          <h3 className="text-md">
+            Selected Items: <strong>{cart.length}</strong>
+          </h3>
+        </div>
+
+        {cart?.length ? (
+          cart?.map((item, index) => (
+            <CartProductCard data={item} key={index} />
+          ))
+        ) : (
+          <div className="flex items-center justify-center">
+            <img src={cartImg} className=" lg:w-[40%] w-[44%]" alt="" />
+          </div>
+        )}
+        {cartTotal > 0 ? (
+          <h2 className="mt-4">
+            Subtotal &emsp;{" "}
+            <span className="text-3xl font-bold">BDT {cartTotal}</span>{" "}
+          </h2>
+        ) : (
+          <h2 className="mt-2 text-2xl font-bold text-center">
+            Your Shopping Cart is Empty{" "}
+          </h2>
+        )}
+        {cart?.length ? (
+          <button
+            onClick={handleGoCart}
+            className="btn btn-outline w-full mt-8 normal-case go-cart"
+          >
+            &nbsp; Go to Cart
+          </button>
+        ) : (
+          <span></span>
+        )}
+
+        {cart?.length ? (
+          <button
+            onClick={handleCheckout}
+            className="btn btn-white w-full mt-3 text-white normal-case"
+          >
+            Checkout &emsp;
+          </button>
+        ) : (
+          <div className="mt-12 flex justify-center">
+            <PrimaryButton eventHandler={handleShopNow}>
+              Shop Now{" "}
+            </PrimaryButton>
+          </div>
+        )}
       </div>
-
-      {cart?.length ? (
-        cart?.map((item, index) => <CartProductCard data={item} key={index} />)
-      ) : (
-        <div className="flex items-center justify-center">
-          <img src={cartImg} className=" w-[80%]" alt="" />
-        </div>
-      )}
-      {cartTotal > 0 ? (
-        <h2 className="mt-4">
-          Subtotal &emsp;{" "}
-          <span className="text-3xl font-bold">BDT {cartTotal}</span>{" "}
-        </h2>
-      ) : (
-        <h2 className="mt-2 text-2xl font-bold text-center">
-          Your Shopping Cart is Empty{" "}
-        </h2>
-      )}
-      {cart?.length ? (
-        <button
-          onClick={handleGoCart}
-          className="btn btn-outline w-full mt-8 normal-case go-cart"
-        >
-          <lord-icon
-            target="button"
-            src="https://cdn.lordicon.com/medpcfcy.json"
-            trigger="hover"
-            class="current-color"
-            style={{ width: "25px", height: "25px" }}
-          ></lord-icon>
-          &nbsp; Go to Cart
-        </button>
-      ) : (
-        <span></span>
-      )}
-
-      {cart?.length ? (
-        <button
-          onClick={handleCheckout}
-          className="btn btn-white w-full mt-3 text-white normal-case"
-        >
-          Checkout &emsp;
-          <lord-icon
-            target="button"
-            src="https://cdn.lordicon.com/zmkotitn.json"
-            trigger="hover"
-            colors="primary:#ffffff"
-            style={{ width: "20px", height: "20px" }}
-          ></lord-icon>
-        </button>
-      ) : (
-        <div className="mt-12 flex justify-center">
-          <PrimaryButton eventHandler={handleShopNow}>Shop Now </PrimaryButton>
-        </div>
-      )}
-    </section>
+    </Drawer>
   );
 };
 

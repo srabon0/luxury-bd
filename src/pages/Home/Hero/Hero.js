@@ -1,7 +1,8 @@
 import React from "react";
+
 const Hero = () => {
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       <video
         className="w-full object-cover sm:h-[400px] md:h-[550px] lg:h-[700px]"
         src="/vid/hero.mp4"

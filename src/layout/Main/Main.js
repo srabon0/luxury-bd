@@ -24,18 +24,15 @@ const Main = () => {
       </Helmet>
       <Marquee />
       <Navbar />
-
-      <CartToggle cartOpen={cartOpen} setCartOpen={setCartOpen} />
-      <div>
+      <div className="w-full overflow-hidden">
         <Outlet />
-        <div
-          style={{ display: cartOpen ? "block" : "none" }}
-          className="transition duration-300"
-        >
-          <Cart setCartOpen={setCartOpen} cartOpen={cartOpen} />
-        </div>
+        <Footer />
       </div>
-      <Footer />
+
+      <div className="w-full">
+        <CartToggle cartOpen={cartOpen} setCartOpen={setCartOpen} />
+        <Cart setCartOpen={setCartOpen} cartOpen={cartOpen} />
+      </div>
     </>
   );
 };
