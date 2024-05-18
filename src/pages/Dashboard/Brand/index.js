@@ -50,8 +50,8 @@ const Brands = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h2>Add Brands</h2>
-        <button onClick={() => setDrawerOpen(true)} className="btn btn-primary">
+        <h2 className="text-xl fw-bold">Add Brands</h2>
+        <button onClick={() => setDrawerOpen(true)} className="btn btn-primary btn-outline btn-sm">
           Add Brand
         </button>
       </div>

@@ -3,25 +3,45 @@
 @tailwind utilities;
 
 .marquee {
-    width: 100%;
-    position: relative;
-    white-space: nowrap;
-    animation: marquee 40s linear infinite;
+  width: 100%;
+  position: relative;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
   }
-  
-  @keyframes marquee {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+  100% {
+    transform: translateX(-100%);
   }
-  
-  .marquee:hover {
-    animation-play-state: paused;
-  }
-  
-  .h-40 {
-    height: 40px;
-  }
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+.h-40 {
+  height: 40px;
+}
+
+.active {
+  background-color: transparent !important;
+}
+
+/* For Webkit (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+/* For Webkit (Chrome, Safari, etc.) */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* For Webkit (Chrome, Safari, etc.) */
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 3px; /* Roundness of the scrollbar thumb */
+}

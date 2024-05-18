@@ -18,11 +18,24 @@ export default function App() {
   const [formDataFile, setFormDataFile] = useState([]);
   const categoryState = useSelector((state) => state)?.categoryState;
   const brandState = useSelector((state) => state)?.brandState;
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
   const dispatch = useDispatch();
   const [updatingProduct, setUpdatingProduct] = useState({});
   const { prodId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (prodId) {
+      fetchProduct();
+    } else {
+      setUpdatingProduct({});
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(CategoryThunks.fetchCategories());
+    dispatch(BrandThunks.fetchBrands());
+  }, [dispatch]);
 
   const uploadProductImage = async (formData) => {
     const base =
@@ -109,11 +122,6 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    dispatch(CategoryThunks.fetchCategories());
-    dispatch(BrandThunks.fetchBrands());
-  }, [dispatch]);
-
   const fetchProduct = async () => {
     const url = "/backend/product/id/" + prodId;
     const { data } = await apiInstance.get(url);
@@ -122,16 +130,17 @@ export default function App() {
     reset(data?.data);
   };
 
-  useEffect(() => {
-    if (prodId) {
-      fetchProduct();
-    } else {
-      setUpdatingProduct({});
-    }
-  }, []);
+  const cat = watch("category");
+
+  const getSubCategories = () => {
+    return categoryState?.categories?.find((category) => category?._id === cat)
+      ?.subCategories;
+  };
+
+  const subCat = getSubCategories() || [];
 
   return (
-    <div className="flex flex-col p-5">
+    <div className="flex flex-col p-5 bg-white rounded-lg">
       <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
         <h3 className="font-medium text-black ">Add product details</h3>
       </div>
@@ -160,7 +169,17 @@ export default function App() {
                   />
                 </div>
 
-                <div className="w-full xl:w-1/2">
+                <div className="w-full xl:w-1/3">
+                  <label className="mb-2.5 block text-black ">Code</label>
+                  <input
+                    {...register("code")}
+                    type="text"
+                    placeholder="Enter Product model"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  dark:bg-form-input dark:focus:border-primary"
+                  />
+                </div>
+
+                <div className="w-full xl:w-1/3">
                   <label className="mb-2.5 block text-black ">Model</label>
                   <input
                     {...register("model")}
@@ -192,6 +211,23 @@ export default function App() {
                     placeholder="Enter Product carton capacity"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  dark:bg-form-input dark:focus:border-primary"
                   />
+                </div>
+
+                <div className="w-full xl:w-1/2">
+                  <label className="mb-2.5 block text-black ">Unit</label>
+                  <select
+                    {...register("unit")}
+                    className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary  dark:bg-form-input"
+                  >
+                    <option value="" disabled selected>
+                      Select Unit
+                    </option>
+                    <option value="pcs">Pcs</option>
+                    <option value="kg">Kg</option>
+                    <option value="gm">gm</option>
+                    <option value="ltr">Ltr</option>
+                    <option value="ml">Ml</option>
+                  </select>
                 </div>
               </div>
 
@@ -233,6 +269,32 @@ export default function App() {
                     </span>
                   </div>
                 </div>
+
+                {/* show subcategories if categories has subcategorires */}
+
+                {subCat?.length ? (
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black ">
+                      Sub Category
+                    </label>
+                    <select
+                      {...register("subCategory")}
+                      className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary  dark:bg-form-input dark:focus:border-primary"
+                    >
+                      <option value="" selected>
+                        Select Sub Category
+                      </option>
+                      {subCat?.map((subCategory) => (
+                        <option
+                          key={subCategory?.name}
+                          value={subCategory?.name}
+                        >
+                          {subCategory?.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : null}
 
                 <div className="w-full xl:w-1/2">
                   <label className="mb-2.5 block text-black ">Brand</label>

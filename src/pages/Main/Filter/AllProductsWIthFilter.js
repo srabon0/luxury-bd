@@ -7,7 +7,7 @@ import { ProductSerdcvices } from "../../../services/product.services";
 import Filter from "./components/Filter";
 import ProductsGrid from "./components/ProductsGrid";
 
-const removeNullValuesFromRequest = (obj) => {
+export const removeNullValuesFromRequest = (obj) => {
   for (const key in obj) {
     if (obj[key] === null || obj[key] === undefined) {
       delete obj[key];
@@ -107,7 +107,7 @@ const AllProductsWIthFilter = () => {
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Page content here */}
-        <div className="flex justify-between items-center mx-3 lg:hidden">
+        <div className="flex justify-between items-center mx-3 lg:hidden p-3 bg-white my-3 rounded-md">
           <label className="input input-bordered flex items-center gap-2">
             <input
               onChange={onchangeInput}

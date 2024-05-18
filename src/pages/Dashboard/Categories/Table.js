@@ -7,7 +7,7 @@ import { getTableRowSerial } from "../../../utils/utils";
 import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import CategoryThunks from "../../../redux/thunk/categoryThunk";
-const columns = ["SL", "Name", "Description", "Action"];
+const columns = ["SL", "Name", "Description", "Sub Categories", "Action"];
 
 const CategoryTable = ({ enableEdit }) => {
   const dispatch = useDispatch();
@@ -38,6 +38,12 @@ const CategoryTable = ({ enableEdit }) => {
               <TableCell>{getTableRowSerial(idx)}</TableCell>
               <TableCell>{cat.name}</TableCell>
               <TableCell>{cat.description}</TableCell>
+              <TableCell>
+                {cat.subCategories.map((subCat) => (
+                  <span key={subCat._id}>{subCat.name}, </span>
+                ))}
+              </TableCell>
+
               <TableCell align="center" className="flex gap-3">
                 <button
                   className="btn btn-secondary btn-sm"

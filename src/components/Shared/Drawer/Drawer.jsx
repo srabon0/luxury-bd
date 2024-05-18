@@ -20,8 +20,9 @@ const Drawer = ({ isOpen, onClose, children, title, size = "md" }) => {
                         <div className="p-4 h-full">
                             <div className="flex justify-between items-center">
                                 <h2>{title}</h2>
-                                <button className="text-base font-bold" onClick={onClose}>
-                                    X
+
+                                <button onClick={onClose} className="btn btn-square btn-outline btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                             </div>
                             <div className="mt-4 h-full">{children}</div>

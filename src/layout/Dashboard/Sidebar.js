@@ -1,20 +1,21 @@
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/16/solid";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import profBg from "../../assests/profbg.jpg";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 import { dashboardMenuList } from "./menuList";
 
 const MenuLinks = ({ menu }) => {
-  const location = useLocation();
   return (
-    <NavLink currentPath={location.pathname} to={menu?.link}>
-      <span className="flex flex-row gap-2 text-lg items-center hover:text-blue-400">
-        {menu?.icon}
-        {menu?.name}
-      </span>
-    </NavLink>
+    <li>
+      <NavLink to={menu?.link}>
+        <span className="flex flex-row gap-2 text-lg items-center active">
+          {menu?.icon}
+          {menu?.name}
+        </span>
+      </NavLink>
+    </li>
   );
 };
 
@@ -30,14 +31,13 @@ const Sidebar = () => {
   };
 
   return (
-    <ul className="menu p-4 w-80 min-h-screen bg-base-200 text-base-content lg:block hidden relative">
+    <ul className="menu p-4 w-80 min-h-screen bg-gray-50 lg:block hidden relative">
       {/* Sidebar content here */}
       {dashboardMenuList.map((menu) => (
-        <li key={menu.id}>
-          <MenuLinks menu={menu} />
-        </li>
+        <MenuLinks key={menu.id} menu={menu} />
       ))}
-      <div className="card bg-base-100 shadow-xl image-full absolute bottom-4 left-3 right-3">
+
+      <div className="card shadow-xl image-full absolute bottom-4 left-3 right-3">
         <figure>
           <img src={profBg} alt={"logo"} />
         </figure>

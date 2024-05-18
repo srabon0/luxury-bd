@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Home from "../components/Home/Home";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import Notfound from "../components/Shared/Notfound";
 import Dashboard from "../layout/Dashboard/Dashboard";
@@ -16,6 +15,7 @@ import StatusCards from "../pages/Dashboard/StatusCards";
 import ContactForm from "../pages/Main/Contact";
 import AllProductsWIthFilter from "../pages/Main/Filter/AllProductsWIthFilter";
 import Service from "../pages/Main/Service";
+import Home from "../pages/Home/Home";
 
 const routes = createBrowserRouter([
   {

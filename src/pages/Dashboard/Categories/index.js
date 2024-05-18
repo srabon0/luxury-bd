@@ -24,9 +24,9 @@ const Category = () => {
     setDrawerOpen(true);
   };
 
-  const addCategory = async (brandData) => {
+  const addCategory = async (catData) => {
     const url = "/backend/category/create";
-    const { data } = await apiInstance.post(url, brandData);
+    const { data } = await apiInstance.post(url, catData);
     if (data?.data?._id) {
       toast.success(data?.message);
       reset();
@@ -35,6 +35,7 @@ const Category = () => {
 
   const onSubmit = async (data) => {
     try {
+      // console.log(data);
       await addCategory(data);
       toast.success("Category added successfully");
     } catch (error) {
@@ -49,8 +50,8 @@ const Category = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h2>Add Category</h2>
-        <button onClick={() => setDrawerOpen(true)} className="btn btn-primary">
+        <h2 className="text-xl fw-bold">Add Category</h2>
+        <button onClick={() => setDrawerOpen(true)} className="btn btn-outline btn-primary btn-sm">
           Add Category
         </button>
       </div>

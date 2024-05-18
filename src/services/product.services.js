@@ -13,6 +13,7 @@ export const ProductSerdcvices = {
     console.log(data?.data?.products);
     return data?.data;
   },
+
   async fetchProductById(productId) {
     const { data } = await apiInstance.get(`frontend/product/id/${productId}`);
     return data?.data;
@@ -47,5 +48,11 @@ export const ProductSerdcvices = {
       imageFileObj
     );
     return data;
+  },
+
+  async getLatestProduct() {
+    const { data } = await apiInstance.get("frontend/product/latest");
+    console.log(data);
+    return data?.data;
   },
 };

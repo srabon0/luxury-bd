@@ -1,3 +1,4 @@
+import noImg from "../assests/noImg.png";
 export const isNullOrObjectEmpty = (obj) => {
   return (
     obj === null ||
@@ -14,13 +15,13 @@ export const getTableRowSerial = (index) => {
 
 export const getImageUrl = (imgName) => {
   if (!imgName) {
-    return "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg";
+    return noImg;
   }
   const base =
     process.env.REACT_APP_ENV === "local"
       ? process.env.REACT_APP_LOCAL_BACKEND
       : process.env.REACT_APP_BACKEND;
-  const url = base +'/'+ imgName;
+  const url = base + "/" + imgName;
   console.log(url);
   return url;
 };

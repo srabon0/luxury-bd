@@ -43,8 +43,6 @@ const Filter = ({ setFilterProps, filterProps }) => {
     <>
       <div className="mb-4 max-w-none lg:max-w-sm">
         <div className="flex-col gap-6">
-          {" "}
-          {/* Filters title */}{" "}
           <div className="mb-6 flex items-center justify-between py-4 [border-bottom:1px_solid_rgb(217,_217,_217)]">
             <h5 className="text-xl font-bold">Filters</h5>
 
@@ -55,21 +53,18 @@ const Filter = ({ setFilterProps, filterProps }) => {
               <XMarkIcon className="w-4 h-4" />
               <span>Clear</span>
             </button>
-          </div>{" "}
+          </div>
           {/* Search input */}
-          <input
-            type="text"
-            className="mb-10 block h-9 min-h-[44px] w-full rounded-md border border-solid border-[#cccccc] bg-[#f2f2f7] bg-[16px_center] bg-no-repeat py-3 pl-11 pr-4 text-sm font-bold text-[#333333] [background-size:18px] [border-bottom:1px_solid_rgb(215,_215,_221)]"
-            placeholder="Search"
-            onChange={(e) => handleInputChange("search", e)}
-            value={searchParams?.get("search") || ""}
-            style={{
-              backgroundImage:
-                'url("https://assets.website-files.com/6458c625291a94a195e6cf3a/64b7a3a33cd5dc368f46daaa_MagnifyingGlass.svg")',
-            }}
-          />
+          <label className="input input-bordered hidden mb-3 lg:block">
+            <input
+              onChange={(e) => handleInputChange("search", e)}
+              value={searchParams?.get("search") || ""}
+              type="text"
+              className="grow"
+              placeholder="Search Product"
+            />
+          </label>
           {/* Divider */}
-          <div className="mb-6 mt-6 h-px w-full bg-[#d9d9d9]"></div>{" "}
           {/* FIlter One */}{" "}
           <div className="flex flex-col gap-6">
             <div className="flex cursor-pointer items-center justify-between py-4 [border-top:1px_solid_rgba(0,_0,_0,_0)] md:py-0">
