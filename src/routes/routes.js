@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import ProductDetails from "../components/ProductDetails/ProductDetails";
+// import ProductDetails from "../components/ProductDetails/ProductDetails";
 import Notfound from "../components/Shared/Notfound";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import Main from "../layout/Main/Main";
@@ -13,7 +13,7 @@ import Category from "../pages/Dashboard/Categories";
 import Products from "../pages/Dashboard/Products";
 import StatusCards from "../pages/Dashboard/StatusCards";
 import ContactForm from "../pages/Main/Contact";
-import AllProductsWIthFilter from "../pages/Main/Filter/AllProductsWIthFilter";
+// import AllProductsWIthFilter from "../pages/Main/Filter/AllProductsWIthFilter";
 import Service from "../pages/Main/Service";
 import Home from "../pages/Home/Home";
 
@@ -46,14 +46,14 @@ const routes = createBrowserRouter([
         path: "/services",
         element: <Service />,
       },
-      {
-        path: "/products",
-        element: <AllProductsWIthFilter />,
-      },
-      {
-        path: "/product/:id",
-        element: <ProductDetails />,
-      },
+      // {
+      //   path: "/products",
+      //   element: <AllProductsWIthFilter />,
+      // },
+      // {
+      //   path: "/product/:id",
+      //   element: <ProductDetails />,
+      // },
     ],
   },
 
