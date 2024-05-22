@@ -10,7 +10,6 @@ import CategoryThunks from "../../redux/thunk/categoryThunk";
 import Footer from "./Footer";
 import Marquee from "./Marquee";
 import Nav from "./Nav";
-import Navbar from "./Navbar";
 const Main = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const dispatch = useDispatch();
