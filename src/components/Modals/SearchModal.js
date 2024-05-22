@@ -29,7 +29,10 @@ const SearchModal = ({ setModalOpen }) => {
   };
 
   return (
-    <div className="z-50 h-full w-screen bg-opacity-90 bg-black fixed top-0 left-0 overflow-y-scroll">
+    <div
+      style={{ zIndex: 1000000000 }}
+      className="h-full w-screen bg-opacity-95 bg-black fixed top-0 left-0 overflow-y-scroll"
+    >
       <section className="max-w-6xl mx-auto px-3">
         <button
           className="fixed lg:right-10 md:right-7 lg:top-10 md:top-7 top-3 font-bold bg-white rounded-full h-8 w-8 z-20"

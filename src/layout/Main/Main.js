@@ -9,6 +9,7 @@ import BrandThunks from "../../redux/thunk/brandThunk";
 import CategoryThunks from "../../redux/thunk/categoryThunk";
 import Footer from "./Footer";
 import Marquee from "./Marquee";
+import Nav from "./Nav";
 import Navbar from "./Navbar";
 const Main = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -23,7 +24,8 @@ const Main = () => {
         <title>Luxurry | Classic Group</title>
       </Helmet>
       <Marquee />
-      <Navbar />
+
+      <Nav />
       <div className="w-full overflow-hidden">
         <Outlet />
         <Footer />
