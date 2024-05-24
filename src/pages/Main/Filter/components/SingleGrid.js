@@ -13,15 +13,15 @@ const SingleGrid = ({ item }) => {
   return (
     <div
       onClick={navigateToDetails}
-      className=" bg-white shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-xl"
+      className="shadow-md rounded-xl duration-500 hover:scale-102 hover:shadow-lg"
     >
       <div>
         <img
           src={getImageUrl(item?.image?.[0]?.imageUrl)}
           alt="Product"
-          className="h-80 object-cover rounded-t-xl"
+          className="h-64 rounded-t-xl w-full object-cover object-center"
         />
-        <div className="px-4 py-3">
+        <div className="px-5 py-2 bg-violet-50">
           <div className="flex justify-between items-center">
             <span className="text-gray-400 mr-3 uppercase text-xs flex gap-1 mb-1">
               <TagIcon className="w-4 h-4" /> {item?.category?.name}

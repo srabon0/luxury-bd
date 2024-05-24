@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useLocation, useSearchParams } from "react-router-dom";
+import NoData from "../../../components/NoData/NoData";
 import Pagination from "../../../components/Shared/Pagination/Pagination";
+import ProductCardSkeleton from "../../../components/Skeleton/ProductCardSkeleton";
 import { ProductSerdcvices } from "../../../services/product.services";
 import Filter from "./components/Filter";
 import ProductsGrid from "./components/ProductsGrid";
@@ -22,7 +24,7 @@ const initPageMeta = {
 
 const AllProductsWIthFilter = () => {
   const [respMeta, setRespMeta] = useState(initPageMeta);
-  const [products, setProducts] = useState([{}]);
+  const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { search } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,18 +68,16 @@ const AllProductsWIthFilter = () => {
   const fetchSearchedProducts = async () => {
     setIsLoading(true);
     removeNullValuesFromRequest(filterProps);
-    console.log(filterProps);
-    ProductSerdcvices.searchProducts(filterProps)
-      .then((data) => {
-        setProducts(data?.products);
-        setRespMeta(data?.meta);
-        console.log(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log(error);
-      });
+
+    try {
+      const data = await ProductSerdcvices.searchProducts(filterProps);
+      setProducts(data?.products);
+      setRespMeta(data?.meta);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onchangeInput = (e) => {
@@ -105,7 +105,7 @@ const AllProductsWIthFilter = () => {
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
+      <div className="drawer-content bg-base-100">
         {/* Page content here */}
         <div className="flex justify-between items-center mx-3 lg:hidden p-3 bg-white my-3 rounded-md">
           <label className="input input-bordered flex items-center gap-2">
@@ -137,22 +137,25 @@ const AllProductsWIthFilter = () => {
           </label>
         </div>
 
-        {
-          /* Products */
-          isLoading && products?.length === 0 ? (
-            <div className="flex items-center justify-center h-full">
-              <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin absolute"></div>
-            </div>
-          ) : (
-            <div className="px-2 mx-auto">
-              <ProductsGrid products={products} />
+        {isLoading && products !== null && <ProductCardSkeleton />}
 
-              <Pagination paginate={handlePaginationChange} meta={respMeta} />
-            </div>
-          )
-        }
+        {!isLoading && products?.length > 0 && (
+          <div className="px-2 mx-auto">
+            <ProductsGrid products={products} />
+            <Pagination paginate={handlePaginationChange} meta={respMeta} />
+          </div>
+        )}
+
+        {!isLoading && (!products || products?.length === 0) && (
+          <div
+            data-aos="fade-right"
+            className="flex items-center justify-center"
+          >
+            <NoData />
+          </div>
+        )}
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side h-auto">
         <label
           htmlFor="my-drawer-2"
           aria-label="close sidebar"

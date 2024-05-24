@@ -50,7 +50,7 @@ const NavMenu = ({ menu, redirectFunc }) => {
       onClick={redirectFunc}
       currentPath={location.pathname}
       to={menu?.link}
-      className="lg:mr-12"
+      className="lg:mr-5"
     >
       <span
         className={` rounded text-lg lg:text-lg font-bold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2  ${
@@ -130,7 +130,7 @@ const Nav = () => {
             )}
             <li>
               <details close>
-                <summary className="text-lg lg:text-lg font-bold font-sans  transition  ">
+                <summary className="text-lg lg:text-lg font-bold font-sans  transition text-black">
                   Categories
                 </summary>
                 <ul className="rounded-none w-96">
