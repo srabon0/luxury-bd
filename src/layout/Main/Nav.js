@@ -6,8 +6,8 @@ import SearchModal from "../../components/Modals/SearchModal";
 import Drawer from "../../components/Shared/Drawer/Drawer";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 import mainLogo from "./../../assests/svg/classic.svg";
-import { menuItems } from "../../components/Dropdowns/menuItem";
-import MenuItems from "../../components/Dropdowns/MenuItems";
+// import { menuItems } from "../../components/Dropdowns/menuItem";
+// import MenuItems from "../../components/Dropdowns/MenuItems";
 
 const mainMenuList = [
   {
