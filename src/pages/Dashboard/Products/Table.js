@@ -30,7 +30,7 @@ const ProductTable = ({ enableEdit, children, products, setProducts }) => {
 
   const deleteProductByid = (id) => {
     setIsModalOpen(false);
-    const url = `backend/product/delete/` + id;
+    const url = `products/` + id;
     apiInstance.delete(url).then((res) => {
       if (res.data) {
         dispatch(deleteProduct(id));

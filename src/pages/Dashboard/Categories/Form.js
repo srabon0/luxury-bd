@@ -22,7 +22,7 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
       ...catData,
       _id: updatedData._id,
     };
-    const url = "/backend/category/" + updatedData._id;
+    const url = "categories/" + updatedData._id;
     const { data } = await apiInstance.put(url, payload);
     if (data?.data?._id) {
       toast.success(data?.message);

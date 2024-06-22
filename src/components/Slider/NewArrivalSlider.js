@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import { ProductSerdcvices } from "../../services/product.services";
+import { ProductServices } from "../../services/product.services";
 import NewArrivalCard from "../Cards/NewArrivalCard";
 import slider1 from "../../assests/sliderImage/slider1.png";
 import slider2 from "../../assests/sliderImage/slider2.png";
@@ -29,7 +29,7 @@ export default function NewArrivalSlider() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await ProductSerdcvices.getLatestProduct();
+        const data = await ProductServices.getLatestProduct();
         setNewarrival(data);
       } catch (error) {
         console.log(error);

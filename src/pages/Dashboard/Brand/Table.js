@@ -1,12 +1,12 @@
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
 import Table from "../../../components/Shared/Table/Table";
 import TableCell from "../../../components/Shared/Table/TableCell";
 import TableRow from "../../../components/Shared/Table/TableRow";
-import { useDispatch, useSelector } from "react-redux";
-import { getTableRowSerial } from "../../../utils/utils";
-import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import BrandThunks from "../../../redux/thunk/brandThunk";
+import { getTableRowSerial } from "../../../utils/utils";
 const columns = ["SL", "Name", "Description", "Action"];
 
 const BrandTable = ({ enableEdit }) => {
@@ -33,12 +33,12 @@ const BrandTable = ({ enableEdit }) => {
   return (
     <>
       <Table columns={columns}>
-        {allBrands.map((brand, idx) => {
+        {allBrands?.map((brand, idx) => {
           return (
             <TableRow key={brand._id}>
               <TableCell>{getTableRowSerial(idx)}</TableCell>
-              <TableCell>{brand.name}</TableCell>
-              <TableCell>{brand.description}</TableCell>
+              <TableCell>{brand?.name}</TableCell>
+              <TableCell>{brand?.description}</TableCell>
               <TableCell align="center" className="flex gap-3">
                 <button
                   className="btn btn-secondary btn-sm"
@@ -66,10 +66,7 @@ const BrandTable = ({ enableEdit }) => {
             undone.
           </p>
           <div className="flex justify-center gap-3">
-            <button
-              onClick={() => closeModal}
-              className="btn btn-secondary btn-sm"
-            >
+            <button onClick={closeModal} className="btn btn-secondary btn-sm">
               Cancel
             </button>
             <button

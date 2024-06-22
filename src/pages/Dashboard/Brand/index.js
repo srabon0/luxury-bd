@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Form from "./Form";
-import BrandTable from "./Table";
-import apiInstance from "../../../plugins/axiosIns";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import apiInstance from "../../../plugins/axiosIns";
 import fetchBrands from "../../../redux/thunk/fetchBrands";
+import Form from "./Form";
+import BrandTable from "./Table";
 
 const Brands = () => {
   const formProps = useForm();
@@ -26,18 +26,23 @@ const Brands = () => {
   };
 
   const addBrand = async (brandData) => {
-    const url = "/backend/brand/create";
+    const url = "brands/create-brand";
     const { data } = await apiInstance.post(url, brandData);
-    if (data?.data?._id) {
-      toast.success(data?.message);
-      reset();
-    }
+    return data;
   };
 
   const onSubmit = async (data) => {
     try {
-      await addBrand(data);
-      toast.success("Product added successfully");
+      const result = await addBrand(data);
+      if (result?.success) {
+        setDrawerOpen(false);
+        dispatch(fetchBrands());
+        reset({
+          name: "",
+          description: "",
+        });
+        toast.success(result?.message);
+      }
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -51,7 +56,10 @@ const Brands = () => {
     <div>
       <div className="flex justify-between items-center">
         <h2 className="text-xl fw-bold">Add Brands</h2>
-        <button onClick={() => setDrawerOpen(true)} className="btn btn-primary btn-outline btn-sm">
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="btn btn-primary btn-outline btn-sm"
+        >
           Add Brand
         </button>
       </div>

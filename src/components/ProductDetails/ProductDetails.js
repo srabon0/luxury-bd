@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProductSerdcvices } from "../../services/product.services";
+import { ProductServices } from "../../services/product.services";
 import { getImageUrl } from "../../utils/utils";
 import ImageZoom from "./ImageZoom";
 import "./ImageZoom.css"; // Import the CSS file
@@ -24,7 +24,7 @@ const ProductDetails = () => {
   const getProduct = async () => {
     try {
       setIsLoading(true);
-      ProductSerdcvices.fetchProductById(id).then((data) => {
+      ProductServices.fetchProductById(id).then((data) => {
         const imgs = createImageUrls(data?.image);
         data.image = imgs;
         setProduct(data);

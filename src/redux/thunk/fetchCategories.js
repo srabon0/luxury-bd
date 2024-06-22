@@ -1,16 +1,15 @@
 import { loadCategory } from "../actions/categoryAction";
 import apiInstance from "../../plugins/axiosIns";
 
+const fetchCategories = () => {
+  return async (dispatch, getState) => {
+    const url = "categories";
+    const { data } = await apiInstance.get(url);
 
-const fetchCategories = ()=>{
-    return async(dispatch,getState)=>{
-        const url = "/backend/category/all"
-        const {data} = await apiInstance.get(url);
-        console.log(data?.data?.categories)
-        if(data){
-            dispatch(loadCategory(data?.data?.categories))
-        }
+    if (data?.success) {
+      dispatch(loadCategory(data?.data));
     }
-}
+  };
+};
 
-export default fetchCategories
+export default fetchCategories;

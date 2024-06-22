@@ -5,7 +5,7 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import NoData from "../../../components/NoData/NoData";
 import Pagination from "../../../components/Shared/Pagination/Pagination";
 import ProductCardSkeleton from "../../../components/Skeleton/ProductCardSkeleton";
-import { ProductSerdcvices } from "../../../services/product.services";
+import { ProductServices } from "../../../services/product.services";
 import Filter from "./components/Filter";
 import ProductsGrid from "./components/ProductsGrid";
 
@@ -70,7 +70,7 @@ const AllProductsWIthFilter = () => {
     removeNullValuesFromRequest(filterProps);
 
     try {
-      const data = await ProductSerdcvices.searchProducts(filterProps);
+      const data = await ProductServices.searchProducts(filterProps);
       setProducts(data?.products);
       setRespMeta(data?.meta);
     } catch (error) {

@@ -1,16 +1,26 @@
 import apiInstance from "../plugins/axiosIns";
 
-export const ProductSerdcvices = {
-  async fetchProducts(page, count, searchKey) {
-    console.log(page, count, searchKey);
+export const ProductServices = {
+  async fetchProducts(paylaod) {
+    console.log(paylaod);
 
-    let url = `backend/product/all?page=${page}&count=${count}`;
-    if (searchKey) {
-      url += `&searchKey=${searchKey}`;
+    let url = "products";
+
+    if (paylaod?.page) {
+      url += `?page=${paylaod?.page}&limit=${paylaod?.limit}`;
+      if (paylaod?.search) {
+        url += `&searchTerm=${paylaod?.search}`;
+      }
+      if (paylaod?.category) {
+        url += `&category=${paylaod?.category}`;
+      }
+      if (paylaod?.brand) {
+        url += `&brand=${paylaod?.brand}`;
+      }
     }
 
     const { data } = await apiInstance.get(url);
-    console.log(data?.data?.products);
+
     return data?.data;
   },
 
@@ -22,8 +32,9 @@ export const ProductSerdcvices = {
     const { data } = await apiInstance.post("backend/product", product);
     return data;
   },
-  async updateProduct(product) {
-    const { data } = await apiInstance.put("backend/product", product);
+  async updateProduct(id, product) {
+    const url = `products/${id}`;
+    const { data } = await apiInstance.patch(url, product);
     return data;
   },
   async deleteProduct(productId) {
@@ -44,7 +55,7 @@ export const ProductSerdcvices = {
   async deleteSingleImage(imageFileObj) {
     console.log(imageFileObj);
     const { data } = await apiInstance.post(
-      "backend/product/delete/image/" + imageFileObj?.productId,
+      "products/delete-image/" + imageFileObj?.productId,
       imageFileObj
     );
     return data;

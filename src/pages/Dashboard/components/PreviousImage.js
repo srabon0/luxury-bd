@@ -2,7 +2,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import React from "react";
 import { toast } from "react-toastify";
 import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
-import { ProductSerdcvices } from "../../../services/product.services";
+import { ProductServices } from "../../../services/product.services";
 import { getImageUrl } from "../../../utils/utils";
 
 const PreviousImage = ({ updatingProduct, setUpdatingProduct }) => {
@@ -21,7 +21,7 @@ const PreviousImage = ({ updatingProduct, setUpdatingProduct }) => {
 
   const onConfirmDelete = async () => {
     console.log("Deleting image, deleteImage: ", deleteImage);
-    ProductSerdcvices.deleteSingleImage({
+    ProductServices.deleteSingleImage({
       productId: updatingProduct?._id,
       ...deleteImage,
     })
@@ -39,7 +39,7 @@ const PreviousImage = ({ updatingProduct, setUpdatingProduct }) => {
 
   return (
     <>
-    <div className="mb-6 grid grid-cols-2 gap-2">
+      <div className="mb-6 grid grid-cols-2 gap-2">
         <label className="mb-2.5 block text-black col-span-full">
           Previous Image
         </label>

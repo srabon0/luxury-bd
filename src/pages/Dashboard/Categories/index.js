@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Form from "./Form";
-import CategoryTable from "./Table";
-import apiInstance from "../../../plugins/axiosIns";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import apiInstance from "../../../plugins/axiosIns";
 import fetchCategories from "../../../redux/thunk/fetchCategories";
+import Form from "./Form";
+import CategoryTable from "./Table";
 
 const Category = () => {
   const formProps = useForm();
@@ -25,19 +25,25 @@ const Category = () => {
   };
 
   const addCategory = async (catData) => {
-    const url = "/backend/category/create";
+    const url = "categories/create-category";
     const { data } = await apiInstance.post(url, catData);
-    if (data?.data?._id) {
-      toast.success(data?.message);
-      reset();
-    }
+    console.log(data);
+    return data;
   };
 
   const onSubmit = async (data) => {
     try {
       // console.log(data);
-      await addCategory(data);
-      toast.success("Category added successfully");
+      const result = await addCategory(data);
+      if (result?.success) {
+        setDrawerOpen(false);
+        dispatch(fetchCategories());
+        reset({
+          name: "",
+          description: "",
+        });
+        toast.success(result?.message);
+      }
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -51,7 +57,10 @@ const Category = () => {
     <div>
       <div className="flex justify-between items-center">
         <h2 className="text-xl fw-bold">Add Category</h2>
-        <button onClick={() => setDrawerOpen(true)} className="btn btn-outline btn-primary btn-sm">
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="btn btn-outline btn-primary btn-sm"
+        >
           Add Category
         </button>
       </div>

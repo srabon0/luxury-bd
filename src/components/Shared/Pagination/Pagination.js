@@ -3,10 +3,11 @@ const optionValues = [5, 10, 20, 30];
 const Pagination = ({ paginate, meta }) => {
   const pageNumbers = [];
   const totalCounts = meta?.totalCounts || 0;
-  const count = meta?.count || 10;
+  const totalPage = meta?.totalPages || 1;
+  const limit = meta?.limit || 10;
   const page = meta?.page || 1;
 
-  for (let i = 1; i <= Math.ceil(totalCounts / count); i++) {
+  for (let i = 1; i <= totalPage; i++) {
     pageNumbers.push(i);
   }
 
@@ -23,7 +24,7 @@ const Pagination = ({ paginate, meta }) => {
           className="select select-bordered select-sm w-full max-w-xs"
         >
           {optionValues.map((value) => (
-            <option key={value} value={value} selected={value === count}>
+            <option key={value} value={value} selected={value === limit}>
               {value}
             </option>
           ))}

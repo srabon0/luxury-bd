@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import "../../assests/styles/search-page.css";
-import { ProductSerdcvices } from "../../services/product.services";
+import { ProductServices } from "../../services/product.services";
 import ProductCard from "../Cards/ProductCard";
 import SectionHeader from "../Typography/SectionHeader";
 
@@ -10,7 +10,7 @@ const SearchModal = ({ setModalOpen }) => {
   const { data: { products } = [], refetch } = useQuery(
     ["products", searchTerm],
     async () => {
-      const res = await ProductSerdcvices.searchProducts({
+      const res = await ProductServices.searchProducts({
         search: searchTerm,
       });
 

@@ -3,11 +3,11 @@ import { loadBrands } from "../actions/brandAction";
 
 const fetchBrands = () => {
   return async (dispatch, getState) => {
-    const url = "/frontend/brand/all";
+    const url = "brands";
     const { data } = await apiInstance.get(url);
-    console.log(data?.data?.brands);
-    if (data) {
-      dispatch(loadBrands(data?.data?.brands));
+
+    if (data?.success) {
+      dispatch(loadBrands(data?.data));
     }
   };
 };

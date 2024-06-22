@@ -1,21 +1,21 @@
 import apiInstance from "../../plugins/axiosIns";
 import {
-  loadCategory,
   deleteCategory,
+  loadCategory,
   updateCategory,
 } from "../actions/categoryAction";
 
 const CategoryThunks = {
   fetchCategories: () => async (dispatch) => {
-    const url = "/frontend/category/all";
+    const url = "categories";
     const { data } = await apiInstance.get(url);
-    if (data) {
-      dispatch(loadCategory(data?.data?.categories));
+    if (data?.success) {
+      dispatch(loadCategory(data?.data));
     }
   },
   deleteCategoryById: (id) => async (dispatch) => {
     console.log(id);
-    const url = `backend/category/delete/` + id;
+    const url = `categories/` + id;
     const { data } = await apiInstance.delete(url);
     if (data) {
       console.log(data?.data?.id);
@@ -23,7 +23,7 @@ const CategoryThunks = {
     }
   },
   updateCategory: (id, updatedData) => async (dispatch) => {
-    const url = `backend/category/update/` + id;
+    const url = `categories/` + id;
     const { data } = await apiInstance.put(url, updatedData);
     if (data) {
       dispatch(updateCategory({ id, updatedData }));

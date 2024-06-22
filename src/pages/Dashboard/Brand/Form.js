@@ -15,7 +15,7 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
       ...brandData,
       _id: updatedData._id,
     };
-    const url = "/backend/brand/" + updatedData._id;
+    const url = "/brands/" + updatedData._id;
     const { data } = await apiInstance.put(url, payload);
     if (data?.data?._id) {
       toast.success(data?.message);
@@ -67,7 +67,10 @@ const Form = ({ isOpen, onClose, updatedData, onSubmit, formProps }) => {
         )}
 
         {!isNullOrObjectEmpty(updatedData) && (
-          <button onClick={handleSubmit(onUpdateData)} className="btn btn-neutral">
+          <button
+            onClick={handleSubmit(onUpdateData)}
+            className="btn btn-neutral"
+          >
             Update Brand
           </button>
         )}

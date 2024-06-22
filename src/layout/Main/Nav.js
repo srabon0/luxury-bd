@@ -6,6 +6,8 @@ import SearchModal from "../../components/Modals/SearchModal";
 import Drawer from "../../components/Shared/Drawer/Drawer";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 import mainLogo from "./../../assests/svg/classic.svg";
+import { menuItems } from "../../components/Dropdowns/menuItem";
+import MenuItems from "../../components/Dropdowns/MenuItems";
 
 const mainMenuList = [
   {
@@ -165,6 +167,15 @@ const Nav = () => {
               </svg>
             </button>
           </ul>
+
+          {/* <ul className="menus">
+            {menuItems.map((menu, index) => {
+              const depthLevel = 0;
+              return (
+                <MenuItems items={menu} key={index} depthLevel={depthLevel} />
+              );
+            })}
+          </ul> */}
         </div>
 
         <div className="navbar-end ">

@@ -1,12 +1,12 @@
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
 import Table from "../../../components/Shared/Table/Table";
 import TableCell from "../../../components/Shared/Table/TableCell";
 import TableRow from "../../../components/Shared/Table/TableRow";
-import { useDispatch, useSelector } from "react-redux";
-import { getTableRowSerial } from "../../../utils/utils";
-import ConfirmModal from "../../../components/Shared/ConfirmModal/ConfirmModal";
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import CategoryThunks from "../../../redux/thunk/categoryThunk";
+import { getTableRowSerial } from "../../../utils/utils";
 const columns = ["SL", "Name", "Description", "Sub Categories", "Action"];
 
 const CategoryTable = ({ enableEdit }) => {
@@ -34,13 +34,13 @@ const CategoryTable = ({ enableEdit }) => {
       <Table columns={columns}>
         {allCategories?.map((cat, idx) => {
           return (
-            <TableRow key={cat._id}>
+            <TableRow key={cat?._id}>
               <TableCell>{getTableRowSerial(idx)}</TableCell>
-              <TableCell>{cat.name}</TableCell>
-              <TableCell>{cat.description}</TableCell>
+              <TableCell>{cat?.name}</TableCell>
+              <TableCell>{cat?.description}</TableCell>
               <TableCell>
-                {cat.subCategories.map((subCat) => (
-                  <span key={subCat._id}>{subCat.name}, </span>
+                {cat?.subCategories?.map((subCat) => (
+                  <span key={subCat._id}>{subCat?.name}, </span>
                 ))}
               </TableCell>
 

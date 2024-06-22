@@ -9,7 +9,7 @@ import DragNDrop from "../../components/Shared/DragNDrop/DragNdrop";
 import apiInstance from "../../plugins/axiosIns";
 import BrandThunks from "../../redux/thunk/brandThunk";
 import CategoryThunks from "../../redux/thunk/categoryThunk";
-import ProductThunks from "../../redux/thunk/productThunk";
+import { ProductServices } from "../../services/product.services";
 import { isNullOrObjectEmpty } from "../../utils/utils";
 import PreviousImage from "./components/PreviousImage";
 
@@ -18,11 +18,22 @@ export default function App() {
   const [formDataFile, setFormDataFile] = useState([]);
   const categoryState = useSelector((state) => state)?.categoryState;
   const brandState = useSelector((state) => state)?.brandState;
-  const { register, handleSubmit, reset, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const [updatingProduct, setUpdatingProduct] = useState({});
   const { prodId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch(CategoryThunks.fetchCategories());
+    dispatch(BrandThunks.fetchBrands());
+  }, [dispatch]);
 
   useEffect(() => {
     if (prodId) {
@@ -32,27 +43,52 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
-    dispatch(CategoryThunks.fetchCategories());
-    dispatch(BrandThunks.fetchBrands());
-  }, [dispatch]);
-
   const uploadProductImage = async (formData) => {
     const base =
       process.env.NODE_ENV === "production"
         ? process.env.REACT_APP_BACKEND
         : process.env.REACT_APP_LOCAL_BACKEND;
-    const uploadUrl = base + "/backend/product/upload";
+    const uploadUrl = base + "files/upload-image";
     try {
       const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData,
       });
-      if (response?.status === 200) {
+      if (
+        (response?.status === 200 || response?.status === 201) &&
+        response.ok
+      ) {
         const data = await response.json();
-        if (data?.imageInfo?.length)
-          toast.success("Image uploaded successfully");
-        return await data?.imageInfo;
+        if (data?.length) toast.success("Image uploaded successfully");
+        return await data?.data;
+      } else {
+        toast.error("Image upload failed");
+        return;
+      }
+    } catch (error) {
+      console.log("image upload error", error);
+      toast.error("Image upload failed");
+    }
+  };
+
+  const uploadProductImageToFolder = async (folder, formData) => {
+    const base =
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_BACKEND
+        : process.env.REACT_APP_LOCAL_BACKEND;
+    const uploadUrl = base + "files/upload-to-folder/" + folder;
+    try {
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      });
+      if (
+        (response?.status === 200 || response?.status === 201) &&
+        response.ok
+      ) {
+        const data = await response.json();
+        if (data?.length) toast.success("Image uploaded successfully");
+        return await data?.data;
       } else {
         toast.error("Image upload failed");
         return;
@@ -64,8 +100,13 @@ export default function App() {
   };
 
   const addProduct = async (productData) => {
-    const url = "/backend/product/create";
-    const response = await apiInstance.post(url, productData);
+    const payload = {
+      ...productData,
+      price: parseInt(productData.price),
+      cartoncapacity: parseInt(productData.cartoncapacity),
+    };
+    const url = "products/create-product";
+    const response = await apiInstance.post(url, payload);
     if (response) {
       reset();
       setSelectedFiles([]);
@@ -75,30 +116,49 @@ export default function App() {
   };
 
   const onUpdateProduct = async (id, productData) => {
+    const folder = productData?.image[0]?.folder || "tempFolder";
     setIsLoading(true);
     try {
-      const formData = new FormData();
-      formDataFile.forEach((image, i) => {
-        formData.append("image", image);
-      });
+      let newMergedImages = updatingProduct?.image || [];
 
-      const imageInfo = await uploadProductImage(formData);
-      const newMergedImages = [...updatingProduct?.image, ...imageInfo];
+      if (formDataFile.length > 0) {
+        const formData = new FormData();
+        formDataFile.forEach((image) => {
+          formData.append("image", image);
+        });
+
+        const imageInfo = await uploadProductImageToFolder(folder, formData);
+        newMergedImages = [...newMergedImages, ...imageInfo];
+      }
+
       const product = { ...productData, image: newMergedImages };
-
-      await updateProduct(id, product);
+      updateProduct(id, product);
       toast.success("Product updated successfully");
-      await setIsLoading(false);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updateProduct = async (id, productData) => {
-    dispatch(ProductThunks.updateProduct(id, productData));
-    setSelectedFiles([]);
-    setFormDataFile([]);
-    await fetchProduct();
+    const paylaod = {
+      ...productData,
+      price: parseInt(productData.price),
+      cartoncapacity: parseInt(productData.cartoncapacity),
+    };
+    await dispatch(
+      ProductServices.updateProduct(id, paylaod).then((res) => {
+        if (res?.success) {
+          console.log(res);
+          setUpdatingProduct(res?.data);
+          toast.success(res?.message);
+          setIsLoading(false);
+          setFormDataFile([]);
+          setSelectedFiles([]);
+        }
+      })
+    );
   };
 
   const onSubmit = async (data) => {
@@ -111,6 +171,8 @@ export default function App() {
 
       const imageInfo = await uploadProductImage(formData);
       if (!imageInfo) {
+        setIsLoading(false);
+        toast.error("Image upload failed");
         return;
       }
       console.log("imageInfo", imageInfo);
@@ -123,9 +185,8 @@ export default function App() {
   };
 
   const fetchProduct = async () => {
-    const url = "/backend/product/id/" + prodId;
+    const url = "products/" + prodId;
     const { data } = await apiInstance.get(url);
-    console.log("data", data);
     setUpdatingProduct(data?.data);
     reset(data?.data);
   };
@@ -174,7 +235,7 @@ export default function App() {
                   <input
                     {...register("code")}
                     type="text"
-                    placeholder="Enter Product model"
+                    placeholder="Enter Product Code"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -199,6 +260,11 @@ export default function App() {
                     placeholder="Enter Product price"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  dark:bg-form-input dark:focus:border-primary"
                   />
+                  {errors.price && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errors.price.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="w-full xl:w-1/2">
@@ -211,6 +277,11 @@ export default function App() {
                     placeholder="Enter Product carton capacity"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter  dark:bg-form-input dark:focus:border-primary"
                   />
+                  {errors.cartoncapacity && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errors.cartoncapacity.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="w-full xl:w-1/2">
@@ -238,6 +309,7 @@ export default function App() {
                     <select
                       {...register("category")}
                       className="relative w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary  dark:bg-form-input"
+                      defaultValue={updatingProduct?.category?._id || ""}
                     >
                       <option value="" disabled selected>
                         Select Category
@@ -301,6 +373,7 @@ export default function App() {
                   <select
                     {...register("brand")}
                     className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary  dark:bg-form-input dark:focus:border-primary"
+                    defaultValue={updatingProduct?.brand?._id || ""}
                   >
                     <option value="" disabled selected>
                       Select Brand
