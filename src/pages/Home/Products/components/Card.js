@@ -18,7 +18,7 @@ const Card = ({ product }) => {
     cartoncapacity,
     description,
   } = product;
-  const thumbnail = getImageUrl(image[0]?.imageUrl) ;
+  const thumbnail = getImageUrl(image[0]?.imageUrl);
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
@@ -30,7 +30,12 @@ const Card = ({ product }) => {
       onClick={navigateToDetails}
       className="p-5 py-10 bg-purple-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer rounded-md"
     >
-      <img className="w-full" src={thumbnail} alt={title + _id} />
+      <img
+        className="w-full"
+        data-aos="zoom-in"
+        src={thumbnail}
+        alt={title + _id}
+      />
       <div className="space-x-1 flex justify-center mt-10">
         <StarIcon className="h-5 text-orange-500" />
         <StarIcon className="h-5 text-orange-500" />
@@ -41,7 +46,8 @@ const Card = ({ product }) => {
       <h1 className="text-xl my-5">{title}</h1>
       <h4 className="flex gap-2 justify-center items-center">
         <span className="flex items-center gap-1">
-          <TagIcon className="h-5 text-purple-500" /> <span>{category?.name}</span>
+          <TagIcon className="h-5 text-purple-500" />{" "}
+          <span>{category?.name}</span>
         </span>
         <span className="flex items-center gap-1">
           <CubeTransparentIcon className="h-5 text-purple-500" />{" "}
@@ -53,7 +59,9 @@ const Card = ({ product }) => {
         </span>
       </h4>
       <p className="truncate overflow-hidden">{description}</p>
-      {price && <h2 className="mt-5 mb-3 text-lg font-bold">&#2547; {price}</h2>}
+      {price && (
+        <h2 className="mt-5 mb-3 text-lg font-bold">&#2547; {price}</h2>
+      )}
       <button className="p-2 px-6 bg-purple-500 text-white rounded-md hover:bg-purple-600">
         Add To Cart
       </button>

@@ -2,13 +2,8 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import { ProductServices } from "../../services/product.services";
+import { getImageUrl } from "../../utils/utils";
 import NewArrivalCard from "../Cards/NewArrivalCard";
-import slider1 from "../../assests/sliderImage/slider1.png";
-import slider2 from "../../assests/sliderImage/slider2.png";
-import slider3 from "../../assests/sliderImage/slider3.png";
-import slider4 from "../../assests/sliderImage/slider4.png";
-import slider5 from "../../assests/sliderImage/slider5.png";
 
 const bg = [
   "#DAC2FF",
@@ -21,23 +16,14 @@ const bg = [
   "#F4FFB2",
 ];
 
-const imagearray = [slider1, slider2, slider3, slider4, slider5];
-
-export default function NewArrivalSlider() {
+export default function NewArrivalSlider({ products }) {
   const [newarrival, setNewarrival] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const data = await ProductServices.getLatestProduct();
-        setNewarrival(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProduct();
-  }, []);
+    if (products) {
+      setNewarrival(products);
+    }
+  }, [products?.length]);
 
   var settings = {
     dots: false,
@@ -89,7 +75,7 @@ export default function NewArrivalSlider() {
               ...item,
               bg: bg[Math.floor(Math.random() * bg.length - index)],
             }}
-            img={imagearray[Math.floor(Math.random() * imagearray.length)]}
+            img={getImageUrl(item?.image?.[0]?.imageUrl)}
           />
         ))}
       </Slider>

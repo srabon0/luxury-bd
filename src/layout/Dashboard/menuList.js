@@ -1,8 +1,5 @@
 import {
   AdjustmentsHorizontalIcon,
-  BellSnoozeIcon,
-  Cog6ToothIcon,
-  CreditCardIcon,
   CubeTransparentIcon,
   HomeIcon,
   PlusCircleIcon,
@@ -34,24 +31,24 @@ export const dashboardMenuList = [
     link: "/dashboard/brands",
     icon: <AdjustmentsHorizontalIcon className="w-6 h-6" />,
   },
-  {
-    id: 1004,
-    name: "Orders",
-    link: "/dashboard/orders",
-    icon: <BellSnoozeIcon className="w-6 h-6" />,
-  },
-  {
-    id: 1005,
-    name: "Payment",
-    link: "/dashboard/payment",
-    icon: <CreditCardIcon className="w-6 h-6" />,
-  },
-  {
-    id: 1006,
-    name: "Settings",
-    link: "/dashboard/settings",
-    icon: <Cog6ToothIcon className="w-6 h-6" />,
-  },
+  // {
+  //   id: 1004,
+  //   name: "Orders",
+  //   link: "/dashboard/orders",
+  //   icon: <BellSnoozeIcon className="w-6 h-6" />,
+  // },
+  // {
+  //   id: 1005,
+  //   name: "Payment",
+  //   link: "/dashboard/payment",
+  //   icon: <CreditCardIcon className="w-6 h-6" />,
+  // },
+  // {
+  //   id: 1006,
+  //   name: "Settings",
+  //   link: "/dashboard/settings",
+  //   icon: <Cog6ToothIcon className="w-6 h-6" />,
+  // },
   {
     id: 1007,
     name: "Back to Home",

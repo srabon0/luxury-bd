@@ -50,7 +50,7 @@ const SearchModal = ({ setModalOpen }) => {
             type="text"
             name="query"
             value={searchTerm}
-            placeholder="Product Name (Ex: Shoes)"
+            placeholder="Product Name (Ex: Sink, Faucet, etc.)"
             className="input w-full max-w-md"
             onChange={handleInputChange}
           />
@@ -58,7 +58,7 @@ const SearchModal = ({ setModalOpen }) => {
 
         {products?.length ? (
           <div className="search-products max-h-96 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5 mt-10 text-white">
-            {products.map((item) => (
+            {products?.map((item) => (
               <ProductCard
                 key={item._id}
                 data={item}

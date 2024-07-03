@@ -1,10 +1,8 @@
 import {
-  LOAD_PRODUCT,
   ADD_PRODUCT,
-  UPDATE_PRODUCT,
   DELETE_PRODUCT,
-  CHANGE_ITEMS_PER_PAGE,
-  CHANGE_PAGE,
+  LOAD_PRODUCT,
+  UPDATE_PRODUCT,
 } from "../actionTypes/productActionType";
 
 export const loadProducts = (payload) => {
@@ -31,20 +29,6 @@ export const updateProduct = (payload) => {
 export const deleteProduct = (payload) => {
   return {
     type: DELETE_PRODUCT,
-    payload: payload,
-  };
-};
-
-export const changePage = (payload) => {
-  return {
-    type: CHANGE_PAGE,
-    payload: payload,
-  };
-};
-
-export const changeItemsPerPage = (payload) => {
-  return {
-    type: CHANGE_ITEMS_PER_PAGE,
     payload: payload,
   };
 };

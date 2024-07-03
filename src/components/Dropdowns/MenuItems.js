@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
-
+import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 
 const MenuItems = ({ items, depthLevel }) => {
@@ -17,7 +17,6 @@ const MenuItems = ({ items, depthLevel }) => {
     document.addEventListener("mousedown", handler);
     document.addEventListener("touchstart", handler);
     return () => {
-      // Cleanup the event listener
       document.removeEventListener("mousedown", handler);
       document.removeEventListener("touchstart", handler);
     };
@@ -35,9 +34,14 @@ const MenuItems = ({ items, depthLevel }) => {
     dropdown && setDropdown(false);
   };
 
+  const commonClasses =
+    "block text-capitalize whitespace-nowrap font-bold min-w-full";
+
   return (
     <li
-      className="menu-items"
+      className={`menu-items rounded text-lg lg:text-lg font-bold font-sans transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 ${
+        depthLevel > 1 ? "max-w-xs overflow-hidden text-ellipsis" : ""
+      }`}
       ref={ref}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -45,21 +49,44 @@ const MenuItems = ({ items, depthLevel }) => {
     >
       {items.url && items.submenu ? (
         <>
+          <Link to={items.url} className={commonClasses}>
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={dropdown ? "true" : "false"}
+              onClick={() => setDropdown((prev) => !prev)}
+              className={commonClasses}
+            >
+              {items.title}
+              {depthLevel > 0 ? (
+                <span>
+                  <ChevronRightIcon className="text-gray-400 h-5 w-5 ml-2" />
+                </span>
+              ) : (
+                <span className="arrow" />
+              )}
+            </button>
+          </Link>
+          <Dropdown
+            depthLevel={depthLevel}
+            submenus={items.submenu}
+            dropdown={dropdown}
+          />
+        </>
+      ) : !items.url && items.submenu ? (
+        <>
           <button
+            className={commonClasses}
             type="button"
             aria-haspopup="menu"
             aria-expanded={dropdown ? "true" : "false"}
             onClick={() => setDropdown((prev) => !prev)}
           >
-            {window.innerWidth < 960 && depthLevel === 0 ? (
-              items.title
-            ) : (
-              <Link to={items.url}>{items.title}</Link>
-            )}
-
-            {depthLevel > 0 && window.innerWidth < 960 ? null : depthLevel >
-                0 && window.innerWidth > 960 ? (
-              <span>&raquo;</span>
+            {items.title}{" "}
+            {depthLevel > 0 ? (
+              <span>
+                <ChevronRightIcon className="text-gray-400 h-5 w-5 ml-2" />
+              </span>
             ) : (
               <span className="arrow" />
             )}
@@ -70,25 +97,10 @@ const MenuItems = ({ items, depthLevel }) => {
             dropdown={dropdown}
           />
         </>
-      ) : !items.url && items.submenu ? (
-        <>
-          <button
-            type="button"
-            aria-haspopup="menu"
-            aria-expanded={dropdown ? "true" : "false"}
-            onClick={() => setDropdown((prev) => !prev)}
-          >
-            {items.title}{" "}
-            {depthLevel > 0 ? <span>&raquo;</span> : <span className="arrow" />}
-          </button>
-          <Dropdown
-            depthLevel={depthLevel}
-            submenus={items.submenu}
-            dropdown={dropdown}
-          />
-        </>
       ) : (
-        <Link to={items.url}>{items.title}</Link>
+        <Link to={items.url} className={commonClasses}>
+          {items.title}
+        </Link>
       )}
     </li>
   );

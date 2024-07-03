@@ -1,19 +1,12 @@
 import {
-  LOAD_PRODUCT,
   ADD_PRODUCT,
-  UPDATE_PRODUCT,
   DELETE_PRODUCT,
-  CHANGE_ITEMS_PER_PAGE,
-  CHANGE_PAGE,
+  LOAD_PRODUCT,
+  UPDATE_PRODUCT,
 } from "../actionTypes/productActionType";
 
 const initialState = {
   products: [],
-  pageNo: 1,
-  itemsPerPage: 20,
-  totalItems: 0,
-  loading: false,
-  error: null,
 };
 
 const productReducer = (state = initialState, action) => {
@@ -21,10 +14,7 @@ const productReducer = (state = initialState, action) => {
     case LOAD_PRODUCT:
       return {
         ...state,
-        products: action?.payload?.products,
-        itemsPerPage: action?.payload?.itemsPerPage,
-        totalItems: action?.payload?.totalProducts,
-        pageNo: action?.payload?.pageNo,
+        products: action?.payload,
       };
     case ADD_PRODUCT:
       return {
@@ -49,16 +39,6 @@ const productReducer = (state = initialState, action) => {
       return {
         ...state,
         products: filteredProduct,
-      };
-    case CHANGE_PAGE:
-      return {
-        ...state,
-        pageNo: action.payload,
-      };
-    case CHANGE_ITEMS_PER_PAGE:
-      return {
-        ...state,
-        itemsPerPage: action.payload,
       };
 
     default:

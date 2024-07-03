@@ -12,10 +12,10 @@ import Brands from "../pages/Dashboard/Brand";
 import Category from "../pages/Dashboard/Categories";
 import Products from "../pages/Dashboard/Products";
 import StatusCards from "../pages/Dashboard/StatusCards";
+import Home from "../pages/Home/Home";
 import ContactForm from "../pages/Main/Contact";
 import AllProductsWIthFilter from "../pages/Main/Filter/AllProductsWIthFilter";
 import Service from "../pages/Main/Service";
-import Home from "../pages/Home/Home";
 
 const routes = createBrowserRouter([
   {
@@ -54,6 +54,18 @@ const routes = createBrowserRouter([
         path: "/product/:id",
         element: <ProductDetails />,
       },
+      // {
+      //   path: "/categories/:categoryId/:subCategory",
+      //   element: <Cat />,
+      // },
+      // {
+      //   path: "/categories/:categoryId",
+      //   element: <Cat />,
+      // },
+      // {
+      //   path: "/categories",
+      //   element: <Cat />,
+      // },
     ],
   },
 

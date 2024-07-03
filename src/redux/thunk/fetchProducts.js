@@ -3,10 +3,10 @@ import { loadProducts } from "../actions/productAction";
 
 const fetchProducts = (page, count, searchKey) => {
   return async (dispatch, getState) => {
-    let url = `backend/product/all`;
+    let url = `/products`;
     const { data } = await apiInstance.get(url);
     if (data) {
-      dispatch(loadProducts(data?.data));
+      dispatch(loadProducts(data?.data?.data));
     }
   };
 };

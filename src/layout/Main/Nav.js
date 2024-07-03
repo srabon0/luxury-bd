@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import MenuItems from "../../components/Dropdowns/MenuItems";
 import SearchModal from "../../components/Modals/SearchModal";
 import Drawer from "../../components/Shared/Drawer/Drawer";
 import { resetCurrentUser } from "../../redux/actions/userAction";
 import mainLogo from "./../../assests/svg/classic.svg";
-// import { menuItems } from "../../components/Dropdowns/menuItem";
-// import MenuItems from "../../components/Dropdowns/MenuItems";
+import { convertCategoriesToMenu } from "./utils";
 
 const mainMenuList = [
   {
@@ -20,12 +20,6 @@ const mainMenuList = [
     name: "Products",
     link: "/products",
   },
-  // {
-  //   id: 1002,
-  //   name: "About",
-  //   link: "/about",
-  // },
-
   {
     id: 1003,
     name: "Contact",
@@ -55,7 +49,7 @@ const NavMenu = ({ menu, redirectFunc }) => {
       className="lg:mr-5"
     >
       <span
-        className={` rounded text-lg lg:text-lg font-bold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2  ${
+        className={`rounded text-lg lg:text-lg font-bold font-sans  transition focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2  ${
           location.pathname === menu?.link ? "text-primary" : "text-black"
         }`}
       >
@@ -76,7 +70,6 @@ const Nav = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const currentUser = useSelector((state) => state?.userState?.authUser?.user);
   const dispatch = useDispatch();
 
   const logout = () => {
@@ -85,6 +78,19 @@ const Nav = () => {
     dispatch(resetCurrentUser());
     navigate("/login");
   };
+  const categoryArray = [
+    {
+      name: "Categories",
+      subCategories: categoryState?.categories,
+    },
+  ];
+  const menuItems = convertCategoriesToMenu(categoryArray);
+
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const isAdmin = user?.role === "admin";
+
+  console.log("user", user);
+
   return (
     <>
       <div className="navbar bg-base-100 px-8 lg:px-14 md:px-10">
@@ -121,7 +127,7 @@ const Nav = () => {
               </li>
             ))}
 
-            {currentUser && currentUser?.role === "admin" && (
+            {user && isAdmin && (
               <>
                 {adminMenuList.map((menu) => (
                   <li key={menu.id}>
@@ -130,78 +136,37 @@ const Nav = () => {
                 ))}
               </>
             )}
-            <li>
-              <details close>
-                <summary className="text-lg lg:text-lg font-bold font-sans  transition text-black">
-                  Categories
-                </summary>
-                <ul className="rounded-none w-96">
-                  {categoryState?.categories?.length &&
-                    categoryState?.categories?.map((category) => (
-                      <li key={category?._id} className="px-4">
-                        <div className="font-bold font-sans stransition focus:outline-none w-full ">
-                          {category.name}
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-              </details>
-            </li>
-            <button
-              onClick={() => setSearchModalOpen(!searhcModalOpen)}
-              className="btn btn-ghost btn-square ml-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
           </ul>
 
-          {/* <ul className="menus">
-            {menuItems.map((menu, index) => {
-              const depthLevel = 0;
-              return (
-                <MenuItems items={menu} key={index} depthLevel={depthLevel} />
-              );
-            })}
-          </ul> */}
-        </div>
+          <ul>
+            {menuItems &&
+              menuItems?.map((menu, index) => (
+                <MenuItems items={menu} key={index} depthLevel={0} />
+              ))}
+          </ul>
 
-        <div className="navbar-end ">
-          <div className="dropdown dropdown-end">
-            <div className="flex-none block lg:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="btn btn-square btn-ghost"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="inline-block w-5 h-5 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+          <button
+            onClick={() => setSearchModalOpen(!searhcModalOpen)}
+            className="btn btn-ghost btn-square ml-4"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
 
-            {!currentUser && (
+          <div className="ml-12">
+            {!user && (
               <>
                 <div className=" hidden lg:block my-4  items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
                   <button
@@ -219,7 +184,7 @@ const Nav = () => {
                 </div>
               </>
             )}
-            {currentUser && (
+            {user && (
               <>
                 <div className="hidden lg:block my-4 items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
                   <button
@@ -231,6 +196,32 @@ const Nav = () => {
                 </div>
               </>
             )}
+          </div>
+        </div>
+
+        <div className="navbar-end ">
+          <div className="block lg:hidden">
+            <div>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="btn btn-square btn-ghost"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="inline-block w-5 h-5 stroke-current"
+                  color="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  ></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
         {searhcModalOpen && <SearchModal setModalOpen={setSearchModalOpen} />}
@@ -248,7 +239,7 @@ const Nav = () => {
             </li>
           ))}
 
-          {currentUser && currentUser?.role === "admin" && (
+          {user && isAdmin && (
             <>
               {adminMenuList.map((menu) => (
                 <li key={menu.id}>
@@ -288,7 +279,7 @@ const Nav = () => {
           <br />
           <hr />
 
-          {!currentUser && (
+          {!user && (
             <div className="flex items-center justify-evenly mt-10">
               <button
                 onClick={() => redirectToDetails("/login")}
@@ -305,7 +296,7 @@ const Nav = () => {
             </div>
           )}
 
-          {currentUser && (
+          {user && (
             <div className="flex items-center justify-between mt-10">
               <button onClick={logout} className="btn btn-primary">
                 Logout
@@ -313,53 +304,15 @@ const Nav = () => {
             </div>
           )}
         </ul>
+
+        {/* <ul>
+          {menuItems.map((menu, index) => {
+            return <MenuItems items={menu} key={index} depthLevel={0} />;
+          })}
+        </ul> */}
       </Drawer>
     </>
   );
 };
 
 export default Nav;
-
-// <ul
-//             tabIndex={0}
-//             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-//           >
-//             {currentUser && currentUser?.role === "admin" && (
-//               <>
-//                 {adminMenuList.map((menu) => (
-//                   <li key={menu.id}>
-//                     <NavMenu menu={menu} />
-//                   </li>
-//                 ))}
-//               </>
-//             )}
-//             {!currentUser && (
-//               <>
-//                 <li>
-//                   <button
-//                     onClick={() => redirectToDetails("/login")}
-//                     className="btn btn-ghost"
-//                   >
-//                     Log in
-//                   </button>
-//                 </li>
-//                 <li>
-//                   <button
-//                     onClick={() => redirectToDetails("/signup")}
-//                     className="btn btn-ghost"
-//                   >
-//                     Sign up
-//                   </button>
-//                 </li>
-//               </>
-//             )}
-//             {currentUser && (
-//               <>
-//                 <li>
-//                   <button onClick={logout} className="btn btn-ghost">
-//                     Logout
-//                   </button>
-//                 </li>
-//               </>
-//             )}
-//           </ul>

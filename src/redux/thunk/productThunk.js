@@ -3,7 +3,7 @@ import { loadProducts } from "../actions/productAction";
 
 const ProductThunks = {
   fetchProducts: () => async (dispatch) => {
-    const url = "/frontend/product/all";
+    const url = "products";
     const { data } = await apiInstance.get(url);
     if (data) {
       dispatch(loadProducts(data?.data?.products));

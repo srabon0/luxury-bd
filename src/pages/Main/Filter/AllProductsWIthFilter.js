@@ -4,7 +4,6 @@ import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useLocation, useSearchParams } from "react-router-dom";
 import NoData from "../../../components/NoData/NoData";
 import Pagination from "../../../components/Shared/Pagination/Pagination";
-import ProductCardSkeleton from "../../../components/Skeleton/ProductCardSkeleton";
 import { ProductServices } from "../../../services/product.services";
 import Filter from "./components/Filter";
 import ProductsGrid from "./components/ProductsGrid";
@@ -19,7 +18,8 @@ export const removeNullValuesFromRequest = (obj) => {
 
 const initPageMeta = {
   page: 1,
-  count: 10,
+  limit: 30,
+  totalCounts: 0,
 };
 
 const AllProductsWIthFilter = () => {
@@ -30,19 +30,17 @@ const AllProductsWIthFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = new URLSearchParams(search);
   const [filterProps, setFilterProps] = useState({
-    categoryId: query.get("categoryId"),
-    brandId: query.get("brandId"),
+    category: query.get("category"),
+    brand: query.get("brand"),
     search: query.get("search"),
-    page: respMeta?.page,
-    count: respMeta?.count,
   });
 
   const initialRender = useRef(true);
 
   useEffect(() => {
     setFilterProps({
-      categoryId: query.get("categoryId"),
-      brandId: query.get("brandId"),
+      category: query.get("category"),
+      brand: query.get("brand"),
       search: query.get("search"),
     });
   }, [search]);
@@ -54,7 +52,7 @@ const AllProductsWIthFilter = () => {
       updateURLParameters();
       fetchSearchedProducts();
     }
-  }, [filterProps]);
+  }, [filterProps, respMeta.page, respMeta.limit]);
 
   const updateURLParameters = () => {
     for (const key in filterProps) {
@@ -67,12 +65,19 @@ const AllProductsWIthFilter = () => {
   };
   const fetchSearchedProducts = async () => {
     setIsLoading(true);
-    removeNullValuesFromRequest(filterProps);
+    let payload = removeNullValuesFromRequest(filterProps);
+    payload = {
+      ...payload,
+      page: respMeta?.page,
+      limit: respMeta?.limit,
+      search: filterProps?.search || "",
+    };
 
     try {
-      const data = await ProductServices.searchProducts(filterProps);
-      setProducts(data?.products);
-      setRespMeta(data?.meta);
+      const { data, meta } = await ProductServices.fetchProducts(payload);
+      setProducts(data);
+      setRespMeta(meta);
+      console.log(meta);
     } catch (error) {
       console.log(error);
     } finally {
@@ -92,11 +97,11 @@ const AllProductsWIthFilter = () => {
   };
 
   const handlePaginationChange = (type, value) => {
-    setFilterProps((prev) => {
+    setRespMeta((prev) => {
       if (type === "page") {
         return { ...prev, page: Number(value) };
       } else if (type === "item") {
-        return { ...prev, count: Number(value) };
+        return { ...prev, limit: Number(value) };
       }
       return prev;
     });
@@ -136,8 +141,6 @@ const AllProductsWIthFilter = () => {
             <FunnelIcon className="w-6 h-6 text-blue-400" />
           </label>
         </div>
-
-        {isLoading && products !== null && <ProductCardSkeleton />}
 
         {!isLoading && products?.length > 0 && (
           <div className="px-2 mx-auto">

@@ -27,7 +27,6 @@ const Category = () => {
   const addCategory = async (catData) => {
     const url = "categories/create-category";
     const { data } = await apiInstance.post(url, catData);
-    console.log(data);
     return data;
   };
 

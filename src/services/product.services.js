@@ -25,7 +25,7 @@ export const ProductServices = {
   },
 
   async fetchProductById(productId) {
-    const { data } = await apiInstance.get(`frontend/product/id/${productId}`);
+    const { data } = await apiInstance.get(`products/${productId}`);
     return data?.data;
   },
   async addProduct(product) {
@@ -43,12 +43,8 @@ export const ProductServices = {
   },
 
   async searchProducts(searchKey) {
-    const url = `frontend/product/search?${
-      searchKey?.page ? `page=${searchKey?.page}&` : ""
-    }${searchKey?.count ? `count=${searchKey?.count}` : ""}`;
-    const { data } = await apiInstance.post(url, {
-      searchKey,
-    });
+    const url = `/products/search`;
+    const { data } = await apiInstance.post(url, searchKey);
     return data?.data;
   },
 
@@ -62,8 +58,12 @@ export const ProductServices = {
   },
 
   async getLatestProduct() {
-    const { data } = await apiInstance.get("frontend/product/latest");
-    console.log(data);
+    const { data } = await apiInstance.post("/products/latest");
+    return data?.data;
+  },
+
+  async getSlider() {
+    const { data } = await apiInstance.post("/products/slider");
     return data?.data;
   },
 };

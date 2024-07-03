@@ -14,14 +14,14 @@ import ProductTable from "./Table";
 
 const initPageMeta = {
   page: 1,
-  limit: 10,
+  limit: 30,
   totalCounts: 0,
 };
 
 const Product = () => {
   const navigate = useNavigate();
   const [respMeta, setRespMeta] = useState(initPageMeta);
-  const [products, setProducts] = useState([{}]);
+  const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { search } = useLocation();
   const query = new URLSearchParams(search);
@@ -40,13 +40,13 @@ const Product = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [filterProps]);
+  }, [filterProps, respMeta.limit, respMeta.page]);
 
   const fetchProducts = async () => {
     setIsLoading(true);
     const paylaod = {
-      page: filterProps?.page || 1,
-      limit: filterProps?.limit || 10,
+      page: respMeta?.page,
+      limit: respMeta?.limit,
       search: filterProps?.search || "",
       category: filterProps?.category || null,
       brand: filterProps?.brand || null,
@@ -69,7 +69,7 @@ const Product = () => {
   };
 
   const handlePaginationChange = (type, value) => {
-    setFilterProps((prev) => {
+    setRespMeta((prev) => {
       if (type === "page") {
         return { ...prev, page: Number(value) };
       } else if (type === "item") {

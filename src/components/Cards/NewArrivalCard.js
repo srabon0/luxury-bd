@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../../assests/styles/style.css";
 
 const NewArrivalCard = ({ data, img }) => {
-  const { title, bg, price, _id } = data;
+  const { title, bg, category, _id } = data;
   return (
     <Link to={`/products/${_id}`}>
       <div
@@ -13,15 +13,21 @@ const NewArrivalCard = ({ data, img }) => {
         <div>
           <h3 className="font-bold text-lg">{title}</h3>
           <div className="flex gap-2 text-xs">
-            <span className="font-bold">Size:</span>
-            <span>1/2</span>
-            <span>1/2</span>
-            <span>1/4</span>
-            <span>3/4</span>
+            <span className="font-bold">Category:</span>
+            <span>{category?.name}</span>
           </div>
-          <h2 className="text-xl mt-2">BDT {price}</h2>
+          {category?.subCategory?.length > 0 && (
+            <div className="flex gap-2 text-xs">
+              <span className="font-bold">Subclass:</span>
+              <span>
+                {category?.subCategory?.map((sub) => sub.name).join(", ")}
+              </span>
+            </div>
+          )}
+          {/* <h2 className="text-xl mt-2">BDT {price}</h2> */}
         </div>
         <img
+          data-aos="zoom-in-down"
           className="lg:h-[100px] md:h-[80px] h-[100px] productImg"
           src={img}
           alt=""
