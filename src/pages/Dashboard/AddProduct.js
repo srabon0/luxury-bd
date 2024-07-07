@@ -78,10 +78,20 @@ export default function App() {
         : process.env.REACT_APP_LOCAL_BACKEND;
     const uploadUrl = base + "files/upload-to-folder/" + folder;
     try {
-      const response = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        uploadUrl,
+        {
+          method: "POST",
+          body: formData,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
       if (
         (response?.status === 200 || response?.status === 201) &&
         response.ok
