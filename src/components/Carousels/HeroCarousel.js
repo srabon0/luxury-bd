@@ -27,32 +27,6 @@ const HeroCarousel = ({ slider }) => {
     }, 4000);
     return () => clearTimeout(timer);
   }, [slideNumber]);
-  const content = [
-    {
-      title: "Top Notch Quality",
-      description: "We are offering the Best Quality In Town!",
-    },
-    {
-      title: "New Arrivals",
-      description:
-        "Elevate Your Style with our brand new products, Purchase Today!",
-    },
-    {
-      title: "Luxurry Vibe",
-      description:
-        "You one stop place to Shop with Confidence. Shopping is Easy!",
-    },
-    {
-      title: "Classic Collection",
-      description:
-        "Remarks the landmark of Always On Trend courtesy, Hurry Up!",
-    },
-    {
-      title: "Premiumness",
-      description:
-        "Remarks the landmark of Always On Trend courtesy, Hurry Up!",
-    },
-  ];
   return (
     <div className="slider">
       {slider?.map((item, index) => (
