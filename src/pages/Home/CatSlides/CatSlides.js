@@ -55,7 +55,7 @@ const CatSlides = () => {
             className="mySwiper"
             data-aos="fade-right"
           >
-            {categories.map((category, index) => (
+            {categories?.map((category, index) => (
               <SwiperSlide key={index}>
                 <SingleSlide category={category} />
               </SwiperSlide>

@@ -19,7 +19,7 @@ import SingleSlide from "./SingleSlide";
 
 const CatSlides = ({ noHeading = false, activeFunctionalities = false }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const categories = useSelector((state) => state.categoryState.categories);
+  const categories = useSelector((state) => state?.categoryState?.categories);
   const [activeCategory, setActiveCategory] = useState(null);
   const currentUrl = useRef(window.location.href);
 
@@ -65,18 +65,19 @@ const CatSlides = ({ noHeading = false, activeFunctionalities = false }) => {
             modules={[Pagination, Navigation]}
             className="mySwiper flex items-center justify-center gap-2"
           >
-            {categories.map((category, index) => (
-              <SwiperSlide key={index}>
-                <Link to={"/categories/" + activeCategory?.name}>
-                  <div onClick={() => handleSetActiveCategory(category)}>
-                    <SingleSlide
-                      activeCategory={activeCategory}
-                      category={category}
-                    />
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
+            {categories?.length &&
+              categories?.map((category, index) => (
+                <SwiperSlide key={index}>
+                  <Link to={"/categories/" + activeCategory?.name}>
+                    <div onClick={() => handleSetActiveCategory(category)}>
+                      <SingleSlide
+                        activeCategory={activeCategory}
+                        category={category}
+                      />
+                    </div>
+                  </Link>
+                </SwiperSlide>
+              ))}
           </Swiper>
         </div>
 

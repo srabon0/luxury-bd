@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import MenuItems from "../../components/Dropdowns/MenuItems";
 import SearchModal from "../../components/Modals/SearchModal";
 import Drawer from "../../components/Shared/Drawer/Drawer";
-import { resetCurrentUser } from "../../redux/actions/userAction";
 import mainLogo from "./../../assests/svg/classic.svg";
 import { convertCategoriesToMenu } from "./utils";
 
@@ -27,18 +26,6 @@ const mainMenuList = [
   },
 ];
 
-const adminMenuList = [
-  {
-    id: 3000,
-    name: "Dashboard",
-    link: "/dashboard",
-  },
-  {
-    id: 3001,
-    name: "Profile",
-    link: "/dashboard/profile",
-  },
-];
 const NavMenu = ({ menu, redirectFunc }) => {
   const location = useLocation();
   return (
@@ -65,19 +52,6 @@ const Nav = () => {
 
   const { categoryState } = useSelector((state) => state);
   const navigate = useNavigate();
-  const redirectToDetails = (link) => {
-    navigate(link);
-    setIsMobileMenuOpen(false);
-  };
-
-  const dispatch = useDispatch();
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("currentUser");
-    dispatch(resetCurrentUser());
-    navigate("/login");
-  };
   const categoryArray = [
     {
       name: "Categories",
@@ -85,11 +59,6 @@ const Nav = () => {
     },
   ];
   const menuItems = convertCategoriesToMenu(categoryArray);
-
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  const isAdmin = user?.role === "admin";
-
-  console.log("user", user);
 
   return (
     <>
@@ -126,16 +95,6 @@ const Nav = () => {
                 <NavMenu menu={menu} />
               </li>
             ))}
-
-            {user && isAdmin && (
-              <>
-                {adminMenuList.map((menu) => (
-                  <li key={menu.id}>
-                    <NavMenu menu={menu} />
-                  </li>
-                ))}
-              </>
-            )}
           </ul>
 
           <ul>
@@ -164,39 +123,6 @@ const Nav = () => {
               />
             </svg>
           </button>
-
-          <div className="ml-12">
-            {!user && (
-              <>
-                <div className=" hidden lg:block my-4  items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
-                  <button
-                    onClick={() => redirectToDetails("/login")}
-                    className="whitespace-nowrap rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-offset-2 hover:text-opacity-50"
-                  >
-                    Log in
-                  </button>
-                  <button
-                    onClick={() => redirectToDetails("/signup")}
-                    className="btn btn-primary"
-                  >
-                    Sign up
-                  </button>
-                </div>
-              </>
-            )}
-            {user && (
-              <>
-                <div className="hidden lg:block my-4 items-center space-x-6 space-y-2 lg:my-0 lg:ml-auto lg:space-x-8 lg:space-y-0">
-                  <button
-                    onClick={logout}
-                    className="whitespace-nowrap rounded-xl bg-primary px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 hover:bg-blue-600"
-                  >
-                    Log Out
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
         </div>
 
         <div className="navbar-end ">
@@ -239,15 +165,6 @@ const Nav = () => {
             </li>
           ))}
 
-          {user && isAdmin && (
-            <>
-              {adminMenuList.map((menu) => (
-                <li key={menu.id}>
-                  <NavMenu menu={menu} />
-                </li>
-              ))}
-            </>
-          )}
           <li>
             <details close>
               <summary className="text-lg lg:text-lg font-bold font-sans transition  ">
@@ -278,31 +195,6 @@ const Nav = () => {
 
           <br />
           <hr />
-
-          {!user && (
-            <div className="flex items-center justify-evenly mt-10">
-              <button
-                onClick={() => redirectToDetails("/login")}
-                className="btn btn-primary"
-              >
-                Log in
-              </button>
-              <button
-                onClick={() => redirectToDetails("/signup")}
-                className="btn btn-secondary"
-              >
-                Sign up
-              </button>
-            </div>
-          )}
-
-          {user && (
-            <div className="flex items-center justify-between mt-10">
-              <button onClick={logout} className="btn btn-primary">
-                Logout
-              </button>
-            </div>
-          )}
         </ul>
 
         {/* <ul>
