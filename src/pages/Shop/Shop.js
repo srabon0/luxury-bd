@@ -275,149 +275,152 @@ export default function Shop() {
             </aside>
 
             {/* Product grid */}
-            <div className="lg:col-span-2 xl:col-span-3">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {/* Replace the following divs with your product components */}
-                <Product
-                  _id="100005"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Funny toys for babies"
-                  price="60.00"
-                  color="Mixed"
-                  badge={false}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100004"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Funny toys for babies"
-                  price="60.00"
-                  color="Mixed"
-                  badge={false}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100003"
-                  img={"https://via.placeholder.com/150"}
-                  productName="cloth Basket"
-                  price="80.00"
-                  color="Mixed"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100002"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Smart Watch"
-                  price="250.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100001"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Round Table Clock"
-                  price="44.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
 
-                <Product
-                  _id="100003"
-                  img={"https://via.placeholder.com/150"}
-                  productName="cloth Basket"
-                  price="80.00"
-                  color="Mixed"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100002"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Smart Watch"
-                  price="250.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100001"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Round Table Clock"
-                  price="44.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100003"
-                  img={"https://via.placeholder.com/150"}
-                  productName="cloth Basket"
-                  price="80.00"
-                  color="Mixed"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100002"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Smart Watch"
-                  price="250.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100001"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Round Table Clock"
-                  price="44.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100003"
-                  img={"https://via.placeholder.com/150"}
-                  productName="cloth Basket"
-                  price="80.00"
-                  color="Mixed"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100002"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Smart Watch"
-                  price="250.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-                <Product
-                  _id="100001"
-                  img={"https://via.placeholder.com/150"}
-                  productName="Round Table Clock"
-                  price="44.00"
-                  color="Black"
-                  badge={true}
-                  des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-                />
-
-                {/* Add more products as needed */}
-              </div>
-              <div className="mt-6">
-                <Pagination
-                  itemsPerPage={itemsPerPage}
-                  handleItemPerPage={handleItemPerPage}
-                />
-              </div>
-            </div>
+            <div>Products Are Launcing soon Please Wait Until then</div>
           </div>
         </main>
       </div>
     </div>
   );
 }
+
+// <div className="lg:col-span-2 xl:col-span-3">
+//               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+//                 <Product
+//                   _id="100005"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Funny toys for babies"
+//                   price="60.00"
+//                   color="Mixed"
+//                   badge={false}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100004"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Funny toys for babies"
+//                   price="60.00"
+//                   color="Mixed"
+//                   badge={false}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100003"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="cloth Basket"
+//                   price="80.00"
+//                   color="Mixed"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100002"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Smart Watch"
+//                   price="250.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100001"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Round Table Clock"
+//                   price="44.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+
+//                 <Product
+//                   _id="100003"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="cloth Basket"
+//                   price="80.00"
+//                   color="Mixed"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100002"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Smart Watch"
+//                   price="250.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100001"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Round Table Clock"
+//                   price="44.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100003"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="cloth Basket"
+//                   price="80.00"
+//                   color="Mixed"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100002"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Smart Watch"
+//                   price="250.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100001"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Round Table Clock"
+//                   price="44.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100003"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="cloth Basket"
+//                   price="80.00"
+//                   color="Mixed"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100002"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Smart Watch"
+//                   price="250.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+//                 <Product
+//                   _id="100001"
+//                   img={"https://via.placeholder.com/150"}
+//                   productName="Round Table Clock"
+//                   price="44.00"
+//                   color="Black"
+//                   badge={true}
+//                   des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
+//                 />
+
+//                 {/* Add more products as needed */}
+//               </div>
+//               <div className="mt-6">
+//                 <Pagination
+//                   itemsPerPage={itemsPerPage}
+//                   handleItemPerPage={handleItemPerPage}
+//                 />
+//               </div>
+//             </div>
