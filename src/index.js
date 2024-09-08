@@ -1,20 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { RouterProvider } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
+import "slick-carousel/slick/slick.css";
 import "./index.css";
-import App from "./App";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AOS from "aos";
-import "aos/dist/aos.css";
-AOS.init();
-
-// Create a client
-const queryClient = new QueryClient();
+import { persistor, store } from "./redux/store";
+// import App from "./App";
+import router from "./routes/route";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      {/* <App /> */}
+      <RouterProvider router={router} />
+    </PersistGate>
+  </Provider>
 );
