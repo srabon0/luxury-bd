@@ -25,15 +25,15 @@ import {
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiX } from "react-icons/bi";
 import { IoFunnelOutline } from "react-icons/io5";
-import Product from "../../components/home/Products/Product";
+// import Product from "../../components/home/Products/Product";
 import FullScreenLoader from "../../components/Loader/FullScreenLoader";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
-import Pagination from "../../components/pageProps/shopPage/Pagination";
+// import Pagination from "../../components/pageProps/shopPage/Pagination";
 import { useGetBrandsQuery } from "../../redux/features/brand/brandApi";
 import { useGetCategoriesQuery } from "../../redux/features/categories/categoryApi";
 
 export default function Shop() {
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  // const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filters, setFilters] = useState([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -72,9 +72,9 @@ export default function Shop() {
     }
   }, [brandData, catData]);
 
-  const handleItemPerPage = (itemsPerPage) => {
-    setItemsPerPage(itemsPerPage);
-  };
+  // const handleItemPerPage = (itemsPerPage) => {
+  //   setItemsPerPage(itemsPerPage);
+  // };
 
   if (brandLoading || catLoading) return <FullScreenLoader />;
   if (brandError || catError) return <div>Error loading data</div>;
