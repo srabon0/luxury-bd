@@ -6,6 +6,8 @@ const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (arg) => {
+        // loop thorugh the arg object and remove the empty values
+
         return {
           url: PRODUCT_URL,
           method: "GET",
