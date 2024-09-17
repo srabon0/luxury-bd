@@ -221,7 +221,7 @@ export default function Shop() {
                           <SingleSelectFilter
                             options={
                               filters.find((filter) => filter.id === "brand")
-                                .options
+                                ?.options || []
                             }
                             label={"Brand"}
                             selectedOption={selectedBrand}
@@ -233,7 +233,7 @@ export default function Shop() {
                           <SingleSelectFilter
                             options={
                               filters.find((filter) => filter.id === "category")
-                                .options
+                                ?.options || []
                             }
                             label={"Category"}
                             selectedOption={selectedCat}
@@ -326,7 +326,8 @@ export default function Shop() {
                   <div className="space-y-6">
                     <SingleSelectFilter
                       options={
-                        filters.find((filter) => filter.id === "brand").options
+                        filters.find((filter) => filter.id === "brand")
+                          ?.options || []
                       }
                       label={"Brand"}
                       selectedOption={selectedBrand}
@@ -338,7 +339,7 @@ export default function Shop() {
                     <SingleSelectFilter
                       options={
                         filters.find((filter) => filter.id === "category")
-                          .options
+                          ?.options || []
                       }
                       label={"Category"}
                       selectedOption={selectedCat}
