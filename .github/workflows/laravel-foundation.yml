@@ -50,6 +50,8 @@ jobs:
           node-version: '22'
       - name: Comparison interaction checks
         run: node --test tests/browser/*.test.mjs
+      - name: Release packaging exclusion tests
+        run: python tests/browser/release.test.py
       - name: Initialize test environment
         run: cp .env.example .env
       - name: Resolve foundation dependencies
@@ -83,3 +85,45 @@ jobs:
           name: foundation-lock-${{ matrix.database }}
           path: platform/composer.lock
           if-no-files-found: ignore
+
+  staging-package:
+    needs: php-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      LOG_CHANNEL: stderr
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, curl, fileinfo, gd, pdo_mysql
+          coverage: none
+          tools: composer:v2
+      - name: Install locked production dependencies
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --no-scripts --optimize-autoloader
+      - name: Verify production platform requirements
+        run: composer check-platform-reqs --no-dev
+      - name: Build isolated staging archive
+        run: python tools/build-release.py --output ../staging-release
+      - name: Verify checksum and boot extracted application
+        run: |
+          cd ../staging-release
+          sha256sum --check SHA256SUMS
+          mkdir -p "${RUNNER_TEMP}/luxurry-package-smoke"
+          tar -xzf luxurry-staging.tar.gz -C "${RUNNER_TEMP}/luxurry-package-smoke"
+          cd "${RUNNER_TEMP}/luxurry-package-smoke/luxurry-platform"
+          php artisan --version
+          php artisan route:list --except-vendor
+      - uses: actions/upload-artifact@v4
+        with:
+          name: luxurry-staging-package
+          path: staging-release/
+          if-no-files-found: error
+          retention-days: 14

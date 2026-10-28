@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Enums\Role;
 use App\Models\User;
+use App\Services\AuditTrail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -11,7 +12,7 @@ class StaffController extends Controller {
     public function index() { return view('workspace.users',['users'=>User::orderBy('name')->paginate(30),'roles'=>Role::cases()]); }
     public function store(Request $request) {
         $data=$request->validate(['name'=>'required|string|max:100','email'=>'required|email|max:254|unique:users','role'=>['required',Rule::enum(Role::class)],'password'=>['required','confirmed',Password::min(12)->letters()->numbers()]]);
-        User::create([...collect($data)->except('password_confirmation')->all(),'email'=>strtolower($data['email']),'is_active'=>true]);
+        DB::transaction(function () use ($data) { $user=User::create([...collect($data)->except('password_confirmation')->all(),'email'=>strtolower($data['email']),'is_active'=>true]); app(AuditTrail::class)->record('staff.created',$user,['name','email','role','is_active','password']); });
         return back()->with('status','Staff account created.');
     }
     public function update(Request $request, User $user) {
@@ -23,6 +24,8 @@ class StaffController extends Controller {
             $values=collect($data)->except(['password','password_confirmation'])->all(); $values['email']=strtolower($values['email']);
             if (!empty($data['password'])) $values['password']=$data['password'];
             $user->update($values);
+            $fields=array_keys(collect($user->getChanges())->except('updated_at')->all());
+            if ($fields) app(AuditTrail::class)->record('staff.updated',$user,$fields);
         },3);
         return back()->with('status','Staff account updated.');
     }

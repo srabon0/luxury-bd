@@ -12,6 +12,8 @@ The approved private design demo remains separate and unchanged.
 - Admin staff/role management; Catalog Manager product/category/image/price editing;
   SR read-only catalog and internal prices. No public sign-up or default staff password.
 - Session sign-in/out, CSRF protections, rate limits, validation, no-store staff responses.
+- Admin-only activity log for catalog/category/staff mutations; actor and field names recorded atomically without submitted values, passwords or price amounts.
+- CI-built staging archive with locked production dependencies, checksum and installation guide; secrets, runtime data, development dependencies and review fixtures excluded.
 - Local WebP images and thumbnails, generated from validated JPG/PNG/WebP inputs.
 - Contact email using configured SMTP, fixed recipient and verified sender; user as Reply-To.
 - Architectural public layouts across home, catalog, details, comparison and contact; staff catalog overview/status badges and current-image preview.
@@ -21,16 +23,15 @@ The approved private design demo remains separate and unchanged.
 
 ## Not a production release yet
 
-Host screenshots confirm MariaDB 10.6.28, PHP 8.4 availability, 1 GB account RAM and 20 entry processes.
-The live domains were set to PHP 8.0; staging must explicitly use PHP 8.4.
-Per-domain PHP extensions, document-root control, storage symlink support, mail limits and cron support still need verification. Laravel 13
-requires PHP 8.3 or newer. Do not change the live site or run migrations against its database.
+The staging domain must use a supported PHP runtime with the required extensions.
+Document-root isolation, local image serving, SMTP delivery and hosting resource limits
+still require acceptance testing. Do not run migrations against the live database.
 
 PHP/Composer installation in the coding workspace could not complete. CI must install
-and execute the PHP tests. A production build artifact must be reviewed before a release. Existing MongoDB/catalog data is not migrated.
+and execute the PHP tests. The CI staging archive must pass host acceptance before a production release. Existing MongoDB/catalog data is not migrated.
 
 Professional resources, full content/settings administration,
-account password recovery, audit trail, backup automation and final visual parity
+account password recovery, backup automation and final visual parity
 with the approved demo remain later milestones. The public catalog intentionally
 has no pricing, cart, checkout or orders. Admin currently controls all implemented
 workspace features; future website-content permissions are not represented as done.
@@ -70,3 +71,15 @@ retain the prior release and explicitly review rollback compatibility for migrat
 Price responses, authenticated pages and login responses must never be included in
 public HTTP/CDN caches. Disk and inode quotas still apply to locally stored images.
 Large traffic capacity cannot be promised on shared hosting without measurements.
+
+## Staging package and audit history
+
+The `staging-package` CI job runs only after both database test jobs pass. Download
+`luxurry-staging-package` from that workflow run; verify SHA256SUMS before extracting.
+Follow [deploy/STAGING.md](deploy/STAGING.md). The package does not deploy itself.
+
+Administrators can review `/workspace/activity` and filter by event. History stores
+field names, actor role/name and record identity; no prices, password hashes, tokens,
+request bodies or before/after values are stored. There are no log-edit/delete HTTP
+routes. This application log is not a tamper-proof external compliance archive.
+Back up and plan retention of the audit table alongside the application database.

@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\{CatalogController,CategoryController,ContactController,ProductController,SessionController,StaffController,WorkspaceController};
+use App\Http\Controllers\{AuditController,CatalogController,CategoryController,ContactController,ProductController,SessionController,StaffController,WorkspaceController};
 use App\Http\Middleware\ActiveStaff;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +19,7 @@ Route::middleware(['auth',ActiveStaff::class])->group(function () {
     Route::post('/staff/logout',[SessionController::class,'destroy'])->name('logout');
     Route::prefix('workspace')->name('workspace.')->group(function () {
         Route::get('/',[WorkspaceController::class,'index'])->middleware('can:view-prices')->name('index');
+        Route::get('/activity',[AuditController::class,'index'])->middleware('can:view-audit')->name('audit');
         Route::get('/prices',[WorkspaceController::class,'prices'])->middleware('can:view-prices')->name('prices');
         Route::middleware('can:manage-catalog')->group(function () {
             Route::resource('products',ProductController::class)->except(['index','show']);
