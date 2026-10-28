@@ -14,18 +14,20 @@ The approved private design demo remains separate and unchanged.
 - Session sign-in/out, CSRF protections, rate limits, validation, no-store staff responses.
 - Local WebP images and thumbnails, generated from validated JPG/PNG/WebP inputs.
 - Contact email using configured SMTP, fixed recipient and verified sender; user as Reply-To.
-- Original Classic Group emblem and optimized local homepage video.
+- Original Classic Group emblem and optimized local homepage video, deferred until after paint.
+- Published-product comparison (up to three), shareable URLs, persistent local selection and responsive specification table. No internal prices or draft details.
 
 ## Not a production release yet
 
-Host PHP/extensions, database version, document-root control, storage symlink support,
-mail limits, cron support, CPU/RAM and disk limits have not been verified. Laravel 13
+Host screenshots confirm MariaDB 10.6.28, PHP 8.4 availability, 1 GB account RAM and 20 entry processes.
+The live domains were set to PHP 8.0; staging must explicitly use PHP 8.4.
+Per-domain PHP extensions, document-root control, storage symlink support, mail limits and cron support still need verification. Laravel 13
 requires PHP 8.3 or newer. Do not change the live site or run migrations against its database.
 
 PHP/Composer installation in the coding workspace could not complete. CI must install
 and execute the PHP tests. A production build artifact must be reviewed before a release. Existing MongoDB/catalog data is not migrated.
 
-The comparison UI, professional resources, full content/settings administration,
+Professional resources, full content/settings administration,
 account password recovery, audit trail, backup automation and final visual parity
 with the approved demo remain later milestones. The public catalog intentionally
 has no pricing, cart, checkout or orders. Admin currently controls all implemented

@@ -26,6 +26,16 @@ class CatalogAccessTest extends TestCase {
         $this->getJson('/api/products/'.$p->slug)->assertOk()->assertDontSee('84756');
         $this->assertArrayNotHasKey('internal_price',$p->load('internalPrice')->toArray());
     }
+    public function test_comparison_preserves_order_and_never_exposes_drafts_or_prices(): void {
+        $first=$this->item();
+        $second=Product::create(['category_id'=>$first->category_id,'name'=>'Arc mixer','slug'=>'arc-mixer','code'=>'AM-02','status'=>'published','finish'=>'Chrome']);
+        Product::create(['category_id'=>$first->category_id,'name'=>'Secret draft','slug'=>'secret-draft','code'=>'SD-03','status'=>'draft']);
+        $this->get('/compare?'.http_build_query(['products'=>[$second->slug,$first->slug,'secret-draft']]))->assertOk()->assertSeeInOrder(['Arc mixer','Forma basin'])->assertSee('no longer available')->assertDontSee('Secret draft')->assertDontSee('84756');
+        $this->get('/compare')->assertOk()->assertSee('A clearer view of your favourites.');
+        $this->getJson('/compare?'.http_build_query(['products'=>['one','two','three','four']]))->assertUnprocessable();
+        $this->getJson('/compare?products=invalid')->assertUnprocessable();
+        $this->getJson('/compare?'.http_build_query(['products'=>['<script>']]))->assertUnprocessable();
+    }
     public function test_guests_cannot_get_internal_prices_or_use_workspace(): void {
         $this->getJson('/workspace/prices')->assertUnauthorized();
         $this->get('/workspace')->assertRedirect('/staff/login');

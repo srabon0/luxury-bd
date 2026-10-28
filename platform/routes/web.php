@@ -4,6 +4,7 @@ use App\Http\Middleware\ActiveStaff;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 Route::get('/', fn()=>view('catalog.home',['products'=>Product::where('status','published')->with('category')->latest('id')->limit(4)->get()]))->name('home');
+Route::get('/compare',[CatalogController::class,'compare'])->middleware('throttle:catalog')->name('catalog.compare');
 Route::get('/products',[CatalogController::class,'index'])->name('catalog.index');
 Route::get('/products/{product:slug}',[CatalogController::class,'show'])->name('catalog.show');
 Route::get('/api/products',[CatalogController::class,'index'])->middleware('throttle:catalog');
