@@ -55,3 +55,7 @@ A roughly 26 KiB poster paints immediately. Playback is initialized after
 first paint and idle time, with a pause/play control and off-screen pausing.
 Reduced-motion and data-saving preferences suppress automatic playback.
 The video is hosted alongside the website, with no external video subscription.
+
+The Architectural homepage now uses a full-width video hero with a dark
+readability gradient and white text. The previous light-purple split panel
+has been removed; the deep-indigo accent and the rest of the layout remain.

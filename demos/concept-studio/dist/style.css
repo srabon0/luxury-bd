@@ -2214,3 +2214,84 @@ body[data-concept="showroom"] .hero-search {
   background: #312e81;
   filter: none;
 }
+/* Architectural hero: uninterrupted video, no coloured panel. */
+.hero-architectural {
+  min-height: clamp(580px, 56.25vw, 820px);
+  background: #11141d;
+}
+.hero-architectural .hero-photo {
+  position: absolute;
+  inset: 0;
+  height: auto;
+}
+.hero-architectural .hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 10, 20, 0.76) 0%,
+    rgba(7, 10, 20, 0.48) 35%,
+    rgba(7, 10, 20, 0.08) 70%,
+    rgba(7, 10, 20, 0.08) 100%
+  );
+}
+.hero-architectural .hero-content {
+  width: auto;
+  max-width: 680px;
+  background: none;
+  color: #fff;
+  padding: clamp(100px, 11vw, 170px) 0 115px 6%;
+  pointer-events: none;
+}
+.hero-architectural .hero-content a {
+  pointer-events: auto;
+}
+.hero-architectural .hero-description {
+  color: #ececf2;
+  text-shadow: 0 1px 8px #0004;
+}
+.hero-architectural .eyebrow {
+  color: #eeecff;
+}
+.hero-architectural h1 {
+  text-shadow: 0 2px 20px #0002;
+}
+.hero-architectural .hero-foot {
+  color: #fff;
+  background: none;
+  text-shadow: 0 1px 5px #0008;
+}
+.hero-architectural .hero-secondary {
+  color: #fff;
+}
+@media (max-width: 760px) {
+  .hero-architectural {
+    min-height: 680px;
+    display: block;
+  }
+  .hero-architectural .hero-photo {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    order: initial;
+  }
+  .hero-architectural .hero-photo::after {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 10, 20, 0.7),
+      rgba(7, 10, 20, 0.44) 58%,
+      rgba(7, 10, 20, 0.18)
+    );
+  }
+  .hero-architectural .hero-content {
+    padding: 100px 6% 140px;
+    width: 100%;
+    max-width: none;
+    background: none;
+  }
+  .hero-architectural .hero-foot {
+    padding: 0;
+    bottom: 26px;
+  }
+}
