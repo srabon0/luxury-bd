@@ -1,0 +1,3 @@
+@extends('layout')
+@section('title','Staff sign in · Luxurry')
+@section('content')<section class="section narrow"><p class="eyebrow">LUXURRY WORKSPACE</p><h1>Welcome back.</h1><p class="muted">Sign in to your staff workspace.</p><form method="post" action="{{ route('login.store') }}">@csrf<label>Email address<input type="email" name="email" required autocomplete="username" value="{{ old('email') }}"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label><button class="button">Sign in</button></form></section>@endsection
