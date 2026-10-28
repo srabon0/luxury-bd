@@ -16,7 +16,7 @@ class CatalogController extends Controller {
         return view('catalog.index',['products'=>$products,'categories'=>Category::orderBy('name')->get()]);
     }
     public function compare(Request $request) {
-        $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:160|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/']);
+        $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:180|regex:/^[A-Za-z0-9_-]+$/']);
         $slugs=collect($data['products']??[])->unique()->values();
         $found=Product::query()->where('status','published')->whereIn('slug',$slugs)->with('category')->get()->keyBy('slug');
         $products=$slugs->map(fn($slug)=>$found->get($slug))->filter()->values();

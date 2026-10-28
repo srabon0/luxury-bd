@@ -1,13 +1,13 @@
 (() => {
     const storageKey = 'luxurry-comparison-v1';
-    const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    const slugPattern = /^[A-Za-z0-9_-]+$/;
     const tray = document.querySelector('.compare-tray');
     if (!tray) return;
     const status = document.querySelector('[data-compare-status]');
     let selected = [];
     try {
         const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        if (Array.isArray(saved)) selected = saved.filter(item => item && typeof item.slug === 'string' && item.slug.length <= 160 && slugPattern.test(item.slug) && typeof item.name === 'string').filter((item, index, all) => all.findIndex(other => other.slug === item.slug) === index).slice(0, 3);
+        if (Array.isArray(saved)) selected = saved.filter(item => item && typeof item.slug === 'string' && item.slug.length <= 180 && slugPattern.test(item.slug) && typeof item.name === 'string').filter((item, index, all) => all.findIndex(other => other.slug === item.slug) === index).slice(0, 3);
     } catch { /* Browsing and comparison still work without storage access. */ }
     const announce = message => { status.textContent = message; };
     const persist = () => { try { localStorage.setItem(storageKey, JSON.stringify(selected)); } catch {} };

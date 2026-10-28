@@ -38,7 +38,7 @@ File::ensureDirectoryExists($root.'/workspace');
 File::put($root.'/workspace/index.html',View::make('workspace.index',['products'=>Product::with(['category','internalPrice'])->paginate(20)])->render());
 foreach (File::allFiles($root) as $file) {
     if ($file->getExtension()!=='html') continue;
-    $html=str_replace('http://localhost','',File::get($file));
+    $html=str_replace(['http://localhost:8000','http://localhost'],'',File::get($file));
     $html=str_replace('/products/forma-oval-basin','/product/',$html);
     $html=preg_replace('/href="\/products(\?[^\"]*)?"/','href="/products/"',$html);
     $html=preg_replace('/href="\/contact(\?[^\"]*)?"/','href="/contact/"',$html);

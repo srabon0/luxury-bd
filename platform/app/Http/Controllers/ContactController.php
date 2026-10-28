@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 class ContactController extends Controller {
     public function create(Request $request) {
-        $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:180|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/']);
+        $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:180|regex:/^[A-Za-z0-9_-]+$/']);
         $products=Product::where('status','published')->whereIn('slug',$data['products']??[])->get(['name','code']);
         $enquiryMessage=$products->isEmpty() ? '' : "I would like to enquire about:\n".$products->map(fn($product)=>$product->name.' ('.$product->code.')')->implode("\n")."\n\nMy requirements: ";
         return view('catalog.contact',compact('enquiryMessage'));
