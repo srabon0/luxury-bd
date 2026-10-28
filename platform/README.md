@@ -43,6 +43,7 @@ workspace features; future website-content permissions are not represented as do
 6. `php artisan serve`. Public routes: `/`, `/products`, `/contact`.
 7. Staff sign-in: `/staff/login`; workspace: `/workspace`.
 8. `php artisan test`. Tests use an isolated in-memory SQLite database by default.
+9. `node --test tests/browser/*.test.mjs` for comparison and deferred-video behavior (Node is a development/CI dependency only).
 
 Production contact email must set `CONTACT_TO_ADDRESS`, `MAIL_MAILER=smtp`, mailbox
 credentials and `MAIL_FROM_ADDRESS` authorized by the host. Keep `.env` out of Git.

@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: '22'
       - name: Comparison interaction checks
-        run: node --test tests/browser/comparison.test.mjs
+        run: node --test tests/browser/*.test.mjs
       - name: Initialize test environment
         run: cp .env.example .env
       - name: Resolve foundation dependencies
