@@ -12,7 +12,7 @@ class ReleasePackageTest(unittest.TestCase):
     def fixture(self, root):
         for name in release.FILES:
             (root / name).write_text('fixture')
-        for name in ['vendor/autoload.php', 'app/Test.php', 'public/.htaccess', 'bootstrap/cache/config.php', '.env', 'storage/app/public/private-upload.jpg', 'database/database.sqlite', 'tests/Secret.php', 'tools/render-review.php', 'deploy/STAGING.md']:
+        for name in ['vendor/autoload.php', 'app/Test.php', 'public/.htaccess', 'bootstrap/cache/config.php', '.env', 'storage/app/public/private-upload.jpg', 'database/database.sqlite', 'database/customer-export.sql', 'public/customer-backup.json', 'config/.env.production', 'tests/Secret.php', 'tools/render-review.php', 'deploy/STAGING.md']:
             file = root / name
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_text('PRIVATE' if name in ['.env','bootstrap/cache/config.php'] else 'fixture')
@@ -25,7 +25,7 @@ class ReleasePackageTest(unittest.TestCase):
             archive = release.build(source, output, 'test-sha')
             with tarfile.open(archive) as tar:
                 names = tar.getnames()
-                for suffix in ['.env','bootstrap/cache/config.php','storage/app/public/private-upload.jpg','database/database.sqlite','tests/Secret.php','public/linked-secret','tools/render-review.php']:
+                for suffix in ['.env','bootstrap/cache/config.php','storage/app/public/private-upload.jpg','database/database.sqlite','database/customer-export.sql','public/customer-backup.json','config/.env.production','tests/Secret.php','public/linked-secret','tools/render-review.php']:
                     self.assertNotIn('luxurry-platform/'+suffix,names)
                 for suffix in ['vendor/autoload.php','.env.example','public/.htaccess','STAGING.md','build-manifest.json','storage/app/public']:
                     self.assertIn('luxurry-platform/'+suffix,names)

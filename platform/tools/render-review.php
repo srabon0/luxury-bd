@@ -1,6 +1,6 @@
 <?php
 // CI-only review snapshots. Fixtures are confined to a disposable in-memory database.
-use App\Models\{Category,Product,User};
+use App\Models\{AuditEntry,Category,Product,User};
 use App\Enums\Role;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 use Illuminate\Http\Request;
@@ -36,6 +36,9 @@ $admin->id=1;
 auth()->setUser($admin);
 File::ensureDirectoryExists($root.'/workspace');
 File::put($root.'/workspace/index.html',View::make('workspace.index',['products'=>Product::with(['category','internalPrice'])->paginate(20)])->render());
+AuditEntry::create(['actor_id'=>null,'actor_name'=>'Design review administrator','actor_role'=>'admin','event'=>'product.updated','subject_type'=>'product','subject_id'=>1,'subject_label'=>'Forma Oval Basin','changed_fields'=>['finish','internal_price']]);
+File::ensureDirectoryExists($root.'/activity');
+File::put($root.'/activity/index.html',View::make('workspace.audit',['entries'=>AuditEntry::latest('id')->paginate(40),'events'=>AuditEntry::EVENTS])->render());
 foreach (File::allFiles($root) as $file) {
     if ($file->getExtension()!=='html') continue;
     $html=str_replace(['http://localhost:8000','http://localhost'],'',File::get($file));
@@ -45,8 +48,9 @@ foreach (File::allFiles($root) as $file) {
     $html=preg_replace('/href="\/compare(\?[^\"]*)?"/','href="/compare/"',$html);
     $html=str_replace('href="/staff/login"','href="/login/"',$html);
     $banner='<div style="padding:12px 5%;background:#fff2cd;color:#504022;font:12px Arial,sans-serif">DESIGN REVIEW · Sample products and fictional staff data. Forms are disabled in this static snapshot.</div>';
+    $html=str_replace('href=""','href="/"',$html);
     $html=str_replace('<main id="main">',$banner.'<main id="main">',$html);
     $html=str_replace('<form ','<form onsubmit="event.preventDefault();alert(\'This is a design review. Forms are enabled in the Laravel application.\');" ',$html);
     File::put($file,$html);
 }
-echo "Rendered six public pages and one fictional staff workspace.\n";
+echo "Rendered public pages and fictional staff workspace/activity views.\n";

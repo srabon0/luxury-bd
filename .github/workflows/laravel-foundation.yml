@@ -55,7 +55,7 @@ jobs:
       - name: Initialize test environment
         run: cp .env.example .env
       - name: Resolve foundation dependencies
-        run: composer update 'symfony/mime:^7.4.22' --with-dependencies --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress
       - name: Validate project metadata
         run: composer validate --no-check-lock
       - name: PHP syntax checks
@@ -87,7 +87,6 @@ jobs:
           if-no-files-found: ignore
 
   staging-package:
-    if: ${{ false }}
     needs: php-tests
     runs-on: ubuntu-latest
     defaults:
