@@ -3,7 +3,6 @@ import { Outlet, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import Header from "../components/GlobalHeader/Header";
-import SpecialCase from "../components/SpecialCase/SpecialCase";
 
 const Layout = () => {
   return (
@@ -24,7 +23,6 @@ const Layout = () => {
       {/* <Header /> */}
       {/* <HeaderBottom /> */}
 
-      <SpecialCase />
       <ScrollRestoration />
       <Outlet />
       {/* <Footer />

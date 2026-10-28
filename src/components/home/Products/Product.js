@@ -37,7 +37,7 @@ const Product = (props) => {
     <div className="w-full relative group flex flex-col h-full">
       <div className="relative overflow-hidden flex-grow">
         <div onClick={handleProductDetails}>
-          <Image className="w-full h-full object-cover" imgSrc={props.img} />
+          <Image className="w-full h-full object-cover" imgSrc={props.img} alt={props.productName} />
         </div>
         <div className="absolute top-6 left-8">
           {props.badge && <Badge text="New" />}

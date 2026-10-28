@@ -73,10 +73,12 @@ export default function Shop() {
     searchQuery: searchTerm,
     delay: 1000,
   });
-  const [query, setQuery] = useState({});
+  const query = { limit: size, page, searchTerm: debouncedSearchTerm,
+    category: selectedCat, brand: selectedBrand };
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (page) => {
@@ -85,6 +87,7 @@ export default function Shop() {
 
   const handleSizeChange = (size) => {
     setSize(size);
+    setPage(1);
   };
 
   const handleBrandChange = (brand) => {
@@ -105,15 +108,6 @@ export default function Shop() {
     setPage(1);
   };
 
-  useEffect(() => {
-    setQuery({
-      limit: size,
-      page: page,
-      searchTerm: debouncedSearchTerm,
-      category: selectedCat,
-      brand: selectedBrand,
-    });
-  }, [size, page, debouncedSearchTerm, selectedCat, selectedBrand]);
 
   const {
     data: brandData,
@@ -257,7 +251,9 @@ export default function Shop() {
             </div>
             <div className="relative mb-6 hidden lg:block w-9/12">
               <input
-                onKeyUp={handleInputChange}
+                aria-label="Search products"
+                value={searchTerm}
+                onChange={handleInputChange}
                 type="text"
                 placeholder="Search products..."
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -298,7 +294,9 @@ export default function Shop() {
 
                 <div className="relative ml-4 flex-1">
                   <input
-                    onKeyUp={handleInputChange}
+                    aria-label="Search products"
+                value={searchTerm}
+                onChange={handleInputChange}
                     type="text"
                     placeholder="Search products..."
                     className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

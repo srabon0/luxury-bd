@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 // import Brands from "../components/Brands/Brands";
 // import Categories from "../components/Categories/Categories";
@@ -12,8 +13,9 @@ import Home from "../pages/Home/Home";
 // import Offer from "../pages/Offer/Offer";
 // import Payment from "../pages/payment/Payment";
 // import ProductDetails from "../pages/ProductDetails/ProductDetails";
-import Shop from "../pages/Shop/Shop";
 import NotFoundPage from "../pages/404/404";
+
+const Shop = lazy(() => import("../pages/Shop/Shop"));
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "shop",
-        element: <Shop />,
+        element: <Suspense fallback={<p role="status" className="p-8">Loading collection…</p>}><Shop /></Suspense>,
       },
       // {
       //   path: "about",
