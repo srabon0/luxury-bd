@@ -42,3 +42,16 @@ work includes verified catalog imports, authenticated/authorized administration,
 uploads and optimization, schema validation, indexes/pagination, rate limits, automated
 tests/CI, backups, environment configuration, monitoring and a rollback procedure.
 The demo is a design and interaction prototype, not an enterprise production release.
+
+## Client theme and homepage video
+
+Primary accent is deep indigo `#3730A3` (`rgb(55,48,163)`), with `#312E81`
+for hover states. This supersedes the original `#4F46E5` request after the
+client asked for a deeper shade. All three concept layouts use this palette.
+
+The homepage uses the existing Luxurry hero video, re-encoded with H.264, no
+audio and MP4 fast-start metadata (about 762 KiB versus the original 1.7 MiB).
+A roughly 26 KiB poster paints immediately. Playback is initialized after
+first paint and idle time, with a pause/play control and off-screen pausing.
+Reduced-motion and data-saving preferences suppress automatic playback.
+The video is hosted alongside the website, with no external video subscription.

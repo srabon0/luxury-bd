@@ -2105,3 +2105,112 @@ body[data-concept="showroom"] .site-footer .eyebrow {
     font-size: 8px;
   }
 }
+/* Client brand: rgb(55, 48, 163), consistently across every concept. */
+:root,
+body[data-concept="architectural"],
+body[data-concept="boutique"],
+body[data-concept="showroom"] {
+  --accent: #3730a3;
+  --contrast: #fff;
+}
+body[data-concept="architectural"] {
+  --wash: #f5f4ff;
+}
+body[data-concept="showroom"] {
+  --wash: #f2f1ff;
+  --ink: #211b4b;
+  --line: #e0ddf4;
+}
+.concept-tabs a.selected {
+  background: #eeedff;
+  border-color: #bdb8fc;
+  color: #3730a3;
+}
+.desktop-nav a.active,
+.desktop-nav a:hover,
+.text-link:hover {
+  color: #3730a3;
+}
+body[data-concept="boutique"] .desktop-nav a.active,
+body[data-concept="boutique"] .desktop-nav a:hover {
+  color: #b9b5ff;
+}
+body[data-concept="boutique"] .eyebrow,
+body[data-concept="boutique"] .footer-top .logo {
+  color: #c4bfff;
+}
+body[data-concept="boutique"] .contact-link {
+  border-color: #756eea;
+}
+body[data-concept="showroom"] .eyebrow {
+  color: #3730a3;
+}
+body[data-concept="showroom"] .site-footer {
+  background: #211b4b;
+}
+body[data-concept="showroom"] .site-footer .eyebrow {
+  color: #c4bfff;
+}
+body[data-concept="showroom"] .hero-search {
+  border-color: #c8c3f4;
+}
+:focus-visible {
+  outline-color: #3730a3 !important;
+}
+.video-hero {
+  isolation: isolate;
+}
+.landing-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  background: #17171a;
+}
+.video-toggle {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 4;
+  padding: 10px 14px;
+  background: #171423bf;
+  color: white;
+  border: 1px solid #ffffff75;
+  backdrop-filter: blur(8px);
+  font-size: 11px;
+  pointer-events: auto;
+}
+.hero-photo:after {
+  pointer-events: none;
+}
+.hero-boutique .hero-photo {
+  z-index: 0;
+}
+.hero-boutique .hero-content,
+.hero-boutique .hero-foot {
+  pointer-events: none;
+}
+.hero-boutique .hero-content a,
+.hero-boutique .hero-content input,
+.hero-boutique .hero-content button {
+  pointer-events: auto;
+}
+@media (max-width: 760px) {
+  .video-toggle {
+    right: 14px;
+    top: 14px;
+    font-size: 10px;
+  }
+  .hero-boutique .hero-content {
+    padding-top: 80px !important;
+  }
+  .hero-boutique .hero-photo .video-toggle {
+    top: 15px;
+  }
+}
+
+.primary:hover {
+  background: #312e81;
+  filter: none;
+}

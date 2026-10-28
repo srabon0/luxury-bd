@@ -15,6 +15,7 @@ const esc = (s) =>
       ],
   );
 const money = (v) => "৳ " + v.toLocaleString("en-BD");
+let videoObserver;
 let shortlist = [],
   comparison = [];
 try {
@@ -171,17 +172,9 @@ function header(s, c) {
 function hero(s, c) {
   return `<section class="hero hero-${
     s.concept
-  }"><div class="hero-photo" style="background-image:url('./assets/${
-    c.image
-  }.webp')" role="img" aria-label="${
-    s.concept === "boutique"
-      ? "Dark stone bathroom with white freestanding bath and brass fittings"
-      : s.concept === "showroom"
-        ? "Bright contemporary bathroom with basin and wall hung toilet"
-        : "Sunlit travertine bathroom with countertop basin"
-  }"></div><div class="hero-content"><p class="eyebrow">${c.eyebrow}</p><h1>${
-    c.headline
-  }</h1><p class="hero-description">${
+  }"><div class="hero-photo video-hero"><video class="landing-video" muted loop playsinline preload="none" poster="./assets/hero-poster.jpg" data-src="./assets/hero.mp4" aria-label="Luxurry sanitaryware collection video"></video><button class="video-toggle" type="button" aria-label="Play homepage video">Play video</button></div><div class="hero-content"><p class="eyebrow">${
+    c.eyebrow
+  }</p><h1>${c.headline}</h1><p class="hero-description">${
     c.description
   }</p><div class="hero-ctas">${link(
     "Explore products " + icon("arrow"),
@@ -370,6 +363,7 @@ function footer() {
   )}</button></div></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} Classic Group · Luxurry concept demo</span><span>Sample products & prices. No orders or enquiries are submitted.</span></div></footer>`;
 }
 function render() {
+  videoObserver?.disconnect();
   const s = state(),
     c = concepts[s.concept];
   document.body.dataset.concept = s.concept;
@@ -589,6 +583,54 @@ function spec(id) {
   download(out, `${p.id}-sample-specification.pdf`, "application/pdf");
 }
 function bind(root = document) {
+  const video = root.querySelector(".landing-video");
+  const toggle = root.querySelector(".video-toggle");
+  if (video && toggle) {
+    video.muted = true;
+    const start = () => {
+      if (!video.isConnected) return;
+      if (!video.getAttribute("src")) {
+        video.src = video.dataset.src;
+        video.load();
+      }
+      video.play().catch(() => {
+        toggle.textContent = "Play video";
+        toggle.setAttribute("aria-label", "Play homepage video");
+      });
+    };
+    toggle.onclick = () => (video.paused ? start() : video.pause());
+    video.onplay = () => {
+      toggle.textContent = "Pause video";
+      toggle.setAttribute("aria-label", "Pause homepage video");
+    };
+    video.onpause = () => {
+      toggle.textContent = "Play video";
+      toggle.setAttribute("aria-label", "Play homepage video");
+    };
+    video.onerror = () => {
+      toggle.textContent = "Retry video";
+      toggle.setAttribute("aria-label", "Retry homepage video");
+    };
+    const lowData = navigator.connection?.saveData;
+    const reducedMotion = matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!lowData && !reducedMotion) {
+      requestAnimationFrame(() => {
+        if ("requestIdleCallback" in window)
+          requestIdleCallback(start, { timeout: 1500 });
+        else setTimeout(start, 250);
+      });
+    }
+    videoObserver = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting && !video.paused) video.pause();
+      },
+      { threshold: 0.05 },
+    );
+    videoObserver.observe(video);
+  }
+
   root.querySelectorAll("[data-route]").forEach(
     (a) =>
       (a.onclick = (e) => {
