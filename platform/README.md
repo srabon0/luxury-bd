@@ -14,6 +14,8 @@ The approved private design demo remains separate and unchanged.
 - Session sign-in/out, CSRF protections, rate limits, validation, no-store staff responses.
 - Local WebP images and thumbnails, generated from validated JPG/PNG/WebP inputs.
 - Contact email using configured SMTP, fixed recipient and verified sender; user as Reply-To.
+- Architectural public layouts across home, catalog, details, comparison and contact; staff catalog overview/status badges and current-image preview.
+- Product/comparison enquiries prefill published product names/codes without prices.
 - Original Classic Group emblem and optimized local homepage video, deferred until after paint.
 - Published-product comparison (up to three), shareable URLs, persistent local selection and responsive specification table. No internal prices or draft details.
 

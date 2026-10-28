@@ -1,10 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 use App\Mail\ContactEnquiry;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 class ContactController extends Controller {
-    public function create() { return view('catalog.contact'); }
+    public function create(Request $request) {
+        $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:180|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/']);
+        $products=Product::where('status','published')->whereIn('slug',$data['products']??[])->get(['name','code']);
+        $enquiryMessage=$products->isEmpty() ? '' : "I would like to enquire about:\n".$products->map(fn($product)=>$product->name.' ('.$product->code.')')->implode("\n")."\n\nMy requirements: ";
+        return view('catalog.contact',compact('enquiryMessage'));
+    }
     public function store(Request $request) {
         $data=$request->validate(['name'=>'required|string|max:100','email'=>'required|email|max:254','message'=>'required|string|min:10|max:5000','website'=>'nullable|string|max:0']);
         $recipient=config('catalog.contact_email');

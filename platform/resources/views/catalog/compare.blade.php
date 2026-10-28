@@ -10,6 +10,6 @@
 @foreach(['Category'=>'category','Product code'=>'code','Finish'=>'finish','Dimensions'=>'dimensions','Material'=>'material','Description'=>'description'] as $label=>$field)
 <tr><th scope="row">{{ $label }}</th>@foreach($products as $product)<td>{{ $field==='category' ? $product->category->name : ($product->$field ?: 'Not specified') }}</td>@endforeach</tr>
 @endforeach
-</tbody></table></div><div class="toolbar"><a class="button" href="{{ route('contact') }}">Talk to our team →</a><a href="{{ route('catalog.index') }}">Continue exploring</a></div>
+</tbody></table></div><div class="toolbar"><a class="button" href="{{ route('contact',['products'=>$products->pluck('slug')->all()]) }}">Talk to our team →</a><a href="{{ route('catalog.index') }}">Continue exploring</a></div>
 @endif</section>
 @endsection

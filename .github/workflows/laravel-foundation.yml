@@ -66,6 +66,15 @@ jobs:
           php artisan route:cache
           php artisan view:cache
           php artisan optimize:clear
+      - name: Render isolated design review snapshots
+        if: matrix.database == 'sqlite'
+        run: php tools/render-review.php
+      - uses: actions/upload-artifact@v4
+        if: matrix.database == 'sqlite'
+        with:
+          name: luxurry-design-review
+          path: platform/review
+          if-no-files-found: error
       - name: Dependency security advisory check
         run: composer audit
       - uses: actions/upload-artifact@v4

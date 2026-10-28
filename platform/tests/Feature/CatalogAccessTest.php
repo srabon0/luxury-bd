@@ -36,6 +36,13 @@ class CatalogAccessTest extends TestCase {
         $this->getJson('/compare?products=invalid')->assertUnprocessable();
         $this->getJson('/compare?'.http_build_query(['products'=>['<script>']]))->assertUnprocessable();
     }
+    public function test_product_enquiry_prefills_published_specs_without_private_data(): void {
+        $product=$this->item();
+        $this->get('/contact?'.http_build_query(['products'=>[$product->slug]]))->assertOk()->assertSee('Forma basin (FB-01)')->assertDontSee('84756');
+        $product->update(['status'=>'draft']);
+        $this->get('/contact?'.http_build_query(['products'=>[$product->slug]]))->assertOk()->assertDontSee('Forma basin');
+        $this->getJson('/contact?'.http_build_query(['products'=>['a','b','c','d']]))->assertUnprocessable();
+    }
     public function test_guests_cannot_get_internal_prices_or_use_workspace(): void {
         $this->getJson('/workspace/prices')->assertUnauthorized();
         $this->get('/workspace')->assertRedirect('/staff/login');
