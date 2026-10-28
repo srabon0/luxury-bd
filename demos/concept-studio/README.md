@@ -59,3 +59,9 @@ The video is hosted alongside the website, with no external video subscription.
 The Architectural homepage now uses a full-width video hero with a dark
 readability gradient and white text. The previous light-purple split panel
 has been removed; the deep-indigo accent and the rest of the layout remain.
+
+## Parent-brand endorsement
+
+The original Classic Group PNG from the existing storefront is used unchanged.
+The header pairs the Luxurry wordmark with a smaller Classic Group endorsement,
+with simplified treatment on mobile. The original emblem also appears in the footer.

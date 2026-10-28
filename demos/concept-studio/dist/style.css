@@ -2295,3 +2295,148 @@ body[data-concept="showroom"] .hero-search {
     bottom: 26px;
   }
 }
+/* Luxurry is primary; the authentic Classic Group emblem endorses the brand. */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.brand-endorsement {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 1px solid var(--line);
+  padding-left: 20px;
+}
+.brand-endorsement img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.brand-endorsement > span {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 9px;
+  letter-spacing: 0.025em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.brand-endorsement strong {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.footer-parent-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 26px;
+}
+.footer-parent-brand img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.footer-parent-brand > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.footer-parent-brand span {
+  font-size: 7px;
+  letter-spacing: 0.16em;
+  opacity: 0.65;
+}
+.footer-parent-brand strong {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+@media (max-width: 1200px) and (min-width: 761px) {
+  .brand-lockup {
+    gap: 17px;
+  }
+  .brand-endorsement {
+    padding-left: 16px;
+    gap: 8px;
+  }
+  .brand-endorsement img {
+    width: 42px;
+    height: 42px;
+  }
+  .brand-endorsement > span {
+    font-size: 8px;
+  }
+  .brand-endorsement strong {
+    font-size: 10px;
+  }
+  .desktop-nav {
+    gap: 17px;
+    font-size: 11px;
+  }
+  .header-actions {
+    gap: 17px;
+  }
+}
+@media (max-width: 960px) and (min-width: 761px) {
+  .brand-endorsement > span {
+    display: none;
+  }
+  .brand-lockup {
+    gap: 15px;
+  }
+  .brand-endorsement {
+    padding-left: 14px;
+  }
+}
+@media (max-width: 760px) {
+  .site-header {
+    gap: 12px;
+  }
+  .brand-lockup {
+    gap: 16px;
+  }
+  .brand-endorsement {
+    padding-left: 14px;
+    gap: 0;
+  }
+  .brand-endorsement img {
+    width: 39px;
+    height: 39px;
+  }
+  .brand-endorsement > span {
+    display: none;
+  }
+  .header-actions {
+    gap: 16px;
+  }
+  .footer-parent-brand {
+    margin-top: 22px;
+  }
+}
+@media (max-width: 380px) {
+  .brand-lockup .logo {
+    font-size: 21px;
+  }
+  .brand-lockup .logo span {
+    font-size: 4.5px;
+  }
+  .brand-lockup {
+    gap: 11px;
+  }
+  .brand-endorsement {
+    padding-left: 10px;
+  }
+  .brand-endorsement img {
+    width: 34px;
+    height: 34px;
+  }
+  .header-actions {
+    gap: 13px;
+  }
+}

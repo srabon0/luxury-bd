@@ -126,11 +126,13 @@ function header(s, c) {
       "",
     )}</div><span class="demo-label">DEMO · SAMPLE PRODUCTS & PRICES</span></div><div class="topline"><span>Considered spaces. Everyday living.</span><button data-enquiry>Planning a bathroom? Let’s talk ${icon(
     "arrow",
-  )}</button></div><header class="site-header"><a class="logo" href="${url({
-    view: "home",
-    category: "",
-    search: "",
-  })}" data-route>LUXURRY<span>BATHROOMS, CONSIDERED.</span></a><nav class="desktop-nav" aria-label="Main navigation">${[
+  )}</button></div><header class="site-header"><a class="brand-lockup" href="${url(
+    {
+      view: "home",
+      category: "",
+      search: "",
+    },
+  )}" data-route aria-label="Luxurry, a Classic Group brand — home"><span class="logo">LUXURRY<span>BATHROOMS, CONSIDERED.</span></span><span class="brand-endorsement"><img src="./assets/classic-group.png" alt="Classic Group" width="48" height="48" decoding="async"><span>A brand by<strong>Classic Group</strong></span></span></a><nav class="desktop-nav" aria-label="Main navigation">${[
     ["products", "Products"],
     ["home", "Collections"],
     ["inspiration", "Inspiration"],
@@ -345,7 +347,7 @@ function contact() {
 function footer() {
   return `<footer class="site-footer"><div class="footer-top"><div><a class="logo" href="${url(
     { view: "home" },
-  )}" data-route>LUXURRY<span>BATHROOMS, CONSIDERED.</span></a><p>Thoughtful forms for the<br>spaces you call your own.</p></div><div><h2>Explore</h2>${link(
+  )}" data-route>LUXURRY<span>BATHROOMS, CONSIDERED.</span></a><p>Thoughtful forms for the<br>spaces you call your own.</p><div class="footer-parent-brand"><img src="./assets/classic-group.png" alt="Classic Group" width="54" height="54" loading="lazy" decoding="async"><div><span>A BRAND BY</span><strong>Classic Group</strong></div></div></div><div><h2>Explore</h2>${link(
     "Products",
     { view: "products" },
   )}${link("Inspiration", { view: "inspiration" })}${link("For professionals", {
