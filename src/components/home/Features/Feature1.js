@@ -90,8 +90,8 @@ export default function Feature1() {
             <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                 <img
-                loading="lazy"
-                decoding="async"
+                  loading="lazy"
+                  decoding="async"
                   alt="Water heater from the collection"
                   src={f5}
                   className="h-full w-full object-cover object-center"
@@ -99,8 +99,8 @@ export default function Feature1() {
               </div>
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                 <img
-                loading="lazy"
-                decoding="async"
+                  loading="lazy"
+                  decoding="async"
                   alt="Basin tap from the collection"
                   src={f2}
                   className="h-full w-full object-cover object-center"

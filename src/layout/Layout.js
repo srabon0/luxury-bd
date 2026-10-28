@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import Footer from "../components/home/Footer/Footer";
 import Header from "../components/GlobalHeader/Header";
 
 const Layout = () => {
@@ -19,12 +20,16 @@ const Layout = () => {
         pauseOnHover
         theme="colored"
       />
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
       <Header />
       {/* <Header /> */}
       {/* <HeaderBottom /> */}
 
       <ScrollRestoration />
       <Outlet />
+      <Footer />
       {/* <Footer />
           <FooterBottom /> */}
     </div>
