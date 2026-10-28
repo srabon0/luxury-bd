@@ -23,8 +23,7 @@ mail limits, cron support, CPU/RAM and disk limits have not been verified. Larav
 requires PHP 8.3 or newer. Do not change the live site or run migrations against its database.
 
 PHP/Composer installation in the coding workspace could not complete. CI must install
-and execute the PHP tests. A tested Composer lock file and a production build artifact
-must be reviewed before a release. Existing MongoDB/catalog data is not migrated.
+and execute the PHP tests. A production build artifact must be reviewed before a release. Existing MongoDB/catalog data is not migrated.
 
 The comparison UI, professional resources, full content/settings administration,
 account password recovery, audit trail, backup automation and final visual parity
@@ -34,7 +33,7 @@ workspace features; future website-content permissions are not represented as do
 
 ## Local setup (PHP 8.3+)
 
-1. `composer install` (initially resolves dependencies until the lock file is finalized).
+1. `composer install` (uses the committed lock file).
 2. Copy `.env.example` to `.env`; set a dedicated development MySQL/MariaDB database.
 3. `php artisan key:generate` then `php artisan migrate`.
 4. `php artisan storage:link` and `php artisan luxurry:create-admin`.

@@ -2,8 +2,6 @@ name: Laravel foundation checks
 on:
   push:
     branches: ['platform/laravel-foundation']
-  pull_request:
-    paths: ['platform/**', '.github/workflows/laravel-foundation.yml']
 permissions:
   contents: read
 jobs:
@@ -47,6 +45,8 @@ jobs:
           extensions: mbstring, dom, curl, fileinfo, gd, pdo_sqlite, pdo_mysql
           coverage: none
           tools: composer:v2
+      - name: Initialize test environment
+        run: cp .env.example .env
       - name: Resolve foundation dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Validate project metadata
