@@ -49,3 +49,7 @@
 .compare-status{bottom:calc(94px + env(safe-area-inset-bottom));font-size:11px;padding:8px 12px}
 .comparison-view .compare-status{bottom:16px}
 }
+
+/* Card dimensions must not inherit the HTML image's fixed 480px height. */
+.product-card .product-image{position:relative;aspect-ratio:1 / 1}
+.product-card .product-image img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
