@@ -5,9 +5,9 @@
     <meta name="theme-color" content="#3730A3">
     <meta name="description" content="Explore Luxurry sanitaryware by Classic Group. Discover products, compare specifications and discuss your bathroom project with our team.">
     <title>@yield('title','Luxurry · Classic Group')</title>
-    <link rel="stylesheet" href="{{ asset('assets/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/app.css') }}?v=20261029-compare2">
 </head>
-<body class="{{ request()->is('workspace*','staff/*') ? 'workspace-page' : 'public-page' }}">
+<body class="{{ request()->is('workspace*','staff/*') ? 'workspace-page' : 'public-page' }} {{ request()->routeIs('catalog.compare') ? 'comparison-view' : '' }}">
 <a class="skip" href="#main">Skip to content</a>
 <div class="topline"><span>Considered spaces. Everyday living.</span><a href="{{ route('contact') }}">Planning a bathroom? Let’s talk ↗</a></div>
 <header>
@@ -37,6 +37,6 @@
 </footer>
 <aside class="compare-tray" hidden aria-label="Selected products"><div><strong>Compare your favourites</strong><span data-compare-count></span></div><ul data-compare-items></ul><a class="button" data-compare-open href="{{ route('catalog.compare') }}">View comparison →</a><button type="button" data-compare-clear>Clear selection</button></aside>
 <p class="compare-status" role="status" aria-live="polite" data-compare-status></p>
-<script src="{{ asset('assets/compare.js') }}" defer></script>
+<script src="{{ asset('assets/compare.js') }}?v=20261029-compare2" defer></script>
 </body>
 </html>

@@ -12,19 +12,21 @@ class Element {
     click() { this.handlers.click(); }
     focus() { this.focused = true; }
 }
-function setup(saved = '[]', blocked = false) {
-    const buttons = Array.from({ length: 4 }, (_, i) => new Element({ compareSlug: `product-${i}`, compareName: `Product ${i}` }));
+function setup(saved = '[]', blocked = false, comparisonPage = false) {
+    const buttons = Array.from({ length: comparisonPage ? 3 : 4 }, (_, i) => new Element({ compareSlug: `product-${i}`, compareName: `Product ${i}` }));
     const tray = new Element(), count = new Element(), list = new Element(), clear = new Element(), link = new Element(), status = new Element();
     tray.querySelector = selector => ({ '[data-compare-count]': count, '[data-compare-items]': list, '[data-compare-clear]': clear })[selector];
     let stored = saved;
+    const classes = {};
+    let navigation;
     const document = {
-        body: { classList: { toggle() {} } },
-        querySelector: selector => ({ '.compare-tray': tray, '[data-compare-status]': status, '[data-compare-link]': link })[selector],
+        body: { classList: { toggle(name, value) { classes[name] = value; } } },
+        querySelector: selector => ({ '.compare-tray': tray, '.comparison-page': comparisonPage ? new Element() : null, '[data-compare-status]': status, '[data-compare-link]': link })[selector],
         querySelectorAll: selector => selector === '[data-compare-slug]' ? buttons : [link],
         createElement: () => new Element(),
     };
-    vm.runInNewContext(code, { document, URL, location: { origin: 'https://example.test' }, localStorage: { getItem() { if (blocked) throw Error('Denied'); return stored; }, setItem(key, value) { if (blocked) throw Error('Denied'); stored = value; } } });
-    return { buttons, tray, count, list, clear, link, status, saved: () => stored };
+    vm.runInNewContext(code, { document, URL, location: { origin: 'https://example.test', assign(url) { navigation = url; } }, localStorage: { getItem() { if (blocked) throw Error('Denied'); return stored; }, setItem(key, value) { if (blocked) throw Error('Denied'); stored = value; } } });
+    return { buttons, tray, count, list, clear, link, status, classes, navigation: () => navigation, saved: () => stored };
 }
 test('selection caps at three, persists and creates a shareable comparison URL', () => {
     const app = setup();
@@ -49,4 +51,14 @@ test('restored selection rejects invalid slugs and duplicate products and treats
     assert.equal(app.list.children.length, 1);
     assert.equal(app.list.children[0].children[0].textContent, '<img onerror=alert(1)>');
     assert.equal(app.buttons[0].attributes['aria-pressed'], 'true');
+});
+test('comparison page hides the tray, uses shared products and removes from the displayed URL', () => {
+    const app = setup(JSON.stringify([{ slug: 'unrelated', name: 'Old selection' }]), false, true);
+    assert.equal(app.tray.hidden, true);
+    assert.equal(app.classes['has-comparison'], false);
+    assert.deepEqual(JSON.parse(app.saved()).map(item => item.slug), ['product-0', 'product-1', 'product-2']);
+    app.buttons[1].click();
+    const url = new URL(app.navigation(), 'https://example.test');
+    assert.deepEqual(url.searchParams.getAll('products[]'), ['product-0', 'product-2']);
+    assert.equal(app.tray.hidden, true);
 });
