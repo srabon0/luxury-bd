@@ -59,3 +59,6 @@
 .product-card h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;line-height:1.4;min-height:2.8em;overflow-wrap:anywhere}
 .product-card>.compare-add{margin-top:auto;min-height:44px}
 @media(max-width:800px){.product-card h3{font-size:14px}}
+
+/* Improve paragraph contrast in the homepage enquiry section. */
+.home-contact>p:not(.eyebrow){color:#555663}
