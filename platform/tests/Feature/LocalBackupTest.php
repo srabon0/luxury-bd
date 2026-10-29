@@ -12,8 +12,8 @@ class LocalBackupTest extends TestCase {
     protected function setUp(): void { parent::setUp();$this->directory=sys_get_temp_dir().'/luxurry-backup-test-'.bin2hex(random_bytes(8)); File::ensureDirectoryExists($this->directory,0700);config(['backup.directory'=>$this->directory,'backup.mysqldump'=>$this->directory.'/dump','backup.keep_days'=>1]); }
     protected function tearDown(): void { File::deleteDirectory($this->directory); parent::tearDown(); }
     private function fakeConnection(): void {
-        $config=DB::connection()->getConfig(); $config['driver']='mysql';$config['database']='luxurry_test';$config['username']='test';$config['password']='secret-not-in-argv';
-        $connection=\Mockery::mock();$connection->shouldReceive('getConfig')->andReturn($config);DB::shouldReceive('connection')->andReturn($connection);
+        $original=DB::connection();$config=$original->getConfig(); $config['driver']='mysql';$config['database']='luxurry_test';$config['username']='test';$config['password']='secret-not-in-argv';
+        $connection=\Mockery::mock($original);$connection->shouldReceive('getConfig')->andReturn($config);DB::shouldReceive('connection')->andReturn($connection);
     }
     private function binary(bool $failure=false): void {
         $body=$failure ? 'exit 1' : "printf '%s\\n' 'CREATE TABLE backup_test(id INT);'";

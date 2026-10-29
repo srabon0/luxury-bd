@@ -30,6 +30,12 @@ class RecoverySettingsTest extends TestCase {
         $this->assertSame(['password'],$entry->changed_fields);$this->assertStringNotContainsString($token,$entry->toJson());$this->assertStringNotContainsString($data['password'],$entry->toJson());
         $this->post('/staff/reset-password',$data)->assertSessionHasErrors('email');
     }
+    public function test_changed_password_invalidates_an_established_staff_session(): void {
+        $user=$this->staff();$oldHash=$user->getAuthPassword();
+        $user->update(['password'=>'ChangedPassword123']);
+        $this->actingAs($user->fresh())->withSession(['password_hash_web'=>$oldHash])->get('/workspace')->assertRedirect('/staff/login');
+        $this->assertGuest();
+    }
     public function test_expired_inactive_and_weak_resets_are_rejected(): void {
         $user=$this->staff();$token=Password::createToken($user);
         $data=['email'=>$user->email,'token'=>$token,'password'=>'NewSecurePassword123','password_confirmation'=>'NewSecurePassword123'];
