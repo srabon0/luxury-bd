@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\{AuditController,CatalogController,CategoryController,ContactController,ProductController,SessionController,StaffController,WorkspaceController};
+use App\Http\Controllers\{PasswordRecoveryController,SiteSettingsController,AuditController,CatalogController,CategoryController,ContactController,ProductController,SessionController,StaffController,WorkspaceController};
 use App\Http\Middleware\ActiveStaff;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -12,10 +12,14 @@ Route::get('/api/products/{product:slug}',[CatalogController::class,'show'])->mi
 Route::get('/contact',[ContactController::class,'create'])->name('contact');
 Route::post('/contact',[ContactController::class,'store'])->middleware('throttle:contact')->name('contact.send');
 Route::middleware('guest')->group(function () {
+    Route::get('/staff/forgot-password',[PasswordRecoveryController::class,'requestForm'])->name('password.request');
+    Route::post('/staff/forgot-password',[PasswordRecoveryController::class,'email'])->middleware('throttle:password-recovery')->name('password.email');
+    Route::get('/staff/reset-password/{token}',[PasswordRecoveryController::class,'resetForm'])->name('password.reset');
+    Route::post('/staff/reset-password',[PasswordRecoveryController::class,'reset'])->middleware('throttle:password-recovery')->name('password.update');
     Route::get('/staff/login',[SessionController::class,'create'])->name('login');
     Route::post('/staff/login',[SessionController::class,'store'])->middleware('throttle:staff-login')->name('login.store');
 });
-Route::middleware(['auth',ActiveStaff::class])->group(function () {
+Route::middleware(['auth','auth.session',ActiveStaff::class,\App\Http\Middleware\ProtectBackupSnapshot::class])->group(function () {
     Route::post('/staff/logout',[SessionController::class,'destroy'])->name('logout');
     Route::prefix('workspace')->name('workspace.')->group(function () {
         Route::get('/',[WorkspaceController::class,'index'])->middleware('can:view-prices')->name('index');
@@ -26,6 +30,8 @@ Route::middleware(['auth',ActiveStaff::class])->group(function () {
             Route::resource('categories',CategoryController::class)->only(['index','store','update','destroy']);
         });
         Route::middleware('can:manage-users')->group(function () {
+            Route::get('/settings',[SiteSettingsController::class,'edit'])->name('settings.edit');
+            Route::put('/settings',[SiteSettingsController::class,'update'])->name('settings.update');
             Route::get('/users',[StaffController::class,'index'])->name('users.index');
             Route::post('/users',[StaffController::class,'store'])->name('users.store');
             Route::patch('/users/{user}',[StaffController::class,'update'])->name('users.update');

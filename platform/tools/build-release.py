@@ -59,6 +59,7 @@ def build(source, output, commit):
             (root / 'storage' / directory).mkdir(parents=True, exist_ok=True)
         (root / 'bootstrap/cache').mkdir(parents=True, exist_ok=True)
         (root / 'STAGING.md').write_text((source / 'deploy/STAGING.md').read_text())
+        (root / 'BACKUPS.md').write_text((source / 'deploy/BACKUPS.md').read_text())
         manifest = {'application': 'Luxurry', 'source_commit': commit, 'purpose': 'staging acceptance testing', 'contains_database': False, 'contains_environment_file': False, 'includes_production_dependencies': True}
         (root / 'build-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         archive = output / 'luxurry-staging.tar.gz'

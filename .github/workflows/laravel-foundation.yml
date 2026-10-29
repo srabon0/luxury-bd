@@ -52,6 +52,11 @@ jobs:
         run: node --test tests/browser/*.test.mjs
       - name: Release packaging exclusion tests
         run: python tests/browser/release.test.py
+      - name: Install database restore test client
+        if: matrix.database == 'mysql'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq mariadb-client
       - name: Initialize test environment
         run: cp .env.example .env
       - name: Resolve foundation dependencies

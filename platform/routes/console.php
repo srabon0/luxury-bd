@@ -14,3 +14,10 @@ Artisan::command('luxurry:create-admin', function () {
     DB::transaction(function () use ($name,$email,$password) { $user=User::create(['name'=>$name,'email'=>$email,'password'=>$password,'role'=>Role::Admin,'is_active'=>true]); app(AuditTrail::class)->record('staff.created',$user,['name','email','password','role','is_active']); });
     $this->info('Administrator created.'); return 0;
 })->purpose('Create the first administrator interactively; no default credentials.');
+
+Artisan::command('luxurry:backup',function (\App\Services\LocalBackup $backup) {
+    try { $file=$backup->create(); $this->info('Backup completed: '.basename($file)); return 0; }
+    catch (\Throwable $exception) { report($exception); $this->error('Backup failed. Check the private application log and hosting configuration.'); return 1; }
+})->purpose('Create a private database and upload backup with retention.');
+\Illuminate\Support\Facades\Schedule::command('luxurry:backup')->dailyAt('02:00')->timezone('UTC')->withoutOverlapping(30)->when(fn()=>config('backup.enabled'));
+\Illuminate\Support\Facades\Schedule::command('auth:clear-resets')->daily()->timezone('UTC');

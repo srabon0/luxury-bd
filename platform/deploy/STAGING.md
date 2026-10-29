@@ -68,3 +68,18 @@ remain identifiable by type/id/label. There is no application endpoint to edit o
 delete log entries. Database administrators can still alter database records;
 this is not a cryptographically tamper-proof or external compliance archive.
 Plan retention and backups appropriate to disk space and business requirements.
+
+## Password recovery, content and backups
+
+Verify password recovery using a real staff mailbox: reset links use APP_URL and
+expire after 60 minutes. Confirm an expired/reused link fails and deactivated users
+cannot recover access. Verify an already-established staff session loses access
+after its password changes. Never enable public registration.
+
+Admin can open Website settings to edit homepage text, public contact details and
+the private enquiry destination; test email delivery after changing that destination.
+Managers and SR must be denied settings access. SMTP credentials remain in .env.
+
+Follow the included BACKUPS.md for backup and restore acceptance before
+enabling backups or configuring cron. The archive deliberately contains no existing
+backups, real environment file or populated database.

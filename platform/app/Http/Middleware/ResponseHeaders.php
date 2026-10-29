@@ -6,7 +6,7 @@ class ResponseHeaders {
     public function handle(Request $request, Closure $next) {
         $response=$next($request);
         $response->headers->set('X-Content-Type-Options','nosniff');
-        $response->headers->set('Referrer-Policy','strict-origin-when-cross-origin');
+        $response->headers->set('Referrer-Policy',$request->is('staff*') ? 'no-referrer' : 'strict-origin-when-cross-origin');
         $response->headers->set('X-Frame-Options','SAMEORIGIN');
         if ($request->is('workspace*','staff*')) $response->headers->set('Cache-Control','private, no-store');
         return $response;

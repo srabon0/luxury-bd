@@ -12,6 +12,9 @@ The approved private design demo remains separate and unchanged.
 - Admin staff/role management; Catalog Manager product/category/image/price editing;
   SR read-only catalog and internal prices. No public sign-up or default staff password.
 - Session sign-in/out, CSRF protections, rate limits, validation, no-store staff responses.
+- Expiring single-use password recovery for active staff, trusted reset URLs and session password checks.
+- Admin-only homepage/contact settings with plain-text rendering and private enquiry recipient.
+- Local database/upload backups with checksums, retention and coordinated catalog-write locks.
 - Admin-only activity log for catalog/category/staff mutations; actor and field names recorded atomically without submitted values, passwords or price amounts.
 - CI-built staging archive with locked production dependencies, checksum and installation guide; secrets, runtime data, development dependencies and review fixtures excluded.
 - Local WebP images and thumbnails, generated from validated JPG/PNG/WebP inputs.
@@ -30,9 +33,8 @@ still require acceptance testing. Do not run migrations against the live databas
 PHP/Composer installation in the coding workspace could not complete. CI must install
 and execute the PHP tests. The CI staging archive must pass host acceptance before a production release. Existing MongoDB/catalog data is not migrated.
 
-Professional resources, full content/settings administration,
-account password recovery, backup automation and final visual parity
-with the approved demo remain later milestones. The public catalog intentionally
+Additional professional resources and broader editorial content can be added later.
+The implemented homepage/contact settings and backups still require host acceptance. The public catalog intentionally
 has no pricing, cart, checkout or orders. Admin currently controls all implemented
 workspace features; future website-content permissions are not represented as done.
 
@@ -83,3 +85,6 @@ field names, actor role/name and record identity; no prices, password hashes, to
 request bodies or before/after values are stored. There are no log-edit/delete HTTP
 routes. This application log is not a tamper-proof external compliance archive.
 Back up and plan retention of the audit table alongside the application database.
+
+Password recovery requires working SMTP and an accurate HTTPS APP_URL. Backups are
+disabled until the host-specific manual backup/restore test succeeds; see deploy/BACKUPS.md.
