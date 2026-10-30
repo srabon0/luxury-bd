@@ -1,7 +1,10 @@
 name: Laravel foundation checks
 on:
   push:
-    branches: ['platform/laravel-foundation']
+    branches: ['main', 'platform/laravel-foundation']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -50,6 +53,11 @@ jobs:
           node-version: '22'
       - name: Comparison interaction checks
         run: node --test tests/browser/*.test.mjs
+      - name: Deployment script checks
+        run: |
+          bash -n deploy/activate-release.sh
+          php -l deploy/front-controller.php
+          python tests/browser/deploy.test.py
       - name: Release packaging exclusion tests
         run: python tests/browser/release.test.py
       - name: Install database restore test client
@@ -132,3 +140,47 @@ jobs:
           path: staging-release/
           if-no-files-found: error
           retention-days: 14
+
+  production-deploy:
+    needs: [php-tests, staging-package]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PRODUCTION_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.DEPLOY_URL }}
+    concurrency:
+      group: luxurry-production
+      cancel-in-progress: false
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_PORT: ${{ vars.DEPLOY_PORT || '22' }}
+      DEPLOY_ROOT: ${{ vars.DEPLOY_ROOT }}
+      PUBLIC_ROOT: ${{ vars.PUBLIC_ROOT }}
+      LEGACY_APP: ${{ vars.LEGACY_APP }}
+      PHP_BIN: ${{ vars.PHP_BIN }}
+      DEPLOY_URL: ${{ vars.DEPLOY_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: luxurry-staging-package
+          path: staging-release
+      - name: Install private SSH identity and verified host keys
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          test -n "$SSH_PRIVATE_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/luxurry_deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/luxurry_deploy ~/.ssh/known_hosts
+      - name: Upload and activate tested Laravel release
+        run: python platform/tools/deploy-ssh.py
+      - name: Remove deployment identity
+        if: always()
+        run: rm -f ~/.ssh/luxurry_deploy
+
