@@ -1,0 +1,169 @@
+name: Laravel foundation checks
+on:
+  push:
+    branches: ['main', 'platform/laravel-foundation']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlite, mysql]
+    services:
+      mysql:
+        image: mariadb:10.6
+        env:
+          MARIADB_DATABASE: luxurry_test
+          MARIADB_ROOT_PASSWORD: isolated-ci-password
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      DB_CONNECTION: ${{ matrix.database }}
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: ${{ matrix.database == 'mysql' && 'luxurry_test' || ':memory:' }}
+      DB_USERNAME: root
+      DB_PASSWORD: isolated-ci-password
+      SESSION_DRIVER: array
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, curl, fileinfo, gd, pdo_sqlite, pdo_mysql
+          coverage: none
+          tools: composer:v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Comparison interaction checks
+        run: node --test tests/browser/*.test.mjs
+      - name: Deployment script checks
+        run: |
+          bash -n deploy/activate-release.sh
+          bash -n deploy/ftp-agent.sh
+          php -l deploy/front-controller.php
+          python tests/browser/deploy.test.py
+          python tests/browser/ftp-deploy.test.py
+      - name: Release packaging exclusion tests
+        run: python tests/browser/release.test.py
+      - name: Install database restore test client
+        if: matrix.database == 'mysql'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq mariadb-client
+      - name: Initialize test environment
+        run: cp .env.example .env
+      - name: Resolve foundation dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Validate project metadata
+        run: composer validate --no-check-lock
+      - name: PHP syntax checks
+        run: find app bootstrap config database routes tests -name '*.php' -print0 | xargs -0 -n 1 php -l
+      - name: Run permissions, catalog and contact tests
+        run: php artisan test
+      - name: Check production cache compilation
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan optimize:clear
+      - name: Render isolated design review snapshots
+        if: matrix.database == 'sqlite'
+        run: php tools/render-review.php
+      - uses: actions/upload-artifact@v4
+        if: matrix.database == 'sqlite'
+        with:
+          name: luxurry-design-review
+          path: platform/review
+          if-no-files-found: error
+      - name: Dependency security advisory check
+        run: composer audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: foundation-lock-${{ matrix.database }}
+          path: platform/composer.lock
+          if-no-files-found: ignore
+
+  staging-package:
+    needs: php-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      LOG_CHANNEL: stderr
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, curl, fileinfo, gd, pdo_mysql
+          coverage: none
+          tools: composer:v2
+      - name: Install locked production dependencies
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --no-scripts --optimize-autoloader
+      - name: Verify production platform requirements
+        run: composer check-platform-reqs --no-dev
+      - name: Build isolated staging archive
+        run: python tools/build-release.py --output ../staging-release
+      - name: Verify checksum and boot extracted application
+        run: |
+          cd ../staging-release
+          sha256sum --check SHA256SUMS
+          mkdir -p "${RUNNER_TEMP}/luxurry-package-smoke"
+          tar -xzf luxurry-staging.tar.gz -C "${RUNNER_TEMP}/luxurry-package-smoke"
+          cd "${RUNNER_TEMP}/luxurry-package-smoke/luxurry-platform"
+          php artisan --version
+          php artisan route:list --except-vendor
+      - uses: actions/upload-artifact@v4
+        with:
+          name: luxurry-staging-package
+          path: staging-release/
+          if-no-files-found: error
+          retention-days: 14
+
+  production-deploy:
+    needs: [php-tests, staging-package]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PRODUCTION_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ vars.DEPLOY_URL }}
+    concurrency:
+      group: luxurry-production
+      cancel-in-progress: false
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_PORT: ${{ vars.FTP_PORT || '21' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: luxurry-staging-package
+          path: staging-release
+      - name: Upload over FTPS and wait for cPanel cron activation
+        run: python platform/tools/deploy-ftps.py

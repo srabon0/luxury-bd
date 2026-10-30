@@ -1,0 +1,14 @@
+@extends('layout')
+@section('content')
+<section class="hero">
+    <video muted loop playsinline preload="none" poster="{{ asset('assets/hero-poster.jpg') }}" aria-label="Luxurry collection video"><source data-src="{{ asset('assets/hero.mp4') }}" type="video/mp4"></video>
+    <div><p class="eyebrow">{{ $siteContent['hero_eyebrow'] }}</p><h1>{{ $siteContent['hero_heading'] }}</h1><p>{{ $siteContent['hero_description'] }}</p><a class="button" href="{{ route('catalog.index') }}">Explore products →</a></div>
+    <span class="hero-note">LUXURRY / CLASSIC GROUP</span><button class="video-toggle" aria-label="Play homepage video">Play video</button>
+</section>
+<div class="service-strip"><span>Thoughtful design</span><span>Product specifications</span><span>Side-by-side comparison</span><span>Project enquiries</span></div>
+<section class="collection-intro section"><div><p class="eyebrow">FORM. FUNCTION. EVERYDAY.</p><h2>{{ $siteContent['intro_heading'] }}</h2></div><div><p>{{ $siteContent['intro_description'] }}</p><a class="text-link" href="{{ route('catalog.compare') }}">Find your fit with comparison ↗</a></div></section>
+<section class="section featured-section"><div class="section-heading"><div><p class="eyebrow">A CONSIDERED COLLECTION</p><h2>Simple forms.<br>Lasting presence.</h2></div><a class="text-link" href="{{ route('catalog.index') }}">Explore the collection ↗</a></div><div class="grid">@forelse($products as $product)@include('catalog.card')@empty<div class="empty-state"><h3>The collection is being prepared.</h3><p>Our team can help with product details and project enquiries.</p><a class="text-link" href="{{ route('contact') }}">Talk to our team ↗</a></div>@endforelse</div></section>
+<section class="selection-guide section"><div><p class="eyebrow">A LITTLE CLARITY GOES A LONG WAY</p><h2>Every detail.<br>A clearer choice.</h2><p>Bring your favourites together and look beyond the first impression.</p><a class="button" href="{{ route('catalog.compare') }}">Compare your favourites →</a></div><ol><li><span>01</span><div><h3>Explore the collection.</h3><p>Browse by category and find the forms that suit your space.</p></div></li><li><span>02</span><div><h3>Consider the details.</h3><p>Compare dimensions, finishes and materials for up to three products.</p></div></li><li><span>03</span><div><h3>Start a conversation.</h3><p>Share your requirements with our team and plan your next step.</p></div></li></ol></section>
+<section class="home-contact section"><p class="eyebrow">LET’S CREATE SOMETHING CONSIDERED</p><h2>Your space.<br>Our attention to detail.</h2><p>Choosing for a home, a project or a showroom? Start a conversation with our team.</p><a class="button" href="{{ route('contact') }}">Get in touch →</a></section>
+<script src="{{ asset('assets/home.js') }}" defer></script>
+@endsection

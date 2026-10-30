@@ -1,31 +1,10 @@
+name: Legacy React deploy retired
 on:
-    push:
-        branches:
-            - main
-name: 🚀 Deploy website on push
-
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-    web-deploy:
-        name: 🎉 Deploy
-        runs-on: ubuntu-latest
-        steps:
-            - name: 🚚 Get latest code
-              uses: actions/checkout@v3
-
-            - name: Use Node.js 18
-              uses: actions/setup-node@v2
-              with:
-                  node-version: '18'
-
-            - name: 🔨 Build Project
-              run: |
-                  npm ci
-                  npm run build
-
-            - name: 📂 Sync files
-              uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-              with:
-                  server: ${{ secrets.FTP_SERVER }}
-                  username: ${{ secrets.FTP_USERNAME }}
-                  password: ${{ secrets.FTP_PASSWORD }}
-                  local-dir: ./build/
+  retired:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'React FTP deployment is retired. Use Laravel foundation checks and its production deployment job.'

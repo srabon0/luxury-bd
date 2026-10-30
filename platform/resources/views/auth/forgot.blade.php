@@ -1,0 +1,3 @@
+@extends('layout')
+@section('title','Recover staff access · Luxurry')
+@section('content')<section class="section narrow"><p class="eyebrow">LUXURRY WORKSPACE</p><h1>Recover your access.</h1><p class="muted">Enter your staff email to request a password reset link. Links expire after 60 minutes.</p><form method="post" action="{{ route('password.email') }}">@csrf<label>Staff email<input type="email" name="email" required maxlength="254" autocomplete="email" value="{{ old('email') }}"></label><button class="button">Request reset link</button></form><p><a href="{{ route('login') }}">← Back to sign in</a></p></section>@endsection
