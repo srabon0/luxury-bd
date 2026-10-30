@@ -1,118 +1,130 @@
-# GitHub Actions production deployment
+# Automatic Laravel deployment: FTPS + cPanel cron
 
-Push or merge application changes to `main` → PHP tests on MariaDB and SQLite,
-JavaScript checks, dependency audit, production dependency build and extracted
-package smoke test → SSH upload → migrations/configuration → release activation
-→ live checks. Feature branches and pull requests never deploy.
+Push to `main` → tests → production build → encrypted FTPS upload → cron activates
+the release → live checks → result returned to GitHub. SSH login is not required.
+Pull requests and feature branches run tests without deploying. The old React FTP
+workflow is retired by this PR. The optional SSH uploader is no longer selected.
 
-## Status and first-time setup
+## One-time host setup
 
-The workflow is prepared, not connected to a hosting account automatically.
-The existing Laravel PR must be merged before `main` contains the application.
-The previous React FTP workflow is replaced so it cannot overwrite the Laravel site.
+1. Take a fresh database and file backup, including public uploads.
+2. Make a private directory outside the domain document root. Install
+   `ftp-agent.sh` and a copy of `ftp-config.example.sh` named `config.sh` there.
+   Set the configuration file's permissions to `0600`.
+3. Edit its five settings: `DEPLOY_ROOT` (this private directory), `PUBLIC_ROOT`
+   (the real document root), `LEGACY_APP` (existing working production core),
+   `PHP_BIN` (working PHP 8.4 CLI), and `BASE_URL` (canonical HTTPS URL).
+   Paths must be absolute, without spaces or `..`. No FTP password goes here.
+4. Run this once through a temporary cPanel cron, using your actual private paths:
 
-This deployment transport needs an SSH shell, `bash`, `rsync`, `flock`, `tar`,
-`sha256sum`, `curl` and PHP 8.4 on the host. A cPanel **SSH Access** key screen
-does not itself prove that shell access is enabled. Confirm shell/rsync access
-with the hosting provider before enabling production deployment. An FTP-only
-account cannot run this workflow; do not enter FTP credentials as SSH credentials.
+   ```sh
+   /bin/bash /PRIVATE/ftp-agent.sh /PRIVATE/config.sh --check > /PRIVATE/readiness.txt 2>&1
+   ```
 
-1. Take a fresh database and full file backup, including public uploads.
-2. Enable shell access and authorize a dedicated deployment public key for the
-   hosting account. Keep its private key out of Git and chat.
-3. Create the GitHub environment `production`. Configure repository variables
-   and environment secrets below. Required environment reviewers are optional;
-   omit reviewers if every successful main-branch push should deploy automatically.
-4. Verify the server SSH host-key fingerprint through the provider or another
-   trusted channel. Store its matching known_hosts lines, including `[host]:port`
-   for a nondefault port. The workflow does not disable host-key checking.
-5. Confirm `PUBLIC_ROOT/storage` is the **real directory** used for current
-   uploads. The workflow deliberately refuses a public storage symlink.
-6. Set `PRODUCTION_DEPLOY_ENABLED=true` only once the settings and backup are ready.
-   Run **Laravel foundation checks → Run workflow → main** for the first deployment.
-   This workflow must exist on the default branch for manual dispatch.
-7. Check the production job, homepage, products, staff login, a draft image upload
-   and contact email. Subsequent commits to `main` deploy after checks succeed.
+   Read `readiness.txt`. It must report `READY`. This checks PHP 8.4, bash, flock,
+   rsync, curl, tar, sha256sum, realpath, the core environment, and a writable real
+   public upload directory. It creates `incoming/AGENT_READY` for GitHub's check.
+5. Replace that temporary cron with this permanent once-per-minute cron:
 
-### Secrets (production environment)
+   ```sh
+   /bin/bash /PRIVATE/ftp-agent.sh /PRIVATE/config.sh >> /PRIVATE/agent.log 2>&1
+   ```
+
+   Keep this deployment worker enabled. It exits quickly if nothing is waiting;
+   a lock prevents overlapping activations. Remove older temporary diagnostic crons.
+6. Create a dedicated cPanel FTP account rooted **exactly at
+   `DEPLOY_ROOT/incoming`**. Correct any username suffix cPanel appends to its
+   Directory field. Do not root it at public_html, the account home, or the whole
+   deployment directory. It needs read/write/rename access within incoming only.
+7. Confirm **explicit FTP over TLS**, normally port 21, works using the provider's
+   certificate-matching FTP hostname. Plain FTP and disabled certificate validation
+   are not supported. This deployment credential permits submitting executable
+   release code; do not share it with people who should not deploy.
+
+## One-time GitHub setup
+
+The Laravel PR must be merged so `main` contains the application and new workflow.
+Create a `production` environment and add these environment **Secrets**:
 
 | Secret | Value |
 | --- | --- |
-| `DEPLOY_HOST` | Hosting SSH hostname |
-| `DEPLOY_USER` | Hosting SSH account username |
-| `DEPLOY_SSH_KEY` | Dedicated, unencrypted deployment private key |
-| `DEPLOY_KNOWN_HOSTS` | Verified server SSH public host-key lines |
+| `FTP_SERVER` | Certificate-matching hostname, without protocol or port suffix |
+| `FTP_USERNAME` | Full dedicated incoming-only FTP username |
+| `FTP_PASSWORD` | That account's password |
 
-### Repository variables
+These names match the previous FTP workflow, but verify the values and root
+directory. An old FTP account is not automatically suitable for the new layout.
+
+Add these repository **Variables**:
 
 | Variable | Value |
 | --- | --- |
-| `PRODUCTION_DEPLOY_ENABLED` | `true` to enable; absent or any other value disables deployment |
-| `DEPLOY_PORT` | SSH port, defaults to `22` |
-| `DEPLOY_ROOT` | New private deployment directory, outside the web root |
-| `PUBLIC_ROOT` | Existing real domain document root |
-| `LEGACY_APP` | Existing working production Laravel application directory |
-| `PHP_BIN` | Absolute path to the host's working PHP 8.4 CLI executable |
-| `DEPLOY_URL` | Canonical production HTTPS URL, without a trailing slash |
+| `PRODUCTION_DEPLOY_ENABLED` | `true` to enable; absent/other values skip deployment |
+| `FTP_PORT` | Explicit FTPS control port; default `21` |
+| `DEPLOY_URL` | Canonical public HTTPS URL for the GitHub environment link |
 
-Paths must be absolute, without spaces or `..`. Keep infrastructure values in
-GitHub settings, not tracked files. Never paste live environment-file contents,
-database credentials or mail passwords into a workflow.
+Enable deployment only after the host preflight, permanent cron, FTPS account and
+backup are ready. Required environment reviewers are optional; omit them for fully
+automatic main-branch deployment. Use branch protection to require checks before merging.
 
-## Files and data
+For the first deployment use **Laravel foundation checks → Run workflow → main**.
+Subsequent successful pushes to main deploy automatically. GitHub waits up to
+15 minutes for cron acknowledgement. A successful FTP upload alone is not success.
 
-Each build is installed to `DEPLOY_ROOT/releases/<commit>-<run>-<attempt>`.
-The original production application remains intact. Releases share its `.env`
-and runtime `storage` through **private PHP-side links**; Apache does not serve
-these links. Do not delete `LEGACY_APP`, its `.env` or storage after activation.
+## Preservation and activation
 
-Existing images and all future uploads stay in `PUBLIC_ROOT/storage`. Configuration
-reads `PUBLIC_STORAGE_ROOT`; the deploy command sets and caches it explicitly.
-Assets are real files under `PUBLIC_ROOT/_releases/<release>/assets`, with a
-release-specific cached `ASSET_URL`. Apache does not need to follow a symlink.
-The workflow does not edit `.htaccess`, robots.txt, TLS challenge directories,
-uploaded images or database records, except for forward schema migrations.
+* CI packages code and locked production dependencies; it excludes the real `.env`,
+  databases and uploads. All files arrive under a new incoming release directory.
+* Files upload with `.part` names. A checksum manifest covers the archive, its
+  checksum file, activation script and front controller. The `READY` marker is last.
+* Cron ignores incomplete uploads, rejects bad checksums and stale run/attempt IDs,
+  and records private logs. Its short incoming `STATUS` never contains credentials.
+* Each build extracts to a new private releases directory. Its `.env` and runtime
+  storage are private PHP-side links to the existing working core. Apache never
+  serves those links. **Keep the original core and its environment/runtime storage.**
+* Existing and new product images stay in the real `PUBLIC_ROOT/storage` folder.
+  The deployment caches `PUBLIC_STORAGE_ROOT` explicitly. Do not run `storage:link`.
+* Release assets are real files under `PUBLIC_ROOT/_releases/<release>/assets`.
+  The cached `ASSET_URL` selects them. `.htaccess`, TLS challenge directories,
+  robots.txt and uploaded images are not replaced.
+* Migrations and caches run before the private `current` release pointer changes.
+  First-time setup backs up and replaces the public index; this initial two-file
+  cutover is not fully atomic. Later pointer replacements are atomic.
+* Checks require successful `/` and `/products` responses with the new
+  `X-Luxurry-Release` header before publishing `STATUS=succeeded`.
 
-The first deployment backs up the public index privately, then installs a small
-front controller. A private `current` file selects the release; later switches
-replace that file atomically. The first index replacement and pointer switch are
-two operations, so first-time setup is not a fully atomic cutover.
+## Failure, rollback and operations
 
-No application environment file is uploaded from GitHub. `APP_KEY`, mail settings,
-database settings, users, prices and products remain host-owned. Do not run
-`storage:link` for this deployment layout. cPanel full-account backups must include
-both the application and document root; do not rely on a legacy upload-only backup
-that still reads `storage/app/public`.
+Detailed logs: `DEPLOY_ROOT/logs/<release>.log`. Worker/preflight errors appear in
+the private cron log or readiness file. Incoming STATUS exposes only a short state.
 
-## Failure and rollback
+A failed live check restores the previous code pointer (or original first-deploy
+index). **Database migrations are not reversed.** Use backward-compatible schema
+changes and take a fresh database backup before schema changes. Code rollback does
+not recover data removed by a destructive migration.
 
-Jobs are serialized and the server takes a deployment lock. An activation failure
-before the pointer changes leaves the previous code selected. Live checks require
-successful `/` and `/products` responses **from the new release**, identified by
-`X-Luxurry-Release`, so a cached previous homepage is not accepted as success.
-Failed live checks restore the previous code pointer (or first-deploy index).
+After READY is submitted, cancelling/timing out a GitHub job does not guarantee
+cron stops. Inspect STATUS and the private current pointer before retrying. A rerun
+creates a new attempt directory; never overwrite an old incoming release. Older
+source should be redeployed through a deliberate new controlled build/run.
 
-**Database migrations are not rolled back automatically.** Use backward-compatible
-schema changes and make a fresh database backup before a schema change. Do not
-assume code rollback reverses a destructive migration. Public release assets and
-private release directories are retained; periodically prune only releases that
-are neither current nor previous after checking backups and disk space.
+The private `previous` file identifies the preceding successful release. Manual
+rollback atomically replaces `current` with a retained release ID, then repeats
+live checks. Keep that release's public asset directory and first-index backups.
 
-For a manual rollback, select an existing tested release by replacing the private
-`current` file with its release ID using a temporary file and rename. The
-`previous` file records the previous successful release. Then repeat live checks.
-Retain its public asset directory. Do not restore a database unless recovery
-requires it and the operator understands which newer records would be lost.
+Full backups must include the database, shared environment/runtime storage,
+deployment state, and document root with images. A legacy upload backup reading
+only `storage/app/public` misses new public uploads. Verify off-host restores.
+Inspect disk usage and prune only releases/archives/assets that are neither
+current nor previous after verifying backups. Never delete the legacy shared core.
 
-Existing cron commands that hardcode `LEGACY_APP/artisan` continue running old
-code. Before enabling scheduled jobs, update their launcher to read `current`
-and run that release's artisan command; preserve the same shared runtime data.
+Other crons hardcoded to the old core's artisan still run old code; update their
+launcher to select the private current release before enabling application schedules.
 
 ## Verification
 
-CI runs shell syntax, PHP front-controller syntax and deployment integration
-tests. The integration fixture checks successful activation, rollback after a
-failed health check, rejected public symlinks, and preservation of runtime files,
-environment content and public uploads. Local fixture tests use a mocked PHP
-binary; real PHP syntax and application tests run in GitHub Actions. Host SSH,
-permissions, extensions and live delivery still require the first real deployment.
+Local fixtures exercise FTPS transfer sequencing and cron activation with mocked
+PHP/HTTP, covering partial uploads, checksums, readiness, stale jobs, acknowledgement,
+rollback and data preservation. CI also runs real PHP syntax/application/database
+tests, dependency audit and extracted archive smoke tests. Host TLS, credentials
+and preflight still require real setup; deployment remains disabled by default.

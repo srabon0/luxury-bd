@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Called by GitHub Actions over pinned-host SSH. No credentials in arguments.
+# Called by the private cPanel cron worker (or optional SSH transport).
 set -Eeuo pipefail
 umask 077
 DEPLOY_ROOT=$1 PUBLIC_ROOT=$2 LEGACY_APP=$3 PHP_BIN=$4 BASE_URL=$5 RELEASE_ID=$6
@@ -73,7 +73,7 @@ SWITCHED=1
 mv -f "$DEPLOY_ROOT/.current-next" "$DEPLOY_ROOT/current"
 mv -f "$PUBLIC_ROOT/.index-deploy.php" "$PUBLIC_ROOT/index.php"
 for route in / /products; do
-  curl --fail --silent --show-error --retry 2 --retry-all-errors --max-time 30 \
+  curl --fail --silent --show-error --retry 2 --max-time 30 \
     -H 'Cache-Control: no-cache' -D "$INCOMING/health-headers" \
     "${BASE_URL%/}${route}?deploy_check=$RELEASE_ID" -o /dev/null
   tr -d '\r' < "$INCOMING/health-headers" | grep -Fqi "X-Luxurry-Release: $RELEASE_ID"
