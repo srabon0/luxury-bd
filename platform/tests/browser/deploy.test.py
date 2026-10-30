@@ -52,13 +52,14 @@ if len(sys.argv)>3 and sys.argv[1]=='-r' and 'file_put_contents' in sys.argv[2]:
         self.php.chmod(0o755)
         curl=self.bin/'curl'
         curl.write_text('''#!/usr/bin/env python3
-import os,sys
+import os,sys,json
 from pathlib import Path
+Path(os.environ['CURL_ARGS']).write_text(json.dumps(sys.argv[1:]))
 if os.environ.get('FAIL_HEALTH')=='1':sys.exit(22)
 Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Release: '+os.environ['TEST_RELEASE']+'\\n')
 ''')
         curl.chmod(0o755)
-        self.env={**os.environ,'PATH':str(self.bin)+os.pathsep+os.environ['PATH'],'TEST_RELEASE':self.release}
+        self.env={**os.environ,'PATH':str(self.bin)+os.pathsep+os.environ['PATH'],'TEST_RELEASE':self.release,'CURL_ARGS':str(self.base/'curl-args')}
     def tearDown(self):self.temp.cleanup()
     def run_deploy(self):
         return subprocess.run(['bash',str(APP/'deploy/activate-release.sh'),str(self.root),str(self.public),str(self.legacy),str(self.php),'https://example.test',self.release],env=self.env,capture_output=True,text=True)
@@ -78,6 +79,18 @@ Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Releas
         self.assertEqual(icon.parent.stat().st_mode & 0o777,0o755)
         self.assertIn(str(self.root),(self.public/'index.php').read_text())
         self.preserved()
+    def test_healthcheck_ip_preserves_https_hostname(self):
+        import json
+        self.env['HEALTHCHECK_IP']='192.0.2.10'
+        r=self.run_deploy();self.assertEqual(r.returncode,0,r.stderr)
+        args=json.loads((self.base/'curl-args').read_text())
+        self.assertEqual(args[args.index('--resolve')+1],'example.test:443:192.0.2.10')
+        self.assertIn('https://example.test/products?deploy_check='+self.release,args)
+        self.assertNotIn('--insecure',args)
+    def test_invalid_healthcheck_ip_rejected_before_switch(self):
+        self.env['HEALTHCHECK_IP']='999.0.0.1'
+        self.assertNotEqual(self.run_deploy().returncode,0)
+        self.assertEqual((self.public/'index.php').read_text(),'original controller')
     def test_first_deploy_health_failure_restores_original_index(self):
         self.env['FAIL_HEALTH']='1'
         r=self.run_deploy();self.assertNotEqual(r.returncode,0)

@@ -4,7 +4,17 @@ set -Eeuo pipefail
 umask 077
 DEPLOY_ROOT=$1 PUBLIC_ROOT=$2 LEGACY_APP=$3 PHP_BIN=$4 BASE_URL=$5 RELEASE_ID=$6
 [[ "$RELEASE_ID" =~ ^[0-9a-f]{40}-[0-9]+-[0-9]+$ ]] || exit 2
-[[ "$BASE_URL" == https://* ]] || exit 2
+[[ "$BASE_URL" =~ ^https://[a-zA-Z0-9.-]+(:[0-9]+)?/?$ ]] || exit 2
+HEALTH_ARGS=()
+if [[ -n "${HEALTHCHECK_IP:-}" ]]; then
+  [[ "$HEALTHCHECK_IP" =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]] || exit 2
+  IFS=. read -r -a octets <<< "$HEALTHCHECK_IP"
+  for octet in "${octets[@]}"; do (( 10#$octet <= 255 )) || exit 2; done
+  origin=${BASE_URL#https://}; origin=${origin%/}
+  host=${origin%%:*}; port=443
+  if [[ "$origin" == *:* ]]; then port=${origin##*:}; fi
+  HEALTH_ARGS=(--resolve "$host:$port:$HEALTHCHECK_IP" --noproxy "$host")
+fi
 for path in "$DEPLOY_ROOT" "$PUBLIC_ROOT" "$LEGACY_APP" "$PHP_BIN"; do
   [[ "$path" =~ ^/[a-zA-Z0-9_./-]+$ && "$path" != / && "$path" != *..* ]] || exit 2
 done
@@ -76,7 +86,7 @@ SWITCHED=1
 mv -f "$DEPLOY_ROOT/.current-next" "$DEPLOY_ROOT/current"
 mv -f "$PUBLIC_ROOT/.index-deploy.php" "$PUBLIC_ROOT/index.php"
 for route in / /products; do
-  curl --fail --silent --show-error --retry 2 --max-time 30 \
+  curl "${HEALTH_ARGS[@]}" --fail --silent --show-error --retry 2 --max-time 30 \
     -H 'Cache-Control: no-cache' -D "$INCOMING/health-headers" \
     "${BASE_URL%/}${route}?deploy_check=$RELEASE_ID" -o /dev/null
   tr -d '\r' < "$INCOMING/health-headers" | grep -Fqi "X-Luxurry-Release: $RELEASE_ID"
