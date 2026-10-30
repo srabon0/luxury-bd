@@ -35,6 +35,8 @@ class DeploymentTest(unittest.TestCase):
         (fixture/'vendor/autoload.php').write_text('<?php')
         (fixture/'artisan').write_text('<?php')
         (fixture/'public/assets/app.css').write_text('new css')
+        (fixture/'public/assets/nested').mkdir()
+        (fixture/'public/assets/nested/icon.svg').write_text('<svg/>')
         archive=self.incoming/'luxurry-staging.tar.gz'
         with tarfile.open(archive,'w:gz') as tar:tar.add(fixture,arcname='luxurry-platform')
         digest=hashlib.sha256(archive.read_bytes()).hexdigest()
@@ -70,6 +72,10 @@ Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Releas
         self.assertEqual((self.root/'current').read_text().strip(),self.release)
         self.assertTrue((self.root/'releases'/self.release/'.env').is_symlink())
         self.assertEqual((self.public/'_releases'/self.release/'assets/app.css').read_text(),'new css')
+        icon=self.public/'_releases'/self.release/'assets/nested/icon.svg'
+        self.assertEqual(icon.read_text(),'<svg/>')
+        self.assertEqual(icon.stat().st_mode & 0o777,0o644)
+        self.assertEqual(icon.parent.stat().st_mode & 0o777,0o755)
         self.assertIn(str(self.root),(self.public/'index.php').read_text())
         self.preserved()
     def test_first_deploy_health_failure_restores_original_index(self):

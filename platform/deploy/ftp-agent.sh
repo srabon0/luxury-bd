@@ -12,7 +12,7 @@ for path in "$DEPLOY_ROOT" "$PUBLIC_ROOT" "$LEGACY_APP" "$PHP_BIN"; do
   [[ "$path" =~ ^/[a-zA-Z0-9_./-]+$ && "$path" != / && "$path" != *..* ]] || fail 'Invalid absolute path in config.sh.'
 done
 [[ "$BASE_URL" =~ ^https://[a-zA-Z0-9.-]+(:[0-9]+)?/?$ ]] || fail 'BASE_URL must be the canonical HTTPS origin.'
-for tool in bash flock rsync curl tar sha256sum realpath; do command -v "$tool" >/dev/null || fail "Required command $tool is unavailable."; done
+for tool in bash flock cp find chmod curl tar sha256sum realpath; do command -v "$tool" >/dev/null || fail "Required command $tool is unavailable."; done
 [[ -x "$PHP_BIN" ]] || fail 'PHP_BIN is not an executable file.'
 [[ -f "$LEGACY_APP/.env" && -d "$LEGACY_APP/storage" ]] || fail 'The existing production environment/runtime storage was not found.'
 [[ -f "$PUBLIC_ROOT/index.php" ]] || fail 'The public index.php was not found.'

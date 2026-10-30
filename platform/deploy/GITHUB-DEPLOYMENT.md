@@ -22,7 +22,7 @@ workflow is retired by this PR. The optional SSH uploader is no longer selected.
    ```
 
    Read `readiness.txt`. It must report `READY`. This checks PHP 8.4, bash, flock,
-   rsync, curl, tar, sha256sum, realpath, the core environment, and a writable real
+   cp, find, chmod, curl, tar, sha256sum, realpath, the core environment, and a writable real
    public upload directory. It creates `incoming/AGENT_READY` for GitHub's check.
 5. Replace that temporary cron with this permanent once-per-minute cron:
 

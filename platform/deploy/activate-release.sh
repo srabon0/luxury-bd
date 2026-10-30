@@ -9,7 +9,8 @@ for path in "$DEPLOY_ROOT" "$PUBLIC_ROOT" "$LEGACY_APP" "$PHP_BIN"; do
   [[ "$path" =~ ^/[a-zA-Z0-9_./-]+$ && "$path" != / && "$path" != *..* ]] || exit 2
 done
 command -v flock >/dev/null
-command -v rsync >/dev/null
+command -v cp >/dev/null
+command -v find >/dev/null
 command -v curl >/dev/null
 [[ -x "$PHP_BIN" && -f "$LEGACY_APP/.env" && -d "$LEGACY_APP/storage" ]]
 [[ -d "$PUBLIC_ROOT/storage" && ! -L "$PUBLIC_ROOT/storage" ]]
@@ -35,7 +36,9 @@ ln -s "$LEGACY_APP/.env" "$RELEASE/.env"
 chmod 755 "$RELEASE" "$RELEASE/bootstrap/cache"
 mkdir -p "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets"
 chmod 755 "$PUBLIC_ROOT/_releases" "$PUBLIC_ROOT/_releases/$RELEASE_ID" "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets"
-rsync -a --chmod=D755,F644 "$RELEASE/public/assets/" "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets/"
+cp -R "$RELEASE/public/assets/." "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets/"
+find "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets" -type d -exec chmod 755 {} +
+find "$PUBLIC_ROOT/_releases/$RELEASE_ID/assets" -type f -exec chmod 644 {} +
 export PUBLIC_STORAGE_ROOT="$PUBLIC_ROOT/storage"
 export ASSET_URL="${BASE_URL%/}/_releases/$RELEASE_ID"
 cd "$RELEASE"
