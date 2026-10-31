@@ -67,3 +67,28 @@
 input,select,textarea{font-size:16px}
 header .parent>img{width:60px;height:60px;object-fit:contain;flex-shrink:0}
 @media(max-width:800px){header .parent>img{width:52px;height:52px}}
+
+/* Compact phone header, hero and footer without changing desktop typography. */
+@media(max-width:600px){
+  .topline{justify-content:center;padding:6px 5%;font-size:11px;line-height:1.5}
+  .topline>span{display:none}
+  .topline>a{max-width:none;text-align:center;white-space:nowrap}
+  header{padding:14px 5%;gap:12px}
+  header .brand{gap:14px}
+  header .wordmark{font-size:24px}
+  header .wordmark small{font-size:8px;letter-spacing:.12em;margin-top:6px}
+  header .parent{padding-left:14px}
+  header nav{gap:16px;font-size:13px;align-items:center}
+  header nav>a{padding:8px 0}
+  header nav .nav-contact{font-size:12px;padding:8px 10px;min-height:40px}
+  .hero>div{padding:24px 5% 52px}
+  .hero .eyebrow{font-size:10px;letter-spacing:.12em;line-height:1.5;margin:0 0 12px}
+  .hero h1{font-size:clamp(29px,7.8vw,36px);line-height:1.12;margin:0 0 16px}
+  .hero p:not(.eyebrow){font-size:14px;line-height:1.65;max-width:34ch;margin:0 0 18px}
+  .hero .button{font-size:13px;line-height:1.5;padding:11px 18px;min-height:44px;margin:0}
+  .hero .hero-note{font-size:8px;letter-spacing:.12em;bottom:15px;left:5%}
+  .hero .video-toggle{font-size:11px;padding:7px 10px}
+  .footer-bottom{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;padding:16px 0;font-size:11px;line-height:1.5}
+  .footer-bottom>span:nth-child(3){grid-column:1;grid-row:2;white-space:nowrap}
+  .footer-bottom>a{grid-column:2;grid-row:1 / span 2;align-self:center;text-align:right}
+}
