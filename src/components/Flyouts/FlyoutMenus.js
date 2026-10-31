@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import { useGetBrandsQuery } from "../../redux/features/brand/brandApi";
 import { useGetCategoriesQuery } from "../../redux/features/categories/categoryApi";
 import Logo from "../GlobalHeader/Logo";
-import FullScreenLoader from "../Loader/FullScreenLoader";
 import SearchModal from "../Modals/SearchModal";
 
 import fly1 from "../../assets/images/flyouts/1.png";
@@ -175,13 +174,24 @@ export default function FlyOuts({ logoSrc, logoAlt }) {
     };
   }, []);
 
-  if (brandLoading || catLoading) return <FullScreenLoader />;
-
   if (brandError || catError) {
     console.error(brandError || catError);
   }
   return (
     <>
+      {(brandLoading || catLoading) && (
+        <p role="status" className="bg-gray-50 text-center text-xs py-2">
+          Loading brands and categories…
+        </p>
+      )}
+      {(brandError || catError) && (
+        <p role="status" className="bg-gray-50 text-center text-xs py-2">
+          Some collections are temporarily unavailable.{" "}
+          <Link to="/shop" className="underline">
+            Browse products
+          </Link>
+        </p>
+      )}
       <Popover className="relative isolate z-50 shadow">
         <div className="flex justify-between items-center mx-10">
           <div>

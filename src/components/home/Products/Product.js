@@ -37,7 +37,11 @@ const Product = (props) => {
     <div className="w-full relative group flex flex-col h-full">
       <div className="relative overflow-hidden flex-grow">
         <div onClick={handleProductDetails}>
-          <Image className="w-full h-full object-cover" imgSrc={props.img} />
+          <Image
+            className="w-full h-full object-cover"
+            imgSrc={props.img}
+            alt={props.productName}
+          />
         </div>
         <div className="absolute top-6 left-8">
           {props.badge && <Badge text="New" />}
@@ -61,7 +65,7 @@ const Product = (props) => {
                     badge: props.badge,
                     price: props.price,
                     colors: props.color,
-                  })
+                  }),
                 )
               }
               className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primeColor flex items-center justify-end gap-2 hover:cursor-pointer pb-1 duration-300 w-full"
