@@ -4,8 +4,8 @@ use App\Models\SiteSetting;
 class WebsiteContent {
     public const DEFAULTS = [
         'hero_eyebrow'=>'THE SHAPE OF EVERYDAY LIVING','hero_heading'=>"Designed around\nyour everyday.",
-        'hero_description'=>'Considered forms. Bathroom essentials for the spaces you call your own.',
-        'intro_heading'=>"Spaces that feel\nlike you.",'intro_description'=>'Discover sanitaryware with considered proportions and practical details. Explore the collection, compare specifications and speak with our team about your space.',
+        'hero_description'=>'Sanitaryware and kitchenware for the spaces you call your own.',
+        'intro_heading'=>"Spaces that feel\nlike you.",'intro_description'=>'Discover sanitaryware and kitchenware with considered proportions and practical details. Explore the collection, compare specifications and speak with our team about your space.',
         'contact_heading'=>"Good spaces start\nwith a little dialogue.",'contact_description'=>'Whether you’re choosing one detail or planning an entire project, tell us what you have in mind.',
         'public_email'=>'','phone'=>'','address'=>'',
     ];
