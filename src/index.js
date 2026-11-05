@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import "slick-carousel/slick/slick.css";
 import "./index.css";
+import "./renew.css";
 import { persistor, store } from "./redux/store";
 // import App from "./App";
 import router from "./routes/route";
@@ -16,5 +17,5 @@ root.render(
       {/* <App /> */}
       <RouterProvider router={router} />
     </PersistGate>
-  </Provider>
+  </Provider>,
 );

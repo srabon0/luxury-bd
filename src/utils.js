@@ -7,7 +7,8 @@ export const getImageUrl = (imgName) => {
     process.env.NODE_ENV === "development"
       ? process.env.REACT_APP_LOCAL_BACKEND
       : process.env.REACT_APP_BACKEND;
-  const url = base + imgName;
-  console.log(url);
+  if (/^https?:\/\//i.test(imgName)) return imgName;
+  const url =
+    (base || "").replace(/\/$/, "") + "/" + imgName.replace(/^\//, "");
   return url;
 };

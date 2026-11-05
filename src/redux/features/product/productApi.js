@@ -4,6 +4,10 @@ const PRODUCT_URL = "products";
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getProduct: builder.query({
+      query: (id) => ({ url: `${PRODUCT_URL}/${id}`, method: "GET" }),
+      providesTags: ["products"],
+    }),
     getProducts: builder.query({
       query: (arg) => {
         // loop thorugh the arg object and remove the empty values
@@ -64,6 +68,7 @@ const productApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetProductQuery,
   useGetProductsQuery,
   useAddProductMutation,
   useDeleteProductMutation,
