@@ -5,15 +5,19 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 class CatalogController extends Controller {
-    public function index(Request $request) {
+    public function index(Request $request, ?Category $category = null) {
         $data=$request->validate(['search'=>'nullable|string|max:100','category'=>'nullable|string|max:120','page'=>'nullable|integer|min:1|max:10000','sort'=>'nullable|in:newest,name']);
+        $selectedCategory = $category ?? app(\App\Services\SearchMetadata::class)->category($request);
+        if ($category || $request->filled('category')) {
+            abort_unless($selectedCategory && $selectedCategory->products()->where('status','published')->exists(), 404);
+        }
         $query=Product::query()->where('status','published')->with('category');
-        if (!empty($data['category'])) $query->whereHas('category',fn($q)=>$q->where('slug',$data['category']));
+        if ($selectedCategory) $query->where('category_id',$selectedCategory->id);
         if (!empty($data['search'])) { $term='%'.addcslashes($data['search'],'%_\\').'%'; $query->where(fn($q)=>$q->where('name','like',$term)->orWhere('code','like',$term)); }
         $query->orderBy(($data['sort']??'newest')==='name'?'name':'id',($data['sort']??'newest')==='name'?'asc':'desc');
         $products=$query->paginate(12)->withQueryString();
         if ($request->is('api/*')) return PublicProductResource::collection($products);
-        return view('catalog.index',['products'=>$products,'categories'=>Category::orderBy('name')->get()]);
+        return view('catalog.index',['products'=>$products,'categories'=>Category::whereHas('products',fn($q)=>$q->where('status','published'))->orderBy('name')->get(),'selectedCategory'=>$selectedCategory]);
     }
     public function compare(Request $request) {
         $data=$request->validate(['products'=>'sometimes|array|max:3','products.*'=>'required|string|max:180|regex:/^[A-Za-z0-9_-]+$/']);
