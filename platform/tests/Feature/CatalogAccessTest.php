@@ -108,7 +108,9 @@ class CatalogAccessTest extends TestCase {
     }
     public function test_contact_uses_verified_from_configuration_and_user_as_reply_to(): void {
         Mail::fake();config(['catalog.contact_email'=>'contact@example.test']);
-        $this->post('/contact',['name'=>'Test Visitor','email'=>'visitor@example.test','message'=>'Please send the product specifications.','website'=>''])->assertRedirect(route('contact'));
+        $token = $this->get('/contact')->viewData('contactToken');
+        $this->travel(4)->seconds();
+        $this->post('/contact',['contact_token'=>$token,'name'=>'Test Visitor','email'=>'visitor@example.test','message'=>'Please send the product specifications.','website'=>''])->assertRedirect(route('contact'));
         Mail::assertSent(ContactEnquiry::class,fn($m)=>$m->hasTo('contact@example.test') && $m->enquiry['email']==='visitor@example.test');
         $this->post('/contact',['name'=>'Bot','email'=>'bot@example.test','message'=>'Spam message text','website'=>'spam'])->assertSessionHasErrors('website');
         Mail::assertSentCount(1);
