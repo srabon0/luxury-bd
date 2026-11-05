@@ -69,10 +69,6 @@ jobs:
           sudo apt-get install -y -qq mariadb-client
       - name: Initialize test environment
         run: cp .env.example .env
-      - name: Prepare compatible Symfony security patches
-        run: |
-          composer update symfony/http-foundation symfony/http-kernel symfony/routing --with-all-dependencies --no-install --no-scripts --no-interaction --no-progress
-          python3 -c "import pathlib,gzip,base64; print('PATCHED_LOCK_GZIP='+base64.b64encode(gzip.compress(pathlib.Path('composer.lock').read_bytes())).decode())"
       - name: Resolve foundation dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Validate project metadata
