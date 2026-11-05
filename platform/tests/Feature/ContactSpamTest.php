@@ -69,11 +69,12 @@ class ContactSpamTest extends TestCase {
         Mail::assertSentCount(3);
     }
     public function test_customer_can_retry_after_a_mail_service_failure(): void {
+        $mailFake = Mail::getFacadeRoot();
         Mail::shouldReceive('to')->once()->andThrow(new \RuntimeException('Mail transport unavailable'));
         $token = $this->token();
         $this->travel(4)->seconds();
         $this->from('/contact')->post('/contact', $this->payload($token))->assertSessionHasErrors('message');
-        Mail::fake();
+        Mail::swap($mailFake);
         $token = $this->token();
         $this->travel(4)->seconds();
         $this->post('/contact', $this->payload($token))->assertRedirect(route('contact'));
