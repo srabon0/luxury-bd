@@ -85,12 +85,18 @@ printf '%s\n' "$RELEASE_ID" > "$DEPLOY_ROOT/.current-next"
 SWITCHED=1
 mv -f "$DEPLOY_ROOT/.current-next" "$DEPLOY_ROOT/current"
 mv -f "$PUBLIC_ROOT/.index-deploy.php" "$PUBLIC_ROOT/index.php"
-for route in / /products; do
+for route in / /products /sitemap.xml; do
   curl "${HEALTH_ARGS[@]}" --fail --silent --show-error --retry 2 --max-time 30 \
     -H 'Cache-Control: no-cache' -D "$INCOMING/health-headers" \
     "${BASE_URL%/}${route}?deploy_check=$RELEASE_ID" -o /dev/null
   tr -d '\r' < "$INCOMING/health-headers" | grep -Fqi "X-Luxurry-Release: $RELEASE_ID"
 done
+# Publish the managed crawler rules only after the new release passes health checks.
+if [[ -f "$RELEASE/public/robots.txt" ]]; then
+  cp "$RELEASE/public/robots.txt" "$PUBLIC_ROOT/.robots-next.txt"
+  chmod 644 "$PUBLIC_ROOT/.robots-next.txt"
+  mv -f "$PUBLIC_ROOT/.robots-next.txt" "$PUBLIC_ROOT/robots.txt"
+fi
 trap - ERR
 if [[ -n "$OLD" ]]; then printf '%s\n' "$OLD" > "$DEPLOY_ROOT/previous"; fi
 echo "Deployed release $RELEASE_ID. Environment, public uploads and server rules preserved."

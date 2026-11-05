@@ -23,6 +23,7 @@ class DeploymentTest(unittest.TestCase):
         (self.public/'storage/products').mkdir(parents=True)
         (self.public/'storage/products/photo.webp').write_bytes(b'upload')
         (self.public/'.htaccess').write_text('existing server rules')
+        (self.public/'robots.txt').write_text('old crawler rules')
         (self.public/'index.php').write_text('original controller')
         (self.legacy/'storage/framework/sessions').mkdir(parents=True)
         (self.legacy/'storage/framework/sessions/session').write_text('session data')
@@ -34,6 +35,7 @@ class DeploymentTest(unittest.TestCase):
         for d in ('vendor','public/assets','storage','bootstrap/cache'):(fixture/d).mkdir(parents=True)
         (fixture/'vendor/autoload.php').write_text('<?php')
         (fixture/'artisan').write_text('<?php')
+        (fixture/'public/robots.txt').write_text('User-agent: *\\nSitemap: https://example.test/sitemap.xml\\n')
         (fixture/'public/assets/app.css').write_text('new css')
         (fixture/'public/assets/nested').mkdir()
         (fixture/'public/assets/nested/icon.svg').write_text('<svg/>')
@@ -78,6 +80,7 @@ Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Releas
         self.assertEqual(icon.stat().st_mode & 0o777,0o644)
         self.assertEqual(icon.parent.stat().st_mode & 0o777,0o755)
         self.assertIn(str(self.root),(self.public/'index.php').read_text())
+        self.assertIn('sitemap.xml',(self.public/'robots.txt').read_text())
         self.preserved()
     def test_healthcheck_ip_preserves_https_hostname(self):
         import json
@@ -85,7 +88,7 @@ Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Releas
         r=self.run_deploy();self.assertEqual(r.returncode,0,r.stderr)
         args=json.loads((self.base/'curl-args').read_text())
         self.assertEqual(args[args.index('--resolve')+1],'example.test:443:192.0.2.10')
-        self.assertIn('https://example.test/products?deploy_check='+self.release,args)
+        self.assertIn('https://example.test/sitemap.xml?deploy_check='+self.release,args)
         self.assertNotIn('--insecure',args)
     def test_invalid_healthcheck_ip_rejected_before_switch(self):
         self.env['HEALTHCHECK_IP']='999.0.0.1'
@@ -96,6 +99,7 @@ Path(sys.argv[sys.argv.index('-D')+1]).write_text('HTTP/2 200\\nX-Luxurry-Releas
         r=self.run_deploy();self.assertNotEqual(r.returncode,0)
         self.assertEqual((self.public/'index.php').read_text(),'original controller')
         self.assertFalse((self.root/'current').exists());self.preserved()
+        self.assertEqual((self.public/'robots.txt').read_text(),'old crawler rules')
     def test_later_failure_restores_previous_pointer(self):
         old='b'*40+'-122-1';(self.root/'current').write_text(old+'\n')
         self.env['FAIL_HEALTH']='1'

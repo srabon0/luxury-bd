@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /workspace/
+Disallow: /staff/
+Disallow: /api/
+
+Sitemap: https://luxurrybd.com/sitemap.xml

@@ -3,8 +3,23 @@
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#3730A3">
-    <meta name="description" content="Explore sanitaryware and kitchenware from Luxurry, a Classic Group agency. Discover products, compare specifications and discuss your project with our team.">
-    <title>@yield('title','Luxurry · Classic Group')</title>
+    <title>@if(request()->routeIs('home','catalog.index','catalog.category','catalog.show','contact')){{ $seo['title'] }}@else @yield('title','Luxurry · Classic Group') @endif</title>
+    <meta name="description" content="{{ $seo['description'] }}">
+    <meta name="robots" content="{{ $seo['index'] ? 'index, follow, max-image-preview:large' : 'noindex, follow' }}">
+    <link rel="canonical" href="{{ $seo['canonical'] }}">
+    <meta property="og:site_name" content="Luxurry">
+    <meta property="og:type" content="{{ request()->routeIs('catalog.show') ? 'product' : 'website' }}">
+    <meta property="og:title" content="{{ $seo['title'] }}">
+    <meta property="og:description" content="{{ $seo['description'] }}">
+    <meta property="og:url" content="{{ $seo['canonical'] }}">
+    <meta property="og:image" content="{{ $seo['image'] }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seo['title'] }}">
+    <meta name="twitter:description" content="{{ $seo['description'] }}">
+    <meta name="twitter:image" content="{{ $seo['image'] }}">
+    @if($seo['graph'])
+    <script type="application/ld+json">{!! json_encode(['@context'=>'https://schema.org','@graph'=>$seo['graph']], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) !!}</script>
+    @endif
     <link rel="stylesheet" href="{{ asset('assets/app.css') }}?v=20261029-compare2">
 </head>
 <body class="{{ request()->is('workspace*','staff/*') ? 'workspace-page' : 'public-page' }} {{ request()->routeIs('catalog.compare') ? 'comparison-view' : '' }}">
