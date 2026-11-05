@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider {
         Gate::define('view-audit', fn(User $user) => $user->is_active && $user->role === Role::Admin);
         Gate::define('view-prices', fn(User $user) => $user->is_active);
         RateLimiter::for('staff-login', fn(Request $r) => [Limit::perMinute(20)->by($r->ip()), Limit::perMinute(5)->by(hash('sha256',strtolower((string)$r->input('email')).'|'.$r->ip()))]);
-        RateLimiter::for('contact', fn(Request $r) => Limit::perMinutes(10,5)->by($r->ip()));
+        RateLimiter::for('contact', fn(Request $r) => [Limit::perMinutes(10,5)->by('contact-ip:'.$r->ip()), Limit::perDay(20)->by('contact-day:'.$r->ip()), Limit::perHour(3)->by('contact-email:'.hash('sha256',strtolower(trim((string)$r->input('email')))))]);
         RateLimiter::for('catalog', fn(Request $r) => Limit::perMinute(120)->by($r->ip()));
     }
 }
