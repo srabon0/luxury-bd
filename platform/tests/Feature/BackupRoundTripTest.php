@@ -19,10 +19,11 @@ class BackupRoundTripTest extends TestCase {
         $product->internalPrice()->create(['amount'=>'1234.56','currency'=>'BDT']);
         $restore='luxurry_restore_test'; $handle=null;
         try {
-            $probe=new Process(['mariadb-dump','--host=127.0.0.1','--port=3306','--user=root','--single-transaction','--quick','--skip-lock-tables','--no-tablespaces','luxurry_test'],null,['MYSQL_PWD'=>'isolated-ci-password']);
-            $probe->run();
-            $this->assertTrue($probe->isSuccessful(),'CI dump client preflight: '.$probe->getErrorOutput());
-            $path=app(LocalBackup::class)->create();
+            $wrapper=$directory.'/dump-client';
+            file_put_contents($wrapper,"#!/bin/sh\nexec mariadb-dump \"\$@\" 2>".escapeshellarg($directory.'/dump-error')."\n");chmod($wrapper,0700);
+            config(['backup.mysqldump'=>$wrapper]);
+            try { $path=app(LocalBackup::class)->create(); }
+            catch (\RuntimeException $error) { $this->fail('Isolated CI dump: '.File::get($directory.'/dump-error').' / '.$error->getMessage()); }
             $archive=new \PharData($path);$sql=$archive['database.sql']->getContent();
             $this->assertSame('restore-fixture-image',$archive['public/fixtures/photo.webp']->getContent());
             DB::statement('CREATE DATABASE `luxurry_restore_test` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
