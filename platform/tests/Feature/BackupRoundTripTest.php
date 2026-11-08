@@ -19,6 +19,9 @@ class BackupRoundTripTest extends TestCase {
         $product->internalPrice()->create(['amount'=>'1234.56','currency'=>'BDT']);
         $restore='luxurry_restore_test'; $handle=null;
         try {
+            $probe=new Process(['mariadb-dump','--host=127.0.0.1','--port=3306','--user=root','--single-transaction','--quick','--skip-lock-tables','--no-tablespaces','luxurry_test'],null,['MYSQL_PWD'=>'isolated-ci-password']);
+            $probe->run();
+            $this->assertTrue($probe->isSuccessful(),'CI dump client preflight: '.$probe->getErrorOutput());
             $path=app(LocalBackup::class)->create();
             $archive=new \PharData($path);$sql=$archive['database.sql']->getContent();
             $this->assertSame('restore-fixture-image',$archive['public/fixtures/photo.webp']->getContent());
