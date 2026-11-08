@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('assets/favicon-luxurry-48.png') }}">
+    <link rel="alternate icon" type="image/x-icon" href="{{ asset('assets/favicon-luxurry.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/apple-touch-icon-luxurry.png') }}">
     <meta name="theme-color" content="#3730A3">
     <title>@if(request()->routeIs('home','catalog.index','catalog.category','catalog.show','contact')){{ $seo['title'] }}@else @yield('title','Luxurry · Classic Group') @endif</title>
     <meta name="description" content="{{ $seo['description'] }}">
