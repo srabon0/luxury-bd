@@ -19,11 +19,12 @@ class BackupRoundTripTest extends TestCase {
         $product->internalPrice()->create(['amount'=>'1234.56','currency'=>'BDT']);
         $restore='luxurry_restore_test'; $handle=null;
         try {
+            // The disposable loopback CI service has no TLS; newer clients require it by default.
+            // Keep --defaults-file first and limit this override to the isolated test client.
             $wrapper=$directory.'/dump-client';
-            file_put_contents($wrapper,"#!/bin/sh\nexec mariadb-dump \"\$@\" 2>".escapeshellarg($directory.'/dump-error')."\n");chmod($wrapper,0700);
+            file_put_contents($wrapper,"#!/bin/sh\noptions=\"\$1\"\nshift\nexec mariadb-dump \"\$options\" --skip-ssl \"\$@\"\n");chmod($wrapper,0700);
             config(['backup.mysqldump'=>$wrapper]);
-            try { $path=app(LocalBackup::class)->create(); }
-            catch (\RuntimeException $error) { $this->fail('Isolated CI dump: '.File::get($directory.'/dump-error').' / '.$error->getMessage()); }
+            $path=app(LocalBackup::class)->create();
             $archive=new \PharData($path);$sql=$archive['database.sql']->getContent();
             $this->assertSame('restore-fixture-image',$archive['public/fixtures/photo.webp']->getContent());
             DB::statement('CREATE DATABASE `luxurry_restore_test` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
@@ -31,7 +32,7 @@ class BackupRoundTripTest extends TestCase {
             $options=$directory.'/restore.cnf';
             $ini="[client]\nhost=127.0.0.1\nport=3306\nuser=root\npassword=isolated-ci-password\n";
             file_put_contents($options,$ini);chmod($options,0600);
-            $process=new Process(['mariadb','--defaults-file='.$options,$restore]);$process->setInput($sql);$process->setTimeout(60);$process->run();
+            $process=new Process(['mariadb','--defaults-file='.$options,'--skip-ssl',$restore]);$process->setInput($sql);$process->setTimeout(60);$process->run();
             $this->assertTrue($process->isSuccessful(),'Isolated database import failed.');
             config(['database.connections.restore_check'=>[...$source,'url'=>null,'database'=>$restore]]);
             $connection=DB::connection('restore_check');
