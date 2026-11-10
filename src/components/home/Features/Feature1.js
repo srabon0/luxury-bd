@@ -80,7 +80,9 @@ export default function Feature1() {
           <div>
             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
               <img
-                alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
+                loading="lazy"
+                decoding="async"
+                alt="Kitchen hood from the collection"
                 src={f4}
                 className="h-full w-full object-cover object-center"
               />
@@ -88,14 +90,18 @@ export default function Feature1() {
             <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                 <img
-                  alt="Detail of temperature setting button on kettle bass with digital degree readout."
+                  loading="lazy"
+                  decoding="async"
+                  alt="Water heater from the collection"
                   src={f5}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                 <img
-                  alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
+                  loading="lazy"
+                  decoding="async"
+                  alt="Basin tap from the collection"
                   src={f2}
                   className="h-full w-full object-cover object-center"
                 />

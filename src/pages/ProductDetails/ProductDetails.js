@@ -1,130 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
-import ProductInfo from "../../components/pageProps/productDetails/ProductInfo";
-import { FaDownload } from "react-icons/fa";
-
-const tabs = [
-  {
-    id: "Fiche Technique",
-    label: "Fiche Technique",
-  },
-  {
-    id: "Description",
-    label: "Description",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis.",
-  },
-  {
-    id: "Video",
-    label: "Video",
-    content: (
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/watch?v=6e0yIRDVPlA&list=RD6e0yIRDVPlA&start_radio=1"
-        title="YouTube Video"
-        frameBorder="0"
-        allowFullScreen
-      ></iframe>
-    ),
-  },
-  // Add more tabs as needed
-];
-
-const ProductDetails = () => {
-  const location = useLocation();
-  const [prevLocation, setPrevLocation] = useState("");
-  const [productInfo, setProductInfo] = useState([]);
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-  };
-
-  useEffect(() => {
-    setProductInfo(location.state.item);
-    setPrevLocation(location.pathname);
-  }, [location, productInfo.ficheTech]);
-
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { useGetProductQuery } from "../../redux/features/product/productApi";
+import { getImageUrl } from "../../utils";
+export default function ProductDetails() {
+  const { id } = useParams();
+  const { data, isLoading, isError, refetch } = useGetProductQuery(id);
+  const product = data?.data;
+  if (isLoading)
+    return (
+      <main
+        id="main-content"
+        className="section-wrap empty-state"
+        role="status"
+      >
+        Loading product…
+      </main>
+    );
+  if (isError)
+    return (
+      <main id="main-content" className="section-wrap empty-state">
+        <h1>We couldn’t load this product.</h1>
+        <button className="collection-button" onClick={refetch}>
+          Try again
+        </button>
+        <Link to="/shop">Back to collections</Link>
+      </main>
+    );
+  if (!product)
+    return (
+      <main id="main-content" className="section-wrap empty-state">
+        <h1>Product not found.</h1>
+        <Link to="/shop">Back to collections ↗</Link>
+      </main>
+    );
   return (
-    <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
-      <div className="max-w-container mx-auto px-4">
-        <div className="xl:-mt-10 -mt-7">
-          <Breadcrumbs title="" prevLocation={prevLocation} />
-        </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full -mt-5 xl:-mt-8 pb-10 bg-gray-100 p-4">
-          <div className="h-full xl:col-span-2">
+    <main id="main-content" className="section-wrap">
+      <p className="eyebrow">
+        <Link to="/shop">COLLECTIONS</Link> / PRODUCT
+      </p>
+      <div className="product-detail">
+        <div className="detail-images">
+          {(product.image?.length ? product.image : [{}]).map((img, i) => (
             <img
-              className="w-full h-full "
-              src={productInfo.img}
-              alt={productInfo.img}
+              key={img._id || i}
+              src={getImageUrl(img.imageUrl)}
+              alt={`${product.title}${i ? ` — view ${i + 1}` : ""}`}
+              loading={i ? "lazy" : "eager"}
+              width="700"
+              height="700"
             />
-          </div>
-          <div className="h-full w-full md:col-span-2 xl:col-span-4 xl:px-4 flex flex-col gap-6 justify-center">
-            <ProductInfo productInfo={productInfo} />
-          </div>
+          ))}
         </div>
-        <div>
-          <div className=" space-x-4  pt-4">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`${
-                  activeTab === tab.id
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800"
-                } py-2 px-4  focus:outline-none`}
-                onClick={() => handleTabClick(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className="my-4">
-            {tabs.map((tab) => (
-              <div
-                key={tab.id}
-                className={activeTab === tab.id ? "" : "hidden"}
-              >
-                {tab.id === "Fiche Technique" && productInfo.ficheTech ? (
-                  <div>
-                    <table className="table-auto w-full">
-                      <tbody>
-                        {productInfo.ficheTech.map((row) => (
-                          <tr key={row.label} className="bg-gray-100">
-                            <td className="border px-4 py-2 font-semibold">
-                              {row.label}
-                            </td>
-                            <td className="border px-4 py-2">{row.value}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <div className="my-4 flex justify-end">
-                      <button className="inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-500 hover:bg-blue-600 text-white font-bodyFont">
-                        <FaDownload className="h-5 w-5 mr-2 text-white" />
-                        <a
-                          href={productInfo.pdf}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white"
-                        >
-                          Download PDF
-                        </a>{" "}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <p>{tab.content}</p>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="detail-copy">
+          <p className="eyebrow">THE LUXURRY COLLECTION</p>
+          <h1>{product.title}</h1>
+          <p className="detail-price">
+            {Number(product.price) > 0
+              ? `৳ ${Number(product.price).toLocaleString("en-BD")}`
+              : "Contact for pricing"}
+          </p>
+          <p className="product-description">
+            {product.description ||
+              "Talk to our team for product details and availability."}
+          </p>
+          <dl>
+            {[
+              ["Product code", product.code],
+              ["Model", product.model],
+              ["Unit", product.unit],
+              ["Carton capacity", product.cartoncapacity],
+            ]
+              .filter(([, v]) => v !== undefined && v !== null && v !== "")
+              .map(([key, value]) => (
+                <div key={key}>
+                  <dt>{key}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+          </dl>
+          <a
+            className="collection-button"
+            href={`mailto:hrtamim7@gmail.com?subject=${encodeURIComponent(
+              `Product enquiry: ${product.title} (${product.code || id})`,
+            )}`}
+          >
+            Enquire about this product ↗
+          </a>
+          <p className="detail-note">
+            Contact us to confirm availability and current pricing.
+          </p>
         </div>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default ProductDetails;
+}
